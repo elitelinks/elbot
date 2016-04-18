@@ -1,0 +1,16 @@
+{
+  "name": "elbot",
+  "version": "0.0.1",
+  "description": "discord bot using discord.js",
+  "main": "bot.js",
+  "dependencies": {
+    "discord.js": "^7.0.0",
+    "google": "^2.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "plus",
+  "license": "ISC"
+}
