@@ -4,7 +4,9 @@ var google = require("google");
 var request = require("request");
 
 //settings & data
-var settings = require("./settings/settings.json"), prefixes = settings.prefixes;
+var settings = require("./settings/settings.json"),
+    prefixes = settings.prefixes
+    trivSet = settings.trivia;
 var bank = require("./settings/bank.json");
 
 //invoke bot
@@ -110,6 +112,8 @@ var commands = {
 
 ////////////////////////////////////TO DO FUNCTIONS//////////////////////////////////////////////
 
+//TODO help command
+
 //economy / slots
 var economy = {
 
@@ -121,7 +125,10 @@ var economy = {
 
 
 //trivia
-var trivia = {}
+var trivia = {
+    help : '', //help cmd TODO
+
+};
 
 ////////////////////////////////////DONE FUNCTIONS//////////////////////////////////////////////
 
@@ -137,8 +144,6 @@ bot.on("message", function(msg) {
     }
     else return;
 });
-
-bot.prototype.isOwner = function (msg) {return }
 
 //ready
 bot.on("ready", function (){

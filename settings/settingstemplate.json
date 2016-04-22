@@ -1,8 +1,10 @@
 {
   "token": "",
   "owner": "",
+  "weather_api_key": "",
   "prefixes": [
     ".",
     "!"
-  ]
+  ],
+  "trivia": {}
 }
