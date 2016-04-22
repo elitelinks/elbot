@@ -2,19 +2,27 @@
 var Discord = require("discord.js");
 var settings = require("./settings/settings.json"), prefixes = settings.prefixes;
 var google = require("google");
+var request = require("request");
 //invoke bot
 var bot = new Discord.Client();
 
-//////////////////////////////////////// COMMANDS ///////////////////////////////////////////////
+///////////////////////////////////// C0MMAND HANDLER /////////////////////////////////////////////
+
+//TODO add admin/bot owner check
 
 var cmdHandlr = function (bot, msg, cmdTxt, suffix) {
+    console.log(cmdTxt); //debug
     switch (cmdTxt) {
-        case "goog" :  case "google" : commands.goog(bot, msg, suffix); break; //TODO FIX GOOGLE CASES
+        case "goog" :
+        case "google" : commands.goog(bot, msg, suffix); break;
         case "weather" : commands.weather(bot, msg, suffix); break;
-        default: return;
+        case "fuckoff" : commands.logout(bot, msg); break;
+        default: console.log("Something went wrong");
     }
 
 };
+
+//////////////////////////////////////// COMMANDS ///////////////////////////////////////////////
 
 var commands = {
     goog : function (bot, msg, suffix){
@@ -38,14 +46,11 @@ var commands = {
             })
     },
 
-    google : this.goog,
-
-    //TODO FIX WEATHER
-
     weather : function (bot, msg, suffix) {
-        if (!suffix) suffix = "Toronto";
+        if (!suffix) suffix = "Los Angeles, CA";
+        if (suffix === "shit") suffix = "San Diego"; //kekeke
         suffix = suffix.replace(" ", "");
-        var rURL = (/\d/.test(suffix) == false) ? "http://api.openweathermap.org/data/2.5/weather?q=" + suffix + "&APPID=" + options.weather_api_key : "http://api.openweathermap.org/data/2.5/weather?zip=" + suffix + "&APPID=" + settings.weather_api_key;
+        var rURL = (/\d/.test(suffix) == false) ? "http://api.openweathermap.org/data/2.5/weather?q=" + suffix + "&APPID=" + settings.weather_api_key : "http://api.openweathermap.org/data/2.5/weather?zip=" + suffix + "&APPID=" + settings.weather_api_key;
         request(rURL, function (error, response, weath) {
             if (!error && response.statusCode == 200) {
                 weath = JSON.parse(weath);
@@ -80,29 +85,22 @@ var commands = {
                 bot.sendMessage(msg, msgArray);
             }
             else {
-                console.log(errorC(error));
+                console.log(error);
                 bot.sendMessage(msg, "There was an error getting the weather, please try again later.", function (error, sentMessage) {
                     bot.deleteMessage(sentMessage, {"wait": 5000})
                 });
             }
         });
-    }
+    },
+
+    logout: function(bot, msg) {bot.sendMessage(msg, "Logging Out").then(bot.logout());}
 
 };
 
 
 ////////////////////////////////////TO DO FUNCTIONS//////////////////////////////////////////////
 
-//msg checker
-bot.on("message", function(msg) {
-    if(msg.author === bot.user || msg.channel.isPrivate) return;
-    else if (prefixes.indexOf((msg.content.substr(0, 1))) > -1 ) {
-        var cmdTxt = msg.content.split(' ')[0].substr(1);
-        var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
-        var suffix = sufArr.join(' ');
-        cmdHandlr(bot, msg, cmdTxt, suffix);
-    }
-});
+//economy / slots
 
 
 ////////////////////////////////////DONE FUNCTIONS//////////////////////////////////////////////
@@ -115,17 +113,17 @@ bot.on("message", function(msg) {
         var cmdTxt = msg.content.split(' ')[0].substr(1);
         var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
         var suffix = sufArr.join(' ');
-        console.log(cmdTxt); console.log(suffix)
         cmdHandlr(bot, msg, cmdTxt, suffix);
     }
+    else return;
 });
 
 
 //ready
 bot.on("ready", function (){
-  console.log("elbot is ready");
-})
+  console.log("ELbot is ready");
+});
 
-
+bot.on("disconnected", function(){process.exit(0);});
 //login
 bot.loginWithToken(settings.token);console.log("Logged in using Token");

@@ -5,7 +5,8 @@
   "main": "bot.js",
   "dependencies": {
     "discord.js": "^7.0.0",
-    "google": "^2.0.0"
+    "google": "^2.0.0",
+    "request": "^2.72.0"
   },
   "devDependencies": {},
   "scripts": {
