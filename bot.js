@@ -1,25 +1,30 @@
 //Requires
 var Discord = require("discord.js");
-var settings = require("./settings/settings.json"), prefixes = settings.prefixes;
 var google = require("google");
 var request = require("request");
+
+//settings & data
+var settings = require("./settings/settings.json"), prefixes = settings.prefixes;
+var bank = require("./settings/bank.json");
+
 //invoke bot
-var bot = new Discord.Client();
+var bot = new Discord.Client({autoReconnect:true});
 
 ///////////////////////////////////// C0MMAND HANDLER /////////////////////////////////////////////
 
-//TODO add admin/bot owner check
 
 var cmdHandlr = function (bot, msg, cmdTxt, suffix) {
-    console.log(cmdTxt); //debug
     switch (cmdTxt) {
+
+        // searches
         case "goog" :
         case "google" : commands.goog(bot, msg, suffix); break;
         case "weather" : commands.weather(bot, msg, suffix); break;
-        case "fuckoff" : commands.logout(bot, msg); break;
-        default: console.log("Something went wrong");
-    }
 
+        //admin controls
+        case "logout" : commands.logout(bot, msg); break;
+        default: return;
+    }
 };
 
 //////////////////////////////////////// COMMANDS ///////////////////////////////////////////////
@@ -29,7 +34,7 @@ var commands = {
             var search = "google";
             if(suffix){search = suffix;}
             google(search, function(err, response){
-                if(err || !response || !response.links || response.links.length < 1){bot.sendMessage(msg, "Your search resulted in an error. Please forgive me **"+msg.author.username, function(error, sentMessage){bot.deleteMessage(sentMessage, {"wait": 5000})});}
+                if(err || !response || !response.links || response.links.length < 1){bot.sendMessage(msg, "**Your search resulted in an error. Please forgive me **"+msg.author.username, function(error, sentMessage){bot.deleteMessage(sentMessage, {"wait": 5000})});}
                 else {
                     if(response.links[0].link === null){
                         for(var i = 1; i < response.links.length; i++){
@@ -40,7 +45,7 @@ var commands = {
                         }
                     }
                     else {
-                        bot.sendMessage(msg, "I searched for **\""+search+"\"** and found this, **"+msg.author.username+"\n"+response.links[0].link);
+                        bot.sendMessage(msg, "**I searched for **\""+search+"\"** and found this, **"+msg.author.username+"\n"+response.links[0].link);
                     }
                 }
             })
@@ -93,15 +98,30 @@ var commands = {
         });
     },
 
-    logout: function(bot, msg) {bot.sendMessage(msg, "Logging Out").then(bot.logout());}
+    logout: function(bot, msg) {
+        if (msg.author.id === settings.owner) {
+            bot.sendMessage(msg, "Logging Out").then(bot.logout());
+        } else {
+            return;
+        }
+    }
 
 };
-
 
 ////////////////////////////////////TO DO FUNCTIONS//////////////////////////////////////////////
 
 //economy / slots
+var economy = {
 
+    register : function (msg) {
+        // TODO
+    }
+
+};
+
+
+//trivia
+var trivia = {}
 
 ////////////////////////////////////DONE FUNCTIONS//////////////////////////////////////////////
 
@@ -118,6 +138,7 @@ bot.on("message", function(msg) {
     else return;
 });
 
+bot.prototype.isOwner = function (msg) {return }
 
 //ready
 bot.on("ready", function (){
