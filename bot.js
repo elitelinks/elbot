@@ -2,18 +2,17 @@
 var Discord = require("discord.js");
 var google = require("google");
 var request = require("request");
+var jsonfile = require("jsonfile");
 
 //settings & data
 var settings = require("./settings/settings.json"),
-    prefixes = settings.prefixes
-    trivSet = settings.trivia;
+    prefixes = settings.prefixes;
 var bank = require("./settings/bank.json");
 
 //invoke bot
 var bot = new Discord.Client({autoReconnect:true});
 
 ///////////////////////////////////// C0MMAND HANDLER /////////////////////////////////////////////
-
 
 var cmdHandlr = function (bot, msg, cmdTxt, suffix) {
     switch (cmdTxt) {
@@ -22,6 +21,9 @@ var cmdHandlr = function (bot, msg, cmdTxt, suffix) {
         case "goog" :
         case "google" : commands.goog(bot, msg, suffix); break;
         case "weather" : commands.weather(bot, msg, suffix); break;
+        
+        //trivia
+        case "trivia" : trivia.start(); break;
 
         //admin controls
         case "logout" : commands.logout(bot, msg); break;
@@ -124,11 +126,23 @@ var economy = {
 };
 
 
-//trivia
+//trivia commands
 var trivia = {
     help : '', //help cmd TODO
-
+    settings : settings.trivia,
+    start : function () {debugger; console.log(this.settings);} //debug
 };
+
+//trivia session
+var triviaSesh = {
+    triviaDir : './trivia',
+    scorelist : {},
+    currentQ : {},
+    settings : settings.trivia,
+    loadlist : function (bot, msg, suffix) {
+        if (!suffix) {}
+    }
+}
 
 ////////////////////////////////////DONE FUNCTIONS//////////////////////////////////////////////
 
