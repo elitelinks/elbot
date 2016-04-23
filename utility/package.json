@@ -1,0 +1,16 @@
+{
+  "name": "utility",
+  "version": "1.0.0",
+  "description": "\"utilities for elbot\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "plus",
+  "license": "ISC",
+  "dependencies": {
+    "jsonfile": "^2.3.0",
+    "line-by-line": "^0.1.4",
+    "prompt": "^1.0.0"
+  }
+}

@@ -35,24 +35,24 @@ var cmdHandlr = function (bot, msg, cmdTxt, suffix) {
 
 var commands = {
     goog : function (bot, msg, suffix){
-            var search = "google";
-            if(suffix){search = suffix;}
-            google(search, function(err, response){
-                if(err || !response || !response.links || response.links.length < 1){bot.sendMessage(msg, "**Your search resulted in an error. Please forgive me **"+msg.author.username, function(error, sentMessage){bot.deleteMessage(sentMessage, {"wait": 5000})});}
-                else {
-                    if(response.links[0].link === null){
-                        for(var i = 1; i < response.links.length; i++){
-                            if (response.links[i].link !== null) {
-                                bot.sendMessage(msg, "I searched for **\""+search+"\"** and found this, **"+msg.author.username+"\n"+response.links[i].link);
-                                return;
-                            }
+        var search = "google";
+        if(suffix){search = suffix;}
+        google(search, function(err, response){
+            if(err || !response || !response.links || response.links.length < 1){bot.sendMessage(msg, "**Your search resulted in an error. Please forgive me **"+msg.author.username, function(error, sentMessage){bot.deleteMessage(sentMessage, {"wait": 5000})});}
+            else {
+                if(response.links[0].link === null){
+                    for(var i = 1; i < response.links.length; i++){
+                        if (response.links[i].link !== null) {
+                            bot.sendMessage(msg, "I searched for **\""+search+"\"** and found this, **"+msg.author.username+"\n"+response.links[i].link);
+                            return;
                         }
                     }
-                    else {
-                        bot.sendMessage(msg, "**I searched for **\""+search+"\"** and found this, **"+msg.author.username+"\n"+response.links[0].link);
-                    }
                 }
-            })
+                else {
+                    bot.sendMessage(msg, "**I searched for **\""+search+"\"** and found this, **"+msg.author.username+"\n"+response.links[0].link);
+                }
+            }
+        })
     },
 
     weather : function (bot, msg, suffix) {
