@@ -1,9 +1,9 @@
 {
-  accounts : {},
-  settings : {
-    "PAYDAY_CREDITS" : 500,
-    "PAYDAY_TIME" : 600,
-    "SLOT_MAX" : 5000,
-    "SLOT_MIN" : 1
+  "accounts" : {},
+  "settings" : {
+    "payout" : 500,
+    "payoutTime" : 600,
+    "maxBet" : 5000,
+    "minBet" : 1
   }
 }

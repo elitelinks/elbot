@@ -37,8 +37,8 @@ function writer(result) {
     lr.on('end', function () {
         var file = result.filename.slice(0, -4) + ".json";
         jsonfile.writeFile(file, resultJson, function (err) {
-            console.log(`Succesfully wrote ${file}!`);
             (err) => console.error(err);
+            console.log(`Succesfully wrote ${file}!`);
         })
     });
 }
