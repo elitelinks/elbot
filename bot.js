@@ -3,6 +3,7 @@ var Discord = require("discord.js");
 var google = require("google");
 var request = require("request");
 var jsonfile = require("jsonfile");
+var fs = require('fs');
 
 //settings & data
 var settings = require("./settings/settings.json"),
@@ -14,7 +15,7 @@ var bot = new Discord.Client({autoReconnect:true});
 
 ///////////////////////////////////// C0MMAND HANDLER /////////////////////////////////////////////
 
-var cmdHandlr = function (bot, msg, cmdTxt, suffix) {
+var cmdHandlr = (bot, msg, cmdTxt, suffix) => {
     switch (cmdTxt) {
 
         // searches
@@ -23,9 +24,10 @@ var cmdHandlr = function (bot, msg, cmdTxt, suffix) {
         case "weather" : commands.weather(bot, msg, suffix); break;
         
         //trivia
-        case "trivia" : trivia.start(); break;
+        case "trivia" : trivia.start(bot, msg, suffix); break;
 
         //admin controls
+        case "eval" : commands.eval(bot, msg, suffix); break;
         case "logout" : commands.logout(bot, msg); break;
         default: return;
     }
@@ -34,7 +36,7 @@ var cmdHandlr = function (bot, msg, cmdTxt, suffix) {
 //////////////////////////////////////// COMMANDS ///////////////////////////////////////////////
 
 var commands = {
-    goog : function (bot, msg, suffix){
+    goog : (bot, msg, suffix) => {
         var search = "google";
         if(suffix){search = suffix;}
         google(search, function(err, response){
@@ -55,7 +57,7 @@ var commands = {
         })
     },
 
-    weather : function (bot, msg, suffix) {
+    weather : (bot, msg, suffix) => {
         if (!suffix) suffix = "Los Angeles, CA";
         if (suffix === "shit") suffix = "San Diego"; //kekeke
         suffix = suffix.replace(" ", "");
@@ -101,20 +103,34 @@ var commands = {
             }
         });
     },
+//admn
+    eval: (bot, msg, suffix) => {
+        if (msg.author.id === settings.owner) {
+            try {
+                var thing = eval(suffix).toString();
+                bot.sendMessage(msg, `\`\`\`${thing}\`\`\``);
+            } catch(e) {
+                console.log(e);
+                bot.sendMessage(msg, `\`\`\`Error: ${e}\`\`\``);
+            }
+        } else {
+            return;
+        }
+    },
 
-    logout: function(bot, msg) {
+    logout: (bot, msg) => {
         if (msg.author.id === settings.owner) {
             bot.sendMessage(msg, "Logging Out").then(bot.logout());
         } else {
             return;
         }
     }
-
 };
+
 
 ////////////////////////////////////TO DO FUNCTIONS//////////////////////////////////////////////
 
-//TODO help command
+//TODO general help command
 
 //economy / slots
 var economy = {
@@ -128,24 +144,27 @@ var economy = {
 
 //trivia commands
 var trivia = {
-    help : '', //help cmd TODO
-    settings : settings.trivia,
-    start : function () {debugger; console.log(this.settings);} //debug
-};
+    lists : fs.readdir('./trivia'),
+    help : (bot, msg) => bot.sendMessage(msg, 'Trivia Help Invoked'), //help cmd TODO
+    list : (bot, msg) => bot.sendMessage(msg, trivia.lists),
+    start : (bot ,msg, suffix) => {
+        if (suffix === 'list') {trivia.list(bot, msg)};
+        if (suffix === 'help') {trivia.help(bot, msg)};
+    }
+}
 
 //trivia session
 var triviaSesh = {
     triviaDir : './trivia',
     scorelist : {},
-    currentQ : {},
-    settings : settings.trivia,
+    current : {},
+    count : 0,
     loadlist : function (bot, msg, suffix) {
-        if (!suffix) {}
+        if (!suffix) {trivia.help};
     }
 }
 
 ////////////////////////////////////DONE FUNCTIONS//////////////////////////////////////////////
-
 
 //msg checker
 bot.on("message", function(msg) {
@@ -161,7 +180,8 @@ bot.on("message", function(msg) {
 
 //ready
 bot.on("ready", function (){
-  console.log("ELbot is ready");
+    bot.setPlayingGame("Three Laws of Robotics");
+    console.log("ELbot is ready");
 });
 
 bot.on("disconnected", function(){process.exit(0);});

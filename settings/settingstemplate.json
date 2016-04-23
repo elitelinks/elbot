@@ -1,6 +1,7 @@
 {
   "token": "",
   "owner": "",
+  "gamesroom": "",
   "weather_api_key": "",
   "prefixes": [
     ".",

@@ -2,7 +2,7 @@ var LineByLineReader = require('line-by-line');
 var prompt = require('prompt');
 var fs = require('fs');
 var jsonfile = require('jsonfile');
-jsonfile.spaces = 2;
+jsonfile.spaces = 4;
 
 prompt.start();
 
