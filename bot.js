@@ -1,13 +1,14 @@
 //Requires
 var Discord = require("discord.js");
-var google = require("google");
-var request = require("request");
-var jsonfile = require("jsonfile");
-var fs = require('fs');
+const google = require("google");
+const request = require("request");
+const jsonfile = require("jsonfile");
+const fs = require('fs');
 
 //settings & data
 var settings = require("./settings/settings.json"),
-    prefixes = settings.prefixes;
+    prefixes = settings.prefixes,
+    triviaset = settings.trivia;
 var bank = require("./settings/bank.json");
 
 //invoke bot
@@ -27,7 +28,7 @@ var cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         case "trivia" : trivia.start(bot, msg, suffix); break;
 
         //admin controls
-        case "eval" : commands.eval(bot, msg, suffix); break;
+        case "eval" : commands.eval(bot, msg, cmdTxt, suffix); break;
         case "logout" : commands.logout(bot, msg); break;
         default: return;
     }
@@ -103,12 +104,12 @@ var commands = {
             }
         });
     },
-//admn
-    eval: (bot, msg, suffix) => {
+//admtn
+    eval: (bot, msg, cmdTxt, suffix) => {
         if (msg.author.id === settings.owner) {
             try {
-                var thing = eval(suffix).toString();
-                bot.sendMessage(msg, `\`\`\`${thing}\`\`\``);
+                var thing = eval(suffix.toString());
+                bot.sendMessage(msg, `\`\`\`javascript\n${thing}\`\`\``);
             } catch(e) {
                 console.log(e);
                 bot.sendMessage(msg, `\`\`\`Error: ${e}\`\`\``);
@@ -144,18 +145,23 @@ var economy = {
 
 //trivia commands
 var trivia = {
-    lists : fs.readdir('./trivia'),
     help : (bot, msg) => bot.sendMessage(msg, 'Trivia Help Invoked'), //help cmd TODO
-    list : (bot, msg) => bot.sendMessage(msg, trivia.lists),
+
+    categories: fs.readdirSync(triviaset.path),
+
+    list : function(bot, msg)  {
+        catTxt = trivia.categories.map(function(x) {return x.slice(0, -5)}).join(' ');
+        bot.sendMessage(msg, `Trivia categories available are:\n\`\`\`${catTxt}\`\`\``);
+    },
+
     start : (bot ,msg, suffix) => {
-        if (suffix === 'list') {trivia.list(bot, msg)};
+        if (suffix === 'list') {trivia.list(bot, msg, suffix)};
         if (suffix === 'help') {trivia.help(bot, msg)};
     }
 }
 
 //trivia session
 var triviaSesh = {
-    triviaDir : './trivia',
     scorelist : {},
     current : {},
     count : 0,
