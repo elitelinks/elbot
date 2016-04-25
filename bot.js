@@ -24,6 +24,9 @@ const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         // searches
         case "goog" :
         case "google" : commands.goog(bot, msg, suffix); break;
+        case "syl" :
+        case "syllables" :
+        case "syllable" : commands.syllable(bot, msg, suffix); break
         case "weather" : commands.weather(bot, msg, suffix); break;
         
         //trivia
@@ -106,6 +109,11 @@ var commands = {
             }
         });
     },
+
+    syllable: (bot, msg, suffix) => {
+        bot.sendMessage(msg, `Syllables: ${syllable(suffix)}`);
+    },
+
 //admtn
     eval: (bot, msg, cmdTxt, suffix) => {
         if (msg.author.id === settings.owner) {
@@ -157,19 +165,25 @@ var trivia = {
     },
 
     start : (bot ,msg, suffix) => {
-        if (suffix === 'list') {trivia.list(bot, msg)};
-        if (suffix === 'help') {trivia.help(bot, msg)};
+        if (suffix === 'list') {trivia.list(bot, msg)}
+        else if (!suffix || suffix === 'help') {trivia.help(bot, msg)}
+        else triviaSesh.loadlist(bot, msg, suffix)
     }
 }
 
 //trivia session
 var triviaSesh = {
+    gameon : false,
     scorelist : {},
-    current : {},
+    currentList : {},
     count : 0,
     loadlist :  (bot, msg, suffix) => {
-        if (!suffix) {trivia.help};
-    }
+        var categories = trivia.categories;
+        if (categories.indexOf(suffix+".json") <= -1) {console.log("no list"); return;}
+        triviaSesh.currentList = jsonfile.readFileSync(`${triviaset.path}/${categories[categories.indexOf(suffix+".json")]}`);
+        console.log(triviaSesh.currentList);
+    },
+    loadQuestion : (bot, msg, suffix) => {} //TODO Load questions
 }
 
 var haiku = (bot, msg) => {
@@ -186,9 +200,6 @@ var haiku = (bot, msg) => {
     while (syllable(lineThree) < 5) {
         lineThree.push(haiArr.shift());
     }
-    console.log(lineOne)
-    console.log(lineTwo)
-    console.log(lineThree)
     if (syllable(lineOne) !== 5 || syllable(lineTwo) !== 7 || syllable(lineThree) !== 5) {return;}
     else {
         bot.sendMessage(msg, `Accidental Haiku Detected! Written by ***${msg.author.username}***!\n\`\`\`${lineOne.join(' ')}\n${lineTwo.join(' ')}\n${lineThree.join(' ')}\`\`\``)
