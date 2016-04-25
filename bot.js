@@ -1,6 +1,8 @@
 //Requires
 var Discord = require("discord.js");
+var startTime = Date.now();
 const google = require("google");
+const syllable = require("syllable");
 const request = require("request");
 const jsonfile = require("jsonfile");
 const fs = require('fs');
@@ -40,19 +42,19 @@ var commands = {
     goog : (bot, msg, suffix) => {
         var search = "google";
         if(suffix){search = suffix;}
-        google(search, function(err, response){
-            if(err || !response || !response.links || response.links.length < 1){bot.sendMessage(msg, "**Your search resulted in an error. Please forgive me **"+msg.author.username, function(error, sentMessage){bot.deleteMessage(sentMessage, {"wait": 5000})});}
+        google(search, (err, response) => {
+            if(err || !response || !response.links || response.links.length < 1){bot.sendMessage(msg, `**Your search resulted in an error. Please forgive me ** ${msg.author.username}`, (error, sentMessage) => {bot.deleteMessage(sentMessage, {"wait": 5000})});}
             else {
                 if(response.links[0].link === null){
                     for(var i = 1; i < response.links.length; i++){
                         if (response.links[i].link !== null) {
-                            bot.sendMessage(msg, "I searched for **\""+search+"\"** and found this, **"+msg.author.username+"\n"+response.links[i].link);
+                            bot.sendMessage(msg, `I searched for **\"${search}\"** and found this, **${msg.author.username}**\n${response.links[i].link}`);
                             return;
                         }
                     }
                 }
                 else {
-                    bot.sendMessage(msg, "**I searched for **\""+search+"\"** and found this, **"+msg.author.username+"\n"+response.links[0].link);
+                    bot.sendMessage(msg, `I searched for **\"${search}\"** and found this, **${msg.author.username}**\n${response.links[0].link}`);
                 }
             }
         })
@@ -63,7 +65,7 @@ var commands = {
         if (suffix === "shit") suffix = "San Diego"; //kekeke
         suffix = suffix.replace(" ", "");
         var rURL = (/\d/.test(suffix) == false) ? "http://api.openweathermap.org/data/2.5/weather?q=" + suffix + "&APPID=" + settings.weather_api_key : "http://api.openweathermap.org/data/2.5/weather?zip=" + suffix + "&APPID=" + settings.weather_api_key;
-        request(rURL, function (error, response, weath) {
+        request(rURL, (error, response, weath) => {
             if (!error && response.statusCode == 200) {
                 weath = JSON.parse(weath);
                 if (!weath.hasOwnProperty("weather")) {
@@ -98,7 +100,7 @@ var commands = {
             }
             else {
                 console.log(error);
-                bot.sendMessage(msg, "There was an error getting the weather, please try again later.", function (error, sentMessage) {
+                bot.sendMessage(msg, "There was an error getting the weather, please try again later.",  (error, sentMessage) => {
                     bot.deleteMessage(sentMessage, {"wait": 5000})
                 });
             }
@@ -150,12 +152,12 @@ var trivia = {
     categories: fs.readdirSync(triviaset.path),
 
     list : (bot, msg) => {
-        catTxt = trivia.categories.map(function(x) {return x.slice(0, -5)}).join(' ');
+        catTxt = trivia.categories.map((x) => {return x.slice(0, -5)}).join(' ');
         bot.sendMessage(msg, `Trivia categories available are:\n\`\`\`${catTxt}\`\`\``);
     },
 
     start : (bot ,msg, suffix) => {
-        if (suffix === 'list') {trivia.list(bot, msg, suffix)};
+        if (suffix === 'list') {trivia.list(bot, msg)};
         if (suffix === 'help') {trivia.help(bot, msg)};
     }
 }
@@ -165,22 +167,45 @@ var triviaSesh = {
     scorelist : {},
     current : {},
     count : 0,
-    loadlist : function (bot, msg, suffix) {
+    loadlist :  (bot, msg, suffix) => {
         if (!suffix) {trivia.help};
     }
 }
+
+var haiku = (bot, msg) => {
+    var haiArr = msg.content.split(' ');
+    var lineOne = [];
+    var lineTwo = [];
+    var lineThree = [];
+    while (syllable(lineOne) < 5) {
+        lineOne.push(haiArr.shift());
+    }
+    while (syllable(lineTwo) < 7) {
+        lineTwo.push(haiArr.shift());
+    }
+    while (syllable(lineThree) < 5) {
+        lineThree.push(haiArr.shift());
+    }
+    console.log(lineOne)
+    console.log(lineTwo)
+    console.log(lineThree)
+    if (syllable(lineOne) !== 5 || syllable(lineTwo) !== 7 || syllable(lineThree) !== 5) {return;}
+    else {
+        bot.sendMessage(msg, `Accidental Haiku Detected! Written by ***${msg.author.username}***!\n\`\`\`${lineOne.join(' ')}\n${lineTwo.join(' ')}\n${lineThree.join(' ')}\`\`\``)
+    }
+};
 
 ////////////////////////////////////DONE FUNCTIONS//////////////////////////////////////////////
 
 //msg checker
 bot.on("message", (msg) => {
-    if(msg.author === bot.user || msg.channel.isPrivate) return;
+    if(msg.author === bot.user || msg.channel.isPrivate) {return;}
     else if (prefixes.indexOf((msg.content.substr(0, 1))) > -1 ) {
         var cmdTxt = msg.content.split(' ')[0].substr(1);
         var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
         var suffix = sufArr.join(' ');
         cmdHandlr(bot, msg, cmdTxt, suffix);
-    }
+    } else if (syllable(msg.content) === 17) {haiku(bot, msg);}
     else return;
 });
 
