@@ -16,7 +16,7 @@ var bot = new Discord.Client({autoReconnect:true});
 
 ///////////////////////////////////// C0MMAND HANDLER /////////////////////////////////////////////
 
-var cmdHandlr = (bot, msg, cmdTxt, suffix) => {
+const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
     switch (cmdTxt) {
 
         // searches
@@ -149,7 +149,7 @@ var trivia = {
 
     categories: fs.readdirSync(triviaset.path),
 
-    list : function(bot, msg)  {
+    list : (bot, msg) => {
         catTxt = trivia.categories.map(function(x) {return x.slice(0, -5)}).join(' ');
         bot.sendMessage(msg, `Trivia categories available are:\n\`\`\`${catTxt}\`\`\``);
     },
@@ -173,7 +173,7 @@ var triviaSesh = {
 ////////////////////////////////////DONE FUNCTIONS//////////////////////////////////////////////
 
 //msg checker
-bot.on("message", function(msg) {
+bot.on("message", (msg) => {
     if(msg.author === bot.user || msg.channel.isPrivate) return;
     else if (prefixes.indexOf((msg.content.substr(0, 1))) > -1 ) {
         var cmdTxt = msg.content.split(' ')[0].substr(1);
@@ -185,11 +185,11 @@ bot.on("message", function(msg) {
 });
 
 //ready
-bot.on("ready", function (){
+bot.on("ready", ()=>{
     bot.setPlayingGame("Three Laws of Robotics");
     console.log("ELbot is ready");
 });
 
-bot.on("disconnected", function(){process.exit(0);});
+bot.on("disconnected", ()=> {process.exit(0);});
 //login
 bot.loginWithToken(settings.token);console.log("Logged in using Token");
