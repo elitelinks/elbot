@@ -51,13 +51,13 @@ var commands = {
                 if(response.links[0].link === null){
                     for(var i = 1; i < response.links.length; i++){
                         if (response.links[i].link !== null) {
-                            bot.sendMessage(msg, `I searched for **\"${search}\"** and found this, **${msg.author.username}**\n${response.links[i].link}`);
+                            bot.sendMessage(msg, `I searched for **\"${search}\"** and found t, **${msg.author.username}**\n${response.links[i].link}`);
                             return;
                         }
                     }
                 }
                 else {
-                    bot.sendMessage(msg, `I searched for **\"${search}\"** and found this, **${msg.author.username}**\n${response.links[0].link}`);
+                    bot.sendMessage(msg, `I searched for **\"${search}\"** and found t, **${msg.author.username}**\n${response.links[0].link}`);
                 }
             }
         })
@@ -114,7 +114,7 @@ var commands = {
         bot.sendMessage(msg, `Syllables of ${suffix}: ${syllable(suffix)}`);
     },
 
-//admtn
+//admin
     eval: (bot, msg, cmdTxt, suffix) => {
         if (msg.author.id === settings.owner) {
             try {
@@ -167,7 +167,12 @@ var trivia = {
     start : (bot ,msg, suffix) => {
         if (suffix === 'list') {trivia.list(bot, msg)}
         else if (!suffix || suffix === 'help') {trivia.help(bot, msg)}
-        else triviaSesh.loadlist(bot, msg, suffix);
+        else if (suffix === 'skip') {
+            if (triviaSesh.currentQuestion === undefined) {return;} // TODO fix skip
+            triviaSesh.round(bot, msg);
+        }
+        else if (trivia.categories.indexOf(suffix+".json") <= -1) {console.log("no list by that name"); return;} //TODO BOT CHat
+        triviaSesh.begin(bot, msg, suffix);
     }
 }
 
@@ -176,34 +181,62 @@ var triviaSesh = {
     gameon : false,
     scorelist : {},
     currentList : [],
-    currentQuestion: {},
+    currentQuestion : {},
     used : [],
-    loadlist :  (bot, msg, suffix) => {
-        var categories = trivia.categories;
-        if (categories.indexOf(suffix+".json") <= -1) {console.log(`No list with the name ${suffix}!`); return;}
-        triviaSesh.currentList = jsonfile.readFileSync(`${triviaset.path}/${categories[categories.indexOf(suffix+".json")]}`);
-        console.log(`${suffix}.json loaded!`); //TODO change to bot msg
-    },
-    loadQuestion : (bot, msg, suffix) => {
-        if (triviaSesh.currentList === []) {return;} //TODO Write something went wrong
-        var questionCheck = Math.floor(Math.random()) * triviaSesh.length;
-        if (triviaSesh.used.indexOf(questionCheck) <= -1) {
-            triviaSesh.currentQuestion = triviaSesh.currentList[questionCheck];
-            triviaSesh.used.append(questionCheck);
-        }
-    },
-    round : (bot, msg, suffix) => {
+    count : 0,
+
+    loadlist : (bot, msg, suffix) => {
         var t = triviaSesh;
-        setTimeout(t.end(bot, msg, suffix), triviaset.timeout) //TODO Write round loop/timeout
+        var categories = trivia.categories;
+        t.currentList = jsonfile.readFileSync(`${triviaset.path}/${categories[categories.indexOf(suffix+".json")]}`);
+        console.log(`${suffix}.json loaded!`); //TODO replace with bot chat
     },
-    end : (bot, msg, suffix) => {
+
+    loadQuestion : () => {
+        var t = triviaSesh;
+        if (t.currentList === []) {console.log('List not loaded!'); return;}
+        var questionCheck = Math.floor(Math.random() * t.currentList.length);
+        if (t.used.indexOf(questionCheck) <= -1) {
+            t.currentQuestion = t.currentList[questionCheck];
+            t.used.push(questionCheck);
+            console.log('used Questions:' + t.used);
+        } else t.loadQuestion();
+    },
+
+    round : (bot, msg) => {
+        var t = triviaSesh;
+        var max = triviaset.maxScore;
+        if (t.count === max) {t.end(bot, msg);}
+        t.loadQuestion();
+        //ask question
+        console.log(t.currentQuestion["question"]); //TODO replace with bot chat
+        bot.on("message", (msg) => {
+            var answers = t.currentQuestion.answers.map((x)=>x.toLowerCase());
+            var guess = msg.content.toLocaleLowerCase();
+            var num = answers.indexOf(guess);
+            if (num > -1) {
+                console.log(`Right answer! ${t.currentQuestion.answers[num]}`) //TODO replace with bot chat
+                //TODO Write score system
+            };
+        });
+    },
+
+    begin : (bot, msg, suffix) => {
+        var t = triviaSesh;
+        t.loadlist(bot, msg, suffix);
+        t.round(bot ,msg);
+    },
+    
+    end : (bot, msg) => {
         var t = triviaSesh;
         t.gameon = false;
         t.scorelist = {};
         t.currentList = [];
         t.currentQuestion = {};
         t.used = [];
+        t.count = 0;
     }
+    
 }
 
 var haiku = (bot, msg) => {
@@ -236,6 +269,8 @@ bot.on("message", (msg) => {
         var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
         var suffix = sufArr.join(' ');
         cmdHandlr(bot, msg, cmdTxt, suffix);
+    } else if (/^(http|https):/.test(msg.content)) {
+        return;
     } else if (syllable(msg.content) === 17) {haiku(bot, msg);}
     else return;
 });
