@@ -67,7 +67,7 @@ var commands = {
         if (!suffix) suffix = "Los Angeles, CA";
         if (suffix === "shit") suffix = "San Diego"; //kekeke
         suffix = suffix.replace(" ", "");
-        var rURL = (/\d/.test(suffix) == false) ? "http://api.openweathermap.org/data/2.5/weather?q=" + suffix + "&APPID=" + settings.weather_api_key : "http://api.openweathermap.org/data/2.5/weather?zip=" + suffix + "&APPID=" + settings.weather_api_key;
+        var rURL = (/\d/.test(suffix) == false) ? `http://api.openweathermap.org/data/2.5/weather?q=${suffix}&APPID=${settings.weather_api_key}` : `http://api.openweathermap.org/data/2.5/weather?zip=${suffix}&APPID=${settings.weather_api_key}`;
         request(rURL, (error, response, weath) => {
             if (!error && response.statusCode == 200) {
                 weath = JSON.parse(weath);
@@ -111,7 +111,7 @@ var commands = {
     },
 
     syllable: (bot, msg, suffix) => {
-        bot.sendMessage(msg, `Syllables: ${syllable(suffix)}`);
+        bot.sendMessage(msg, `Syllables of ${suffix}: ${syllable(suffix)}`);
     },
 
 //admtn
@@ -146,7 +146,7 @@ var commands = {
 //economy / slots
 var economy = {
 
-    register : function (msg) {
+    register : (msg) => {
         // TODO
     }
 
@@ -167,7 +167,7 @@ var trivia = {
     start : (bot ,msg, suffix) => {
         if (suffix === 'list') {trivia.list(bot, msg)}
         else if (!suffix || suffix === 'help') {trivia.help(bot, msg)}
-        else triviaSesh.loadlist(bot, msg, suffix)
+        else triviaSesh.loadlist(bot, msg, suffix);
     }
 }
 
@@ -175,15 +175,35 @@ var trivia = {
 var triviaSesh = {
     gameon : false,
     scorelist : {},
-    currentList : {},
-    count : 0,
+    currentList : [],
+    currentQuestion: {},
+    used : [],
     loadlist :  (bot, msg, suffix) => {
         var categories = trivia.categories;
-        if (categories.indexOf(suffix+".json") <= -1) {console.log("no list"); return;}
+        if (categories.indexOf(suffix+".json") <= -1) {console.log(`No list with the name ${suffix}!`); return;}
         triviaSesh.currentList = jsonfile.readFileSync(`${triviaset.path}/${categories[categories.indexOf(suffix+".json")]}`);
-        console.log(triviaSesh.currentList);
+        console.log(`${suffix}.json loaded!`); //TODO change to bot msg
     },
-    loadQuestion : (bot, msg, suffix) => {} //TODO Load questions
+    loadQuestion : (bot, msg, suffix) => {
+        if (triviaSesh.currentList === []) {return;} //TODO Write something went wrong
+        var questionCheck = Math.floor(Math.random()) * triviaSesh.length;
+        if (triviaSesh.used.indexOf(questionCheck) <= -1) {
+            triviaSesh.currentQuestion = triviaSesh.currentList[questionCheck];
+            triviaSesh.used.append(questionCheck);
+        }
+    },
+    round : (bot, msg, suffix) => {
+        var t = triviaSesh;
+        setTimeout(t.end(bot, msg, suffix), triviaset.timeout) //TODO Write round loop/timeout
+    },
+    end : (bot, msg, suffix) => {
+        var t = triviaSesh;
+        t.gameon = false;
+        t.scorelist = {};
+        t.currentList = [];
+        t.currentQuestion = {};
+        t.used = [];
+    }
 }
 
 var haiku = (bot, msg) => {
