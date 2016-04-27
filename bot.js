@@ -28,6 +28,8 @@ const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         case "syllables" :
         case "syllable" : commands.syllable(bot, msg, suffix); break
         case "weather" : commands.weather(bot, msg, suffix); break;
+        case "8" : commands.eight(bot, msg, suffix); break;
+        case "tsa" : commands.tsa(bot, msg); break;
         
         //trivia
         case "trivia" : trivia.start(bot, msg, suffix); break;
@@ -114,6 +116,37 @@ var commands = {
         bot.sendMessage(msg, `Syllables of ${suffix}: ${syllable(suffix)}`);
     },
 
+    eight: (bot, msg, suffix) => {
+        var ball = [
+            "Signs point to yes.",
+            "Yes.",
+            "Reply hazy, try again.",
+            "Without a doubt.",
+            "My sources say no.",
+            "As I see it, yes.",
+            "You may rely on it.",
+            "Concentrate and ask again.",
+            "Outlook not so good.",
+            "It is decidedly so.",
+            "Better not tell you now.",
+            "Very doubtful.",
+            "Yes - definitely.",
+            "It is certain.",
+            "Cannot predict now.",
+            "Most likely.",
+            "Ask again later.",
+            "My reply is no.",
+            "Outlook good.",
+            "Don't count on it. "
+        ];
+        bot.reply(msg, ball[Math.floor(Math.random() * ball.length)]);
+    },
+
+    tsa: (bot, msg) => {
+        var arrow = Math.round(Math.random())
+        bot.reply(msg, (arrow === 1)? ":arrow_left:" : ":arrow_right:")
+    },
+
 //admin
     eval: (bot, msg, cmdTxt, suffix) => {
         if (msg.author.id === settings.owner) {
@@ -171,7 +204,7 @@ var trivia = {
             if (triviaSesh.currentQuestion === undefined) {return;} // TODO fix skip
             triviaSesh.round(bot, msg);
         }
-        else if (trivia.categories.indexOf(suffix+".json") <= -1) {console.log("no list by that name"); return;} //TODO BOT CHat
+        else if (trivia.categories.indexOf(suffix+".json") <= -1) {console.log("No list by that name"); return;} //TODO BOT CHat
         triviaSesh.begin(bot, msg, suffix);
     }
 }
@@ -218,6 +251,7 @@ var triviaSesh = {
                 console.log(`Right answer! ${t.currentQuestion.answers[num]}`) //TODO replace with bot chat
                 //TODO Write score system
             };
+            setTimeout(triviaSesh.round(bot, msg), triviaset.timeout);
         });
     },
 
