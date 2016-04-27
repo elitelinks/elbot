@@ -194,10 +194,11 @@ var trivia = {
     },
 
     start : (bot ,msg, suffix) => {
-        var t = trivia
-        if (!suffix || suffix === 'help') {trivia.help(bot, msg); return;}
+        var t = trivia;
+        if (triviaSesh.gameon == true) {bot.sendMessage(msg,"There is already a trivia session in place!")}
+        else if (!suffix || suffix === 'help') {t.help(bot, msg); return;}
         else if (t.categories.indexOf(suffix+".json") > -1) {triviaSesh.begin(bot, msg, suffix);}
-        else if (t.categories.indexOf(suffix+".json") <= -1) {console.log("No list by that name"); return;} //TODO CHANGE TO BOT CHAT
+        else {bot.sendMessage(msg, `No list with the name ${suffix}`); return;}
     }
 }
 
@@ -264,8 +265,11 @@ var triviaSesh = {
     }
 }
 
+////////////////////////////////////DONE FUNCTIONS//////////////////////////////////////////////
+
 var haiku = (bot, msg) => {
     var haiArr = msg.content.split(' ');
+    if (syllable(haiArr) !== 17) {return};
     var lineOne = [];
     var lineTwo = [];
     var lineThree = [];
@@ -278,13 +282,13 @@ var haiku = (bot, msg) => {
     while (syllable(lineThree) < 5) {
         lineThree.push(haiArr.shift());
     }
-    if (syllable(lineOne) !== 5 || syllable(lineTwo) !== 7 || syllable(lineThree) !== 5) {return;}
+    if (syllable(lineOne) !== 5 || syllable(lineTwo) !== 7 || syllable(lineThree) !== 5) {
+        return;
+    }
     else {
         bot.sendMessage(msg, `Accidental Haiku Detected! Written by ***${msg.author.username}***!\n\`\`\`${lineOne.join(' ')}\n${lineTwo.join(' ')}\n${lineThree.join(' ')}\`\`\``)
     }
 };
-
-////////////////////////////////////DONE FUNCTIONS//////////////////////////////////////////////
 
 //msg checker
 bot.on("message", (msg) => {
@@ -297,7 +301,7 @@ bot.on("message", (msg) => {
         cmdHandlr(bot, msg, cmdTxt, suffix);
     } else if (/^(http|https):/.test(msg.content)) {
         return;
-    } else if (syllable(msg.content) === 17) {haiku(bot, msg);}
+    } // else if (msg.content.length > 50) {haiku(bot, msg);} // need to figure out why haiku freezes bot
     else return;
 });
 
