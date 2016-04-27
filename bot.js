@@ -143,7 +143,7 @@ var commands = {
 
     tsa: (bot, msg) => {
         var arrow = Math.round(Math.random())
-        bot.reply(msg, (arrow === 1)? ":arrow_left:" : ":arrow_right:")
+        bot.reply(msg, (arrow === 1) ? ":arrow_left:" : ":arrow_right:")
     },
 //admin
     eval: (bot, msg, cmdTxt, suffix) => {
@@ -195,8 +195,13 @@ var trivia = {
 
     start : (bot ,msg, suffix) => {
         var t = trivia;
-        if (triviaSesh.gameon == true) {bot.sendMessage(msg,"There is already a trivia session in place!")}
+        if (suffix === 'skip') {
+            if (triviaSesh.gameon === false) {return;}
+            else {triviaSesh.round(bot, msg);}
+        }
+        else if (triviaSesh.gameon === true) {bot.sendMessage(msg,"There is already a trivia session in place!"); return;}
         else if (!suffix || suffix === 'help') {t.help(bot, msg); return;}
+        else if (suffix === 'list') {t.list(bot, msg);}
         else if (t.categories.indexOf(suffix+".json") > -1) {triviaSesh.begin(bot, msg, suffix);}
         else {bot.sendMessage(msg, `No list with the name ${suffix}`); return;}
     }
@@ -210,6 +215,7 @@ var triviaSesh = {
     currentQuestion : {},
     used : [],
     count : 0,
+    timer : (msg, triviaset) => {setInterval(triviaSesh.round, triviaset.timeout);},
 
     loadlist : (bot, msg, suffix) => {
         var t = triviaSesh;
@@ -225,25 +231,35 @@ var triviaSesh = {
         if (t.used.indexOf(questionCheck) <= -1) {
             t.currentQuestion = t.currentList[questionCheck];
             t.used.push(questionCheck);
-            console.log('used Questions:' + t.used);
+            console.log('Used Question #s ' + t.used);
         } else t.loadQuestion();
+    },
+
+    addPoint : (bot, msg) => {
+        var t = triviaSesh;
+        var winner = msg.author;
+        if (!t.scorelist[winner]) {t.scorelist[winner] = 1;}
+        else t.scorelist[winner] ++;
     },
 
     round : (bot, msg) => {
         var t = triviaSesh;
         var max = triviaset.maxScore;
-        if (t.count === max) {t.end(bot, msg);}
+
+        var botAnswers = (bot, msg) =>{}; //TODO when no answer
+
         t.loadQuestion();
-        //ask question
-        console.log(t.currentQuestion["question"]); //TODO replace with bot chat
+        t.count ++;
+        bot.sendMessage(msg, `Question #${t.count}, ${t.currentQuestion["question"]}`);
         bot.on("message", (msg) => {
             var answers = t.currentQuestion.answers.map((x)=>x.toLowerCase());
             var guess = msg.content.toLowerCase();
             var num = answers.indexOf(guess);
             if (num > -1) {
-                console.log(`Right answer! ${t.currentQuestion.answers[num]}`) //TODO replace with bot chat
-                //TODO Write score system
-            };
+                bot.sendMessage(msg, `Right answer ${msg.author}! ${t.currentQuestion.answers[num]}!`)
+                t.addPoint(bot, msg);
+                t.round(bot, msg);
+            }
         });
     },
 
@@ -256,12 +272,14 @@ var triviaSesh = {
     
     end : (bot, msg) => {
         var t = triviaSesh;
+        bot.sendMessage(msg, "Trivia Ended!");
         t.gameon = false;
         t.scorelist = {};
         t.currentList = [];
         t.currentQuestion = {};
         t.used = [];
         t.count = 0;
+        return;
     }
 }
 

@@ -444,7 +444,8 @@
     {
         "question": "Who was The Grand Inquisitor before he became an agent of the Sith?",
         "answers": [
-            "A temple guard"
+            "A temple guard",
+            "temple guard"
         ]
     },
     {
@@ -1055,8 +1056,8 @@
         ]
     },
     {
-        "question": "What planet was under separatist attack in the Clone Wars Movie? Christophsis ",
-        "answers": []
+        "question": "What planet was under separatist attack in the Clone Wars Movie?",
+        "answers": [ "Christophsis" ]
     },
     {
         "question": "What color is Obi-Wan’s Lightsaber?",
