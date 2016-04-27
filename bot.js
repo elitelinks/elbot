@@ -28,7 +28,7 @@ const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         case "syllables" :
         case "syllable" : commands.syllable(bot, msg, suffix); break
         case "weather" : commands.weather(bot, msg, suffix); break;
-        case "8" : commands.eight(bot, msg, suffix); break;
+        case "8" : commands.eight(bot, msg); break;
         case "tsa" : commands.tsa(bot, msg); break;
         
         //trivia
@@ -188,6 +188,7 @@ var economy = {
 
 //trivia commands
 var trivia = {
+
     help : (bot, msg) => bot.sendMessage(msg, 'Trivia Help Invoked'), //help cmd TODO
 
     categories: fs.readdirSync(triviaset.path),
@@ -239,6 +240,7 @@ var triviaSesh = {
     round : (bot, msg) => {
         var t = triviaSesh;
         var max = triviaset.maxScore;
+        var time = setTimeout(triviaSesh.round(bot, msg), triviaset.timeout);
         if (t.count === max) {t.end(bot, msg);}
         t.loadQuestion();
         //ask question
@@ -251,7 +253,6 @@ var triviaSesh = {
                 console.log(`Right answer! ${t.currentQuestion.answers[num]}`) //TODO replace with bot chat
                 //TODO Write score system
             };
-            setTimeout(triviaSesh.round(bot, msg), triviaset.timeout);
         });
     },
 
@@ -259,6 +260,7 @@ var triviaSesh = {
         var t = triviaSesh;
         t.loadlist(bot, msg, suffix);
         t.round(bot ,msg);
+        t.gameon = true;
     },
     
     end : (bot, msg) => {
@@ -270,7 +272,6 @@ var triviaSesh = {
         t.used = [];
         t.count = 0;
     }
-    
 }
 
 var haiku = (bot, msg) => {
