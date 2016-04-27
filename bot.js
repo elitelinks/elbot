@@ -20,7 +20,6 @@ var bot = new Discord.Client({autoReconnect:true});
 
 const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
     switch (cmdTxt) {
-
         // searches
         case "goog" :
         case "google" : commands.goog(bot, msg, suffix); break;
@@ -53,13 +52,13 @@ var commands = {
                 if(response.links[0].link === null){
                     for(var i = 1; i < response.links.length; i++){
                         if (response.links[i].link !== null) {
-                            bot.sendMessage(msg, `I searched for **\"${search}\"** and found t, **${msg.author.username}**\n${response.links[i].link}`);
+                            bot.sendMessage(msg, `I searched for **\"${search}\"** and found this, **${msg.author.username}**\n${response.links[i].link}`);
                             return;
                         }
                     }
                 }
                 else {
-                    bot.sendMessage(msg, `I searched for **\"${search}\"** and found t, **${msg.author.username}**\n${response.links[0].link}`);
+                    bot.sendMessage(msg, `I searched for **\"${search}\"** and found this, **${msg.author.username}**\n${response.links[0].link}`);
                 }
             }
         })
@@ -116,7 +115,7 @@ var commands = {
         bot.sendMessage(msg, `Syllables of ${suffix}: ${syllable(suffix)}`);
     },
 
-    eight: (bot, msg, suffix) => {
+    eight: (bot, msg) => {
         var ball = [
             "Signs point to yes.",
             "Yes.",
@@ -146,7 +145,6 @@ var commands = {
         var arrow = Math.round(Math.random())
         bot.reply(msg, (arrow === 1)? ":arrow_left:" : ":arrow_right:")
     },
-
 //admin
     eval: (bot, msg, cmdTxt, suffix) => {
         if (msg.author.id === settings.owner) {
@@ -171,7 +169,6 @@ var commands = {
     }
 };
 
-
 ////////////////////////////////////TO DO FUNCTIONS//////////////////////////////////////////////
 
 //TODO general help command
@@ -185,13 +182,11 @@ var economy = {
 
 };
 
-
 //trivia commands
 var trivia = {
-
     help : (bot, msg) => bot.sendMessage(msg, 'Trivia Help Invoked'), //help cmd TODO
 
-    categories: fs.readdirSync(triviaset.path),
+    categories : fs.readdirSync(triviaset.path),
 
     list : (bot, msg) => {
         catTxt = trivia.categories.map((x) => {return x.slice(0, -5)}).join(' ');
@@ -199,14 +194,10 @@ var trivia = {
     },
 
     start : (bot ,msg, suffix) => {
-        if (suffix === 'list') {trivia.list(bot, msg)}
-        else if (!suffix || suffix === 'help') {trivia.help(bot, msg)}
-        else if (suffix === 'skip') {
-            if (triviaSesh.currentQuestion === undefined) {return;} // TODO fix skip
-            triviaSesh.round(bot, msg);
-        }
-        else if (trivia.categories.indexOf(suffix+".json") <= -1) {console.log("No list by that name"); return;} //TODO BOT CHat
-        triviaSesh.begin(bot, msg, suffix);
+        var t = trivia
+        if (!suffix || suffix === 'help') {trivia.help(bot, msg); return;}
+        else if (t.categories.indexOf(suffix+".json") > -1) {triviaSesh.begin(bot, msg, suffix);}
+        else if (t.categories.indexOf(suffix+".json") <= -1) {console.log("No list by that name"); return;} //TODO CHANGE TO BOT CHAT
     }
 }
 
@@ -222,7 +213,7 @@ var triviaSesh = {
     loadlist : (bot, msg, suffix) => {
         var t = triviaSesh;
         var categories = trivia.categories;
-        t.currentList = jsonfile.readFileSync(`${triviaset.path}/${categories[categories.indexOf(suffix+".json")]}`);
+        t.currentList = jsonfile.readFileSync(`${triviaset.path}/${suffix}.json`);
         console.log(`${suffix}.json loaded!`); //TODO replace with bot chat
     },
 
@@ -240,14 +231,13 @@ var triviaSesh = {
     round : (bot, msg) => {
         var t = triviaSesh;
         var max = triviaset.maxScore;
-        var time = setTimeout(triviaSesh.round(bot, msg), triviaset.timeout);
         if (t.count === max) {t.end(bot, msg);}
         t.loadQuestion();
         //ask question
         console.log(t.currentQuestion["question"]); //TODO replace with bot chat
         bot.on("message", (msg) => {
             var answers = t.currentQuestion.answers.map((x)=>x.toLowerCase());
-            var guess = msg.content.toLocaleLowerCase();
+            var guess = msg.content.toLowerCase();
             var num = answers.indexOf(guess);
             if (num > -1) {
                 console.log(`Right answer! ${t.currentQuestion.answers[num]}`) //TODO replace with bot chat
@@ -299,6 +289,7 @@ var haiku = (bot, msg) => {
 //msg checker
 bot.on("message", (msg) => {
     if(msg.author === bot.user || msg.channel.isPrivate) {return;}
+    else if (msg.content === "ping") {bot.reply(msg, "pong");}
     else if (prefixes.indexOf((msg.content.substr(0, 1))) > -1 ) {
         var cmdTxt = msg.content.split(' ')[0].substr(1);
         var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
