@@ -1,12 +1,13 @@
 //Requires
 var Discord = require("discord.js");
 var startTime = new Date;
+var Timer = require("timer.js");
 const google = require("google");
 const syllable = require("syllable");
 const request = require("request");
 const jsonfile = require("jsonfile");
 const http = require('http');
-const fs = require('fs');
+const fs = require('fs-extra');
 
 //settings & data
 var settings = require("./settings/settings.json"),
@@ -37,6 +38,7 @@ const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
 
         //admin controls
         case "eval" : commands.eval(bot, msg, cmdTxt, suffix); break;
+        case "cleanup" : commands.cleanup(); break;
         case "logout" : commands.logout(bot, msg); break;
         default: return;
     }
@@ -156,14 +158,19 @@ var commands = {
     },
     
     orly: (bot, msg, suffix) => {
+        fs.ensureDir('./cache', function (err) {
+            console.log(err) // => null 
+            // dir has now been created, including the directory it is to be placed in 
+        })
         var randomstring = require('randomstring');
-        var filename = ('' + startTime.getMonth()+1) + startTime.getDate() + startTime.getFullYear() + randomstring.generate(5);
+        var filename = (startTime.getMonth()+1).toString() + startTime.getDate().toString() + startTime.getFullYear().toString() + randomstring.generate(5);
+        
         try {
             var orlyOpts = suffix.split(',');
             var author = encodeURIComponent(orlyOpts[0].trim());
             var title = encodeURIComponent(orlyOpts[1].trim());
             var topTxt = orlyOpts[2] ? encodeURIComponent(orlyOpts[2].trim()) : "%20";
-            var guideTxt = orlyOpts[2] ? encodeURIComponent(orlyOpts[3].trim()) : "The%20Definitive%20Guide";
+            var guideTxt = orlyOpts[3] ? encodeURIComponent(orlyOpts[3].trim()) : "The%20Definitive%20Guide";
             var imgCode = Math.floor(Math.random() * 40) + 1;
             var colorCode = Math.floor(Math.random() * 16);
             request.get(`https://orly-appstore.herokuapp.com/generate?title=${title}&top_text=${topTxt}&author=${author}&image_code=${imgCode}&theme=${colorCode}&guide_text=${guideTxt}&guide_text_placement=bottom_right`)
@@ -186,6 +193,12 @@ var commands = {
         } else {
             return;
         }
+    },
+
+    cleanup : ()=> {
+        fs.emptyDir('./cache', function (err) {
+            if (!err) console.log(err)
+        });
     },
 
     logout: (bot, msg) => {
@@ -226,7 +239,7 @@ var trivia = {
         var t = trivia;
         if (suffix === 'skip') {
             if (triviaSesh.gameon === false) {return;}
-            else {triviaSesh.round(bot, msg);}
+            else {triviaSesh.loop(bot, msg);}
         }
         else if (triviaSesh.gameon === true) {bot.sendMessage(msg,"There is already a trivia session in place!"); return;}
         else if (!suffix || suffix === 'help') {t.help(bot, msg); return;}
@@ -244,7 +257,6 @@ var triviaSesh = {
     currentQuestion : {},
     used : [],
     count : 0,
-    timer : (msg, triviaset) => {setInterval(triviaSesh.round, triviaset.timeout);},
 
     loadlist : (bot, msg, suffix) => {
         var t = triviaSesh;
@@ -272,30 +284,48 @@ var triviaSesh = {
     },
 
     round : (bot, msg) => {
-        var t = triviaSesh;
-        var max = triviaset.maxScore;
-
-        var botAnswers = (bot, msg) =>{}; //TODO when no answer
-
-        t.loadQuestion();
-        t.count ++;
-        bot.sendMessage(msg, `Question #${t.count}, ${t.currentQuestion["question"]}`);
-        bot.on("message", (msg) => {
+        try {
+            var t = triviaSesh;
+            t.loadQuestion();
             var answers = t.currentQuestion.answers.map((x)=>x.toLowerCase());
-            var guess = msg.content.toLowerCase();
-            var num = answers.indexOf(guess);
-            if (num > -1) {
-                bot.sendMessage(msg, `Right answer ${msg.author}! ${t.currentQuestion.answers[num]}!`)
-                t.addPoint(bot, msg);
-                t.round(bot, msg);
-            }
-        });
+            
+            var botAnswers = (bot, msg) => {
+                bot.sendMessage(msg, `The answer is ${t.currentQuestion.answers[0]}!`);
+                trivTimer.stop();
+                t.loop(bot, msg);
+            };
+
+            var trivTimer = new Timer();
+            bot.sendMessage(msg, `***Question #${t.count}***\n\n${t.currentQuestion["question"]}`);
+            bot.on("message", (msg) => {
+                var guess = msg.content.toLowerCase();
+                var num = answers.indexOf(guess);
+                if (num > -1) {
+                    bot.sendMessage(msg, `Right answer ${msg.author}! ${t.currentQuestion.answers[num]}!`)
+                    t.addPoint(bot, msg);
+                    trivTimer.stop()
+                    t.loop(bot, msg);
+                }
+            });
+            
+            trivTimer.start(triviaset.delay).on('end', function() {botAnswers(bot, msg)});
+            
+        } catch(err) {console.log(err)}
+    },
+
+    loop : (bot, msg) => {
+        var t = triviaSesh;
+        if (t.count >= triviaset.maxScore) {t.end(bot, msg); return;}
+        else {
+            t.count++;
+            t.round(bot, msg);
+        }
     },
 
     begin : (bot, msg, suffix) => {
         var t = triviaSesh;
         t.loadlist(bot, msg, suffix);
-        t.round(bot ,msg);
+        t.loop(bot ,msg);
         t.gameon = true;
     },
     
@@ -307,7 +337,7 @@ var triviaSesh = {
         t.currentList = [];
         t.currentQuestion = {};
         t.used = [];
-        t.count = 0;
+        t.count = 0
         return;
     }
 }

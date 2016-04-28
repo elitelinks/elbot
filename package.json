@@ -5,11 +5,13 @@
   "main": "bot.js",
   "dependencies": {
     "discord.js": "^7.0.0",
+    "fs-extra": "^0.30.0",
     "google": "^2.0.0",
     "jsonfile": "^2.3.0",
     "randomstring": "^1.1.4",
     "request": "^2.72.0",
-    "syllable": "^0.1.4"
+    "syllable": "^0.1.4",
+    "timer.js": "^1.0.4"
   },
   "devDependencies": {},
   "repository": {
