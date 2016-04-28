@@ -290,13 +290,14 @@ var triviaSesh = {
             var answers = t.currentQuestion.answers.map((x)=>x.toLowerCase());
             
             var botAnswers = (bot, msg) => {
-                bot.sendMessage(msg, `The answer is ${t.currentQuestion.answers[0]}!`);
+                bot.sendMessage(msg, `The answer is **${t.currentQuestion.answers[0]}**!`);
                 trivTimer.stop();
-                t.loop(bot, msg);
+                trivTimer.start(1).on('end', function(){t.loop(bot,msg)})
             };
 
             var trivTimer = new Timer();
-            bot.sendMessage(msg, `***Question #${t.count}***\n\n${t.currentQuestion["question"]}`);
+            
+            bot.sendMessage(msg, `**Question #${t.count}**\n\n${t.currentQuestion["question"]}`);
             bot.on("message", (msg) => {
                 var guess = msg.content.toLowerCase();
                 var num = answers.indexOf(guess);
@@ -304,7 +305,7 @@ var triviaSesh = {
                     bot.sendMessage(msg, `Right answer ${msg.author}! ${t.currentQuestion.answers[num]}!`)
                     t.addPoint(bot, msg);
                     trivTimer.stop()
-                    t.loop(bot, msg);
+                    trivTimer.start(1).on('end', function(){t.loop(bot,msg)})
                 }
             });
             
