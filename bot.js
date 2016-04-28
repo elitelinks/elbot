@@ -1,10 +1,11 @@
 //Requires
 var Discord = require("discord.js");
-var startTime = Date.now();
+var startTime = new Date;
 const google = require("google");
 const syllable = require("syllable");
 const request = require("request");
 const jsonfile = require("jsonfile");
+const http = require('http');
 const fs = require('fs');
 
 //settings & data
@@ -155,16 +156,19 @@ var commands = {
     },
     
     orly: (bot, msg, suffix) => {
+        var randomstring = require('randomstring');
+        var filename = ('' + startTime.getMonth()+1) + startTime.getDate() + startTime.getFullYear() + randomstring.generate(5);
         try {
             var orlyOpts = suffix.split(',');
-            console.log(orlyOpts);
             var author = encodeURIComponent(orlyOpts[0].trim());
             var title = encodeURIComponent(orlyOpts[1].trim());
             var topTxt = orlyOpts[2] ? encodeURIComponent(orlyOpts[2].trim()) : "%20";
             var guideTxt = orlyOpts[2] ? encodeURIComponent(orlyOpts[3].trim()) : "The%20Definitive%20Guide";
             var imgCode = Math.floor(Math.random() * 40) + 1;
             var colorCode = Math.floor(Math.random() * 16);
-            bot.sendMessage(msg, `https://orly-appstore.herokuapp.com/generate?title=${title}&top_text=${topTxt}&author=${author}&image_code=${imgCode}&theme=${colorCode}&guide_text=${guideTxt}&guide_text_placement=bottom_right`);
+            request.get(`https://orly-appstore.herokuapp.com/generate?title=${title}&top_text=${topTxt}&author=${author}&image_code=${imgCode}&theme=${colorCode}&guide_text=${guideTxt}&guide_text_placement=bottom_right`)
+                .pipe(fs.createWriteStream(`./cache/${filename}.png`))
+                .on('close', function() {bot.sendFile(msg, `./cache/${filename}.png`)});
         } catch(err) {
             console.log(err);
         }
@@ -197,8 +201,6 @@ var commands = {
 
 //TODO general help command
 
-//TODO ORLY book generator
-// https://orly-appstore.herokuapp.com/generate?title=Title&top_text=Top%20Text&author=Author&image_code=8&theme=9&guide_text=Guide%20Text&guide_text_placement=bottom_right
 
 //economy / slots
 var economy = {
@@ -347,7 +349,7 @@ bot.on("message", (msg) => {
         cmdHandlr(bot, msg, cmdTxt, suffix);
     } else if (/^(http|https):/.test(msg.content)) {
         return;
-    } // else if (msg.content.length > 50) {haiku(bot, msg);} // need to figure out why haiku freezes bot
+    } // else if (msg.content.length > 70) {haiku(bot, msg);} // need to figure out why haiku freezes bot
     else return;
 });
 
