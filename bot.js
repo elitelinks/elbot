@@ -29,6 +29,7 @@ const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         case "weather" : commands.weather(bot, msg, suffix); break;
         case "8" : commands.eight(bot, msg); break;
         case "tsa" : commands.tsa(bot, msg); break;
+        case "orly" : commands.orly(bot, msg, suffix); break;
         
         //trivia
         case "trivia" : trivia.start(bot, msg, suffix); break;
@@ -42,9 +43,16 @@ const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
 
 //////////////////////////////////////// COMMANDS ///////////////////////////////////////////////
 
+function Command (bot, msg, cmdTxt, suffix) { // TODO change commands to class
+    this.msg = msg;
+    this.cmdTxt = cmdTxt;
+    this.suffix = suffix;
+}
+
 var commands = {
     goog : (bot, msg, suffix) => {
-        var search = "google";
+        'use strict';
+        let search = "google";
         if(suffix){search = suffix;}
         google(search, (err, response) => {
             if(err || !response || !response.links || response.links.length < 1){bot.sendMessage(msg, `**Your search resulted in an error. Please forgive me ** ${msg.author.username}`, (error, sentMessage) => {bot.deleteMessage(sentMessage, {"wait": 5000})});}
@@ -145,6 +153,22 @@ var commands = {
         var arrow = Math.round(Math.random())
         bot.reply(msg, (arrow === 1) ? ":arrow_left:" : ":arrow_right:")
     },
+    
+    orly: (bot, msg, suffix) => {
+        try {
+            var orlyOpts = suffix.split(',');
+            console.log(orlyOpts);
+            var author = encodeURIComponent(orlyOpts[0].trim());
+            var title = encodeURIComponent(orlyOpts[1].trim());
+            var topTxt = orlyOpts[2] ? encodeURIComponent(orlyOpts[2].trim()) : "%20";
+            var guideTxt = orlyOpts[2] ? encodeURIComponent(orlyOpts[3].trim()) : "The%20Definitive%20Guide";
+            var imgCode = Math.floor(Math.random() * 40) + 1;
+            var colorCode = Math.floor(Math.random() * 16);
+            bot.sendMessage(msg, `https://orly-appstore.herokuapp.com/generate?title=${title}&top_text=${topTxt}&author=${author}&image_code=${imgCode}&theme=${colorCode}&guide_text=${guideTxt}&guide_text_placement=bottom_right`);
+        } catch(err) {
+            console.log(err);
+        }
+    },
 //admin
     eval: (bot, msg, cmdTxt, suffix) => {
         if (msg.author.id === settings.owner) {
@@ -172,6 +196,9 @@ var commands = {
 ////////////////////////////////////TO DO FUNCTIONS//////////////////////////////////////////////
 
 //TODO general help command
+
+//TODO ORLY book generator
+// https://orly-appstore.herokuapp.com/generate?title=Title&top_text=Top%20Text&author=Author&image_code=8&theme=9&guide_text=Guide%20Text&guide_text_placement=bottom_right
 
 //economy / slots
 var economy = {
@@ -286,11 +313,12 @@ var triviaSesh = {
 ////////////////////////////////////DONE FUNCTIONS//////////////////////////////////////////////
 
 var haiku = (bot, msg) => {
-    var haiArr = msg.content.split(' ');
+    'use strict';
+    let haiArr = msg.content.split(' ');
     if (syllable(haiArr) !== 17) {return};
-    var lineOne = [];
-    var lineTwo = [];
-    var lineThree = [];
+    let lineOne = [];
+    let lineTwo = [];
+    let lineThree = [];
     while (syllable(lineOne) < 5) {
         lineOne.push(haiArr.shift());
     }
@@ -331,4 +359,6 @@ bot.on("ready", ()=>{
 
 bot.on("disconnected", ()=> {process.exit(0);});
 //login
-bot.loginWithToken(settings.token);console.log("Logged in using Token");
+if (settings.token) {bot.loginWithToken(settings.token);console.log("Logged in using Token");}
+else {bot.login(settings.email, settings.password)}
+

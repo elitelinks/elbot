@@ -7,5 +7,11 @@
     ".",
     "!"
   ],
-  "trivia": {}
+  "trivia": {
+    "botPlays" : false,
+    "delay" : 15,
+    "maxScore" : 10,
+    "timeout" : 10000,
+    "path" : "./trivia"
+  }
 }
