@@ -8,6 +8,7 @@ const request = require("request");
 const jsonfile = require("jsonfile");
 const http = require('http');
 const fs = require('fs-extra');
+process.setMaxListeners(0);
 
 //settings & data
 var settings = require("./settings/settings.json"),
@@ -34,7 +35,8 @@ const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         case "orly" : commands.orly(bot, msg, suffix); break;
         
         //trivia
-        case "trivia" : trivia.start(bot, msg, suffix); break;
+        case "trivia" : if (suffix === 'stop' && triviaSesh.gameon === true) {triviaSesh.end(bot, msg)}
+            else trivia.start(bot, msg, suffix); break;
 
         //admin controls
         case "eval" : commands.eval(bot, msg, cmdTxt, suffix); break;
@@ -167,8 +169,8 @@ var commands = {
         
         try {
             var orlyOpts = suffix.split(',');
-            var author = encodeURIComponent(orlyOpts[0].trim());
-            var title = encodeURIComponent(orlyOpts[1].trim());
+            var title = encodeURIComponent(orlyOpts[0].trim());
+            var author = orlyOpts[1] ? encodeURIComponent(orlyOpts[1].trim()) : "%20";
             var topTxt = orlyOpts[2] ? encodeURIComponent(orlyOpts[2].trim()) : "%20";
             var guideTxt = orlyOpts[3] ? encodeURIComponent(orlyOpts[3].trim()) : "The%20Definitive%20Guide";
             var imgCode = Math.floor(Math.random() * 40) + 1;
@@ -226,7 +228,7 @@ var economy = {
 
 //trivia commands
 var trivia = {
-    help : (bot, msg) => bot.sendMessage(msg, 'Trivia Help Invoked'), //help cmd TODO
+    help : (bot, msg) => bot.sendMessage(msg, 'Trivia Help'), //help cmd TODO
 
     categories : fs.readdirSync(triviaset.path),
 
@@ -256,6 +258,8 @@ var triviaSesh = {
     currentList : [],
     currentQuestion : {},
     used : [],
+    timer : new Timer(),
+    topscore: 0,
     count : 0,
 
     loadlist : (bot, msg, suffix) => {
@@ -278,14 +282,17 @@ var triviaSesh = {
 
     addPoint : (bot, msg) => {
         var t = triviaSesh;
-        var winner = msg.author;
+        var winner = msg.author.name;
+        if (t.scorelist[winner] > t.topscore) {t.topscore = t.scorelist[winner]}
         if (!t.scorelist[winner]) {t.scorelist[winner] = 1;}
         else t.scorelist[winner] ++;
+        if (t.scorelist[winner] > t.topscore){t.topscore = t.scorelist[winner]}
     },
 
     round : (bot, msg) => {
         try {
             var t = triviaSesh;
+            var trivTimer = t.timer;
             t.loadQuestion();
             var answers = t.currentQuestion.answers.map((x)=>x.toLowerCase());
             
@@ -294,21 +301,19 @@ var triviaSesh = {
                 trivTimer.stop();
                 trivTimer.start(1).on('end', function(){t.loop(bot,msg)})
             };
-
-            var trivTimer = new Timer();
             
             bot.sendMessage(msg, `**Question #${t.count}**\n\n${t.currentQuestion["question"]}`);
             bot.on("message", (msg) => {
                 var guess = msg.content.toLowerCase();
                 var num = answers.indexOf(guess);
                 if (num > -1) {
-                    bot.sendMessage(msg, `Right answer ${msg.author}! ${t.currentQuestion.answers[num]}!`)
+                    bot.sendMessage(msg, `Right answer ${msg.author.name}! ${t.currentQuestion.answers[num]}!`)
                     t.addPoint(bot, msg);
                     trivTimer.stop()
                     trivTimer.start(1).on('end', function(){t.loop(bot,msg)})
                 }
             });
-            
+            trivTimer.stop()
             trivTimer.start(triviaset.delay).on('end', function() {botAnswers(bot, msg)});
             
         } catch(err) {console.log(err)}
@@ -332,7 +337,14 @@ var triviaSesh = {
     
     end : (bot, msg) => {
         var t = triviaSesh;
-        bot.sendMessage(msg, "Trivia Ended!");
+        t.timer.stop();
+        var sortable = [];
+        for (var score in t.scorelist) {
+            sortable.push([score, t.scorelist[score]])
+        }
+        sortable.sort((a,b) => b[1] - a[1])
+        var str = sortable.join('\n').replace(/,/g, ": ");
+        bot.sendMessage(msg, `Trivia Ended!\n\n__**Scores:**__\n\`\`\`${str ? str : 'No one had points!'}\`\`\``);
         t.gameon = false;
         t.scorelist = {};
         t.currentList = [];
@@ -387,7 +399,7 @@ bot.on("message", (msg) => {
 //ready
 bot.on("ready", ()=>{
     bot.setPlayingGame("Three Laws of Robotics");
-    console.log("ELbot is ready");
+    console.log("EL bot is ready");
 });
 
 bot.on("disconnected", ()=> {process.exit(0);});
