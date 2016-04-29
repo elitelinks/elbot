@@ -1,4 +1,5 @@
 //Requires
+process.setMaxListeners(0);
 var Discord = require("discord.js");
 var startTime = new Date;
 var Timer = require("timer.js");
@@ -8,7 +9,7 @@ const request = require("request");
 const jsonfile = require("jsonfile");
 const http = require('http');
 const fs = require('fs-extra');
-process.setMaxListeners(0);
+
 
 //settings & data
 var settings = require("./settings/settings.json"),
@@ -17,9 +18,11 @@ var settings = require("./settings/settings.json"),
 var bank = require("./settings/bank.json");
 
 //invoke bot
-var bot = new Discord.Client({autoReconnect:true});
+const bot = new Discord.Client({autoReconnect:true});
 
-///////////////////////////////////// C0MMAND HANDLER /////////////////////////////////////////////
+/*
+Command Handler
+*/
 
 const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
     switch (cmdTxt) {
@@ -46,7 +49,9 @@ const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
     }
 };
 
-//////////////////////////////////////// COMMANDS ///////////////////////////////////////////////
+/*
+Commands
+ */
 
 function Command (bot, msg, cmdTxt, suffix) { // TODO change commands to class
     this.msg = msg;
@@ -212,19 +217,67 @@ var commands = {
     }
 };
 
-////////////////////////////////////TO DO FUNCTIONS//////////////////////////////////////////////
+/*
+Todo Functions
+ */
 
 //TODO general help command
 
 
 //economy / slots
 var economy = {
-
     register : (msg) => {
         // TODO
     }
-
 };
+
+
+/*
+Done Functions
+ */
+
+var haiku = (bot, msg) => {
+    'use strict';
+    let haiArr = msg.content.split(' ');
+    if (syllable(haiArr) !== 17) {return};
+    let lineOne = [];
+    let lineTwo = [];
+    let lineThree = [];
+    while (syllable(lineOne) < 5) {
+        lineOne.push(haiArr.shift());
+    }
+    while (syllable(lineTwo) < 7) {
+        lineTwo.push(haiArr.shift());
+    }
+    while (syllable(lineThree) < 5) {
+        lineThree.push(haiArr.shift());
+    }
+    if (syllable(lineOne) !== 5 || syllable(lineTwo) !== 7 || syllable(lineThree) !== 5) {
+        return;
+    }
+    else {
+        bot.sendMessage(msg, `Accidental Haiku Detected! Written by ***${msg.author.username}***!\n\`\`\`${lineOne.join(' ')}\n${lineTwo.join(' ')}\n${lineThree.join(' ')}\`\`\``)
+    }
+};
+
+//msg checker
+bot.on("message", (msg) => {
+    if(msg.author === bot.user || msg.channel.isPrivate) {return;}
+    else if (msg.content === "ping") {bot.reply(msg, "pong");}
+    else if (prefixes.indexOf((msg.content.substr(0, 1))) > -1 ) {
+        var cmdTxt = msg.content.split(' ')[0].substr(1);
+        var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
+        var suffix = sufArr.join(' ');
+        cmdHandlr(bot, msg, cmdTxt, suffix);
+    } else if (/^(http|https):/.test(msg.content)) {
+        return;
+    } // else if (msg.content.length > 70) {haiku(bot, msg);} // need to figure out why haiku freezes bot
+    else return;
+});
+
+/*
+ Trivia
+ */
 
 //trivia commands
 var trivia = {
@@ -295,13 +348,13 @@ var triviaSesh = {
             var trivTimer = t.timer;
             t.loadQuestion();
             var answers = t.currentQuestion.answers.map((x)=>x.toLowerCase());
-            
+
             var botAnswers = (bot, msg) => {
                 bot.sendMessage(msg, `The answer is **${t.currentQuestion.answers[0]}**!`);
                 trivTimer.stop();
                 trivTimer.start(1).on('end', function(){t.loop(bot,msg)})
             };
-            
+
             bot.sendMessage(msg, `**Question #${t.count}**\n\n${t.currentQuestion["question"]}`);
             bot.on("message", (msg) => {
                 var guess = msg.content.toLowerCase();
@@ -315,13 +368,13 @@ var triviaSesh = {
             });
             trivTimer.stop()
             trivTimer.start(triviaset.delay).on('end', function() {botAnswers(bot, msg)});
-            
+
         } catch(err) {console.log(err)}
     },
 
     loop : (bot, msg) => {
         var t = triviaSesh;
-        if (t.count >= triviaset.maxScore) {t.end(bot, msg); return;}
+        if (t.topscore >= triviaset.maxScore) {t.end(bot, msg); return;}
         else {
             t.count++;
             t.round(bot, msg);
@@ -334,7 +387,7 @@ var triviaSesh = {
         t.loop(bot ,msg);
         t.gameon = true;
     },
-    
+
     end : (bot, msg) => {
         var t = triviaSesh;
         t.timer.stop();
@@ -355,46 +408,6 @@ var triviaSesh = {
     }
 }
 
-////////////////////////////////////DONE FUNCTIONS//////////////////////////////////////////////
-
-var haiku = (bot, msg) => {
-    'use strict';
-    let haiArr = msg.content.split(' ');
-    if (syllable(haiArr) !== 17) {return};
-    let lineOne = [];
-    let lineTwo = [];
-    let lineThree = [];
-    while (syllable(lineOne) < 5) {
-        lineOne.push(haiArr.shift());
-    }
-    while (syllable(lineTwo) < 7) {
-        lineTwo.push(haiArr.shift());
-    }
-    while (syllable(lineThree) < 5) {
-        lineThree.push(haiArr.shift());
-    }
-    if (syllable(lineOne) !== 5 || syllable(lineTwo) !== 7 || syllable(lineThree) !== 5) {
-        return;
-    }
-    else {
-        bot.sendMessage(msg, `Accidental Haiku Detected! Written by ***${msg.author.username}***!\n\`\`\`${lineOne.join(' ')}\n${lineTwo.join(' ')}\n${lineThree.join(' ')}\`\`\``)
-    }
-};
-
-//msg checker
-bot.on("message", (msg) => {
-    if(msg.author === bot.user || msg.channel.isPrivate) {return;}
-    else if (msg.content === "ping") {bot.reply(msg, "pong");}
-    else if (prefixes.indexOf((msg.content.substr(0, 1))) > -1 ) {
-        var cmdTxt = msg.content.split(' ')[0].substr(1);
-        var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
-        var suffix = sufArr.join(' ');
-        cmdHandlr(bot, msg, cmdTxt, suffix);
-    } else if (/^(http|https):/.test(msg.content)) {
-        return;
-    } // else if (msg.content.length > 70) {haiku(bot, msg);} // need to figure out why haiku freezes bot
-    else return;
-});
 
 //ready
 bot.on("ready", ()=>{
