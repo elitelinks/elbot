@@ -166,28 +166,29 @@ var commands = {
                 "Accept": "application/json"
             }
         };
+        try {
+            request(options, (error, response, data) => {
+                if (!error && response.statusCode == 200) {
+                    data = JSON.parse(data);
+                    if (!data.hasOwnProperty('definitions')) {
+                        return;
+                    }
 
-        request(options, (error, response, data) => {
-            if (!error && response.statusCode == 200) {
-                data = JSON.parse(data);
-                if (!data.hasOwnProperty('definitions')) {
-                    return;
+                    var definitions = data.definitions;
+
+                    var msgArray = [`I found the following definitions for ${suffix}:`, "\n"];
+
+                    var len = definitions.length;
+                    for (i = 0; i < len; i++) {
+                        var partOfSpeech = definitions[i].partOfSpeech;
+                        var def = definitions[i].definition;
+                        msgArray.push(`*${partOfSpeech}* | ${def}`);
+                    }
+
+                    bot.sendMessage(msg, msgArray);
                 }
-
-                var definitions = data.definitions;
-
-                var msgArray = [`I found the following definitions for ${suffix}:`, "\n"];
-
-                var len = definitions.length;
-                for (i = 0; i < len; i++) {
-                    var partOfSpeech = definitions[i].partOfSpeech;
-                    var def = definitions[i].definition;
-                    msgArray.push(`*${partOfSpeech}* | ${definition}`);
-                }
-
-                bot.sendMessage(msg, msgArray);
-            }
-        });
+            });
+        } catch(err) {console.log(err); bot.sendMessage(msg, err)}
     },
 
     eight: (bot, msg) => {
@@ -246,7 +247,7 @@ var commands = {
     },
 //admin
     eval: (bot, msg, cmdTxt, suffix) => {
-        if (msg.author.id === settings.owner) {
+        if (settings.owners.indexOf(msg.author.id) > -1) {
             try {
                 var thing = eval(suffix.toString());
                 bot.sendMessage(msg, `\`\`\`javascript\n${thing}\`\`\``);
@@ -266,7 +267,7 @@ var commands = {
     },
 
     logout: (bot, msg) => {
-        if (msg.author.id === settings.owner) {
+        if (settings.owners.indexOf(msg.author.id) > -1) {
             bot.sendMessage(msg, "Logging Out").then(bot.logout());
         } else {
             return;
