@@ -182,7 +182,7 @@ var commands = {
                 for (i = 0; i < len; i++) {
                     var partOfSpeech = definitions[i].partOfSpeech;
                     var def = definitions[i].definition;
-                    msgArray.push(`*${partOfSpeech}* | ${definition}`);
+                    msgArray.push(`*${partOfSpeech}* | ${def}`);
                 }
 
                 bot.sendMessage(msg, msgArray);
