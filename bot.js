@@ -31,7 +31,8 @@ const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         case "google" : commands.goog(bot, msg, suffix); break;
         case "syl" :
         case "syllables" :
-        case "syllable" : commands.syllable(bot, msg, suffix); break
+        case "syllable" : commands.syllable(bot, msg, suffix); break;
+        case "define" : commands.definition(bot, msg, suffix); break;
         case "weather" : commands.weather(bot, msg, suffix); break;
         case "8" : commands.eight(bot, msg); break;
         case "tsa" : commands.tsa(bot, msg); break;
@@ -130,7 +131,63 @@ var commands = {
     },
 
     syllable: (bot, msg, suffix) => {
-        bot.sendMessage(msg, `Syllables of ${suffix}: ${syllable(suffix)}`);
+        var endpoint = 'https://wordsapiv1.p.mashape.com/words/{{word}}/syllables';
+        endpoint = endpoint.replace('{{word}}', encodeURIComponent(suffix));
+
+        var options = {
+            'url': endpoint,
+            'headers': {
+                "X-Mashape-Key": `${settings.mashape_api_key}`,
+                "Accept": "application/json"
+            }
+        };
+
+        request(options, (error, response, data) => {
+            if (!error && response.statusCode == 200) {
+                data = JSON.parse(data);
+                if (!data.hasOwnProperty('syllables')) {
+                    return;
+                }
+
+                var syllables = data.syllables.count;
+                bot.sendMessage(msg, `Syllables of ${suffix}: ${syllables}`);
+            }
+        });
+    },
+
+    definition: (bot, msg, suffix) => {
+        var endpoint = 'https://wordsapiv1.p.mashape.com/words/{{word}}/definitions';
+        endpoint = endpoint.replace('{{word}}', encodeURIComponent(suffix));
+
+        var options = {
+            'url': endpoint,
+            'headers': {
+                "X-Mashape-Key": `${settings.mashape_api_key}`,
+                "Accept": "application/json"
+            }
+        };
+
+        request(options, (error, response, data) => {
+            if (!error && response.statusCode == 200) {
+                data = JSON.parse(data);
+                if (!data.hasOwnProperty('definitions')) {
+                    return;
+                }
+
+                var definitions = data.definitions;
+
+                var msgArray = [`I found the following definitions for ${suffix}:`, "\n"];
+
+                var len = definitions.length;
+                for (i = 0; i < len; i++) {
+                    var partOfSpeech = definitions[i].partOfSpeech;
+                    var def = definitions[i].definition;
+                    msgArray.push(`*${partOfSpeech}* | ${definition}`);
+                }
+
+                bot.sendMessage(msg, msgArray);
+            }
+        });
     },
 
     eight: (bot, msg) => {
