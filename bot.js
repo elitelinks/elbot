@@ -271,7 +271,7 @@ bot.on("message", (msg) => {
         cmdHandlr(bot, msg, cmdTxt, suffix);
     } else if (/^(http|https):/.test(msg.content)) {
         return;
-    } // else if (msg.content.length > 70) {haiku(bot, msg);} // need to figure out why haiku freezes bot
+    } // else if (msg.content.length > 50) {haiku(bot, msg);} // need to figure out why haiku freezes bot
     else return;
 });
 
@@ -304,7 +304,8 @@ var trivia = {
     }
 }
 
-//trivia session
+//Trivia Session
+//TODO add if bot plays
 var triviaSesh = {
     gameon : false,
     scorelist : {},
@@ -409,14 +410,15 @@ var triviaSesh = {
 }
 
 
-//ready
+//Ready
 bot.on("ready", ()=>{
     bot.setPlayingGame("Three Laws of Robotics");
     console.log("EL bot is ready");
 });
 
-bot.on("disconnected", ()=> {process.exit(0);});
-//login
+//bot.on("disconnected", ()=> {process.exit(0);});
+
+//Login
 if (settings.token) {bot.loginWithToken(settings.token);console.log("Logged in using Token");}
 else {bot.login(settings.email, settings.password)}
 
