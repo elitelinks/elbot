@@ -311,7 +311,7 @@ Done Functions
 var haiku = (bot, msg) => {
     'use strict';
     try {
-        let haiArr = msg.content.replace(/\W/g, '').split(' ');
+        let haiArr = msg.content.replace(/[^a-zA-Z0-9\s]/ig, '').split(' ');
         if (syllable(haiArr.join(' ')) != 17) {
             return;
         }
