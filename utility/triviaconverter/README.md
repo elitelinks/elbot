@@ -1,5 +1,7 @@
 To install - npm install
 
+Then Run node triviaconverter
+
 Takes trivia lists and converts them to JSON
 
 Turns Question|separator|answer1|separator|answer2

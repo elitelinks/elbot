@@ -1,7 +1,7 @@
 //Requires
 process.setMaxListeners(0);
 var Discord = require("discord.js");
-var startTime = new Date;
+var startTime = new Date();
 var Timer = require("timer.js");
 const google = require("google");
 const syllable = require("syllable");
@@ -9,11 +9,11 @@ const request = require("request");
 const jsonfile = require("jsonfile");
 const http = require('http');
 const fs = require('fs-extra');
-
+const devMode = true; //uncomment or remove in production
 
 //settings & data
 var settings = require("./settings/settings.json"),
-    prefixes = settings.prefixes,
+    prefixes = devMode ? settings.dev_prefixes : settings.prefixes,
     triviaset = settings.trivia;
 var bank = require("./settings/bank.json");
 
@@ -34,13 +34,18 @@ const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         case "syllable" : commands.syllable(bot, msg, suffix); break;
         case "define" : commands.definition(bot, msg, suffix); break;
         case "weather" : commands.weather(bot, msg, suffix); break;
+        
+        //fun stuff
         case "8" : commands.eight(bot, msg); break;
         case "tsa" : commands.tsa(bot, msg); break;
         case "orly" : commands.orly(bot, msg, suffix); break;
+        case "ping" : bot.sendMessage(msg, "pong"); break;
         
         //trivia
         case "trivia" : if (suffix === 'stop' && triviaSesh.gameon === true) {triviaSesh.end(bot, msg)}
             else trivia.start(bot, msg, suffix); break;
+
+        case "help" : help[suffix];
 
         //admin controls
         case "eval" : commands.eval(bot, msg, cmdTxt, suffix); break;
@@ -61,6 +66,7 @@ function Command (bot, msg, cmdTxt, suffix) { // TODO change commands to class
 }
 
 var commands = {
+
     goog : (bot, msg, suffix) => {
         'use strict';
         let search = "google";
@@ -222,7 +228,7 @@ var commands = {
         bot.reply(msg, (arrow === 1) ? ":arrow_left:" : ":arrow_right:")
     },
     
-    orly: (bot, msg, suffix) => {
+    orly: (bot, msg, suffix) => { //TODO add choose color & animal option
         fs.ensureDir('./cache', function (err) {
             console.log(err) // => null 
             // dir has now been created, including the directory it is to be placed in 
@@ -240,7 +246,7 @@ var commands = {
             var colorCode = Math.floor(Math.random() * 16);
             request.get(`https://orly-appstore.herokuapp.com/generate?title=${title}&top_text=${topTxt}&author=${author}&image_code=${imgCode}&theme=${colorCode}&guide_text=${guideTxt}&guide_text_placement=bottom_right`)
                 .pipe(fs.createWriteStream(`./cache/${filename}.png`))
-                .on('close', function() {bot.sendFile(msg, `./cache/${filename}.png`)});
+                .on('close', () => {bot.sendFile(msg, `./cache/${filename}.png`)});
         } catch(err) {
             console.log(err);
         }
@@ -276,6 +282,14 @@ var commands = {
 };
 
 /*
+Help
+ */
+
+var help = {
+    "goog" : (bot, msg, suffix) => {}
+}
+
+/*
 Todo Functions
  */
 
@@ -296,40 +310,41 @@ Done Functions
 
 var haiku = (bot, msg) => {
     'use strict';
-    let haiArr = msg.content.split(' ');
-    if (syllable(haiArr) !== 17) {return};
-    let lineOne = [];
-    let lineTwo = [];
-    let lineThree = [];
-    while (syllable(lineOne) < 5) {
-        lineOne.push(haiArr.shift());
-    }
-    while (syllable(lineTwo) < 7) {
-        lineTwo.push(haiArr.shift());
-    }
-    while (syllable(lineThree) < 5) {
-        lineThree.push(haiArr.shift());
-    }
-    if (syllable(lineOne) !== 5 || syllable(lineTwo) !== 7 || syllable(lineThree) !== 5) {
-        return;
-    }
-    else {
-        bot.sendMessage(msg, `Accidental Haiku Detected! Written by ***${msg.author.username}***!\n\`\`\`${lineOne.join(' ')}\n${lineTwo.join(' ')}\n${lineThree.join(' ')}\`\`\``)
-    }
+    try {
+        let haiArr = msg.content.replace(/\W/g, '').split(' ');
+        if (syllable(haiArr.join(' ')) != 17) {
+            return;
+        }
+        let lineOne = [];
+        let lineTwo = [];
+        let lineThree = [];
+        while (syllable(lineOne.join(' ')) < 5) {
+            lineOne.push(haiArr.shift());
+        }
+        while (syllable(lineTwo.join(' ')) < 7) {
+            lineTwo.push(haiArr.shift());
+        }
+        while (syllable(lineThree.join(' ')) < 5) {
+            lineThree.push(haiArr.shift());
+        }
+        if (syllable(lineOne.join(' ')) != 5 || syllable(lineTwo.join(' ')) != 7 || syllable(lineThree.join(' ')) != 5) {
+            return;
+        }
+        else {
+            bot.sendMessage(msg, `Accidental Haiku Detected! Written by ***${msg.author.username}***!\n\`\`\`${lineOne.join(' ')}\n${lineTwo.join(' ')}\n${lineThree.join(' ')}\`\`\``)
+        }
+    } catch(err) {console.log(err)}
 };
 
 //msg checker
 bot.on("message", (msg) => {
     if(msg.author === bot.user || msg.channel.isPrivate) {return;}
-    else if (msg.content === "ping") {bot.reply(msg, "pong");}
     else if (prefixes.indexOf((msg.content.substr(0, 1))) > -1 ) {
         var cmdTxt = msg.content.split(' ')[0].substr(1);
         var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
         var suffix = sufArr.join(' ');
         cmdHandlr(bot, msg, cmdTxt, suffix);
-    } else if (/^(http|https):/.test(msg.content)) {
-        return;
-    } // else if (msg.content.length > 50) {haiku(bot, msg);} // need to figure out why haiku freezes bot
+    }  else if (syllable(msg.content.replace(/[^a-zA-Z0-9\s]/ig, '')) == 17) {haiku(bot, msg);}  /*need to figure out why haiku freezes bot*/
     else return;
 });
 
@@ -360,7 +375,7 @@ var trivia = {
         else if (t.categories.indexOf(suffix+".json") > -1) {triviaSesh.begin(bot, msg, suffix);}
         else {bot.sendMessage(msg, `No list with the name ${suffix}`); return;}
     }
-}
+};
 
 //Trivia Session
 //TODO add if bot plays
@@ -376,7 +391,6 @@ var triviaSesh = {
 
     loadlist : (bot, msg, suffix) => {
         var t = triviaSesh;
-        var categories = trivia.categories;
         t.currentList = jsonfile.readFileSync(`${triviaset.path}/${suffix}.json`);
         console.log(`${suffix}.json loaded!`); //TODO replace with bot chat
     },
@@ -411,7 +425,7 @@ var triviaSesh = {
             var botAnswers = (bot, msg) => {
                 bot.sendMessage(msg, `The answer is **${t.currentQuestion.answers[0]}**!`);
                 trivTimer.stop();
-                trivTimer.start(1).on('end', function(){t.loop(bot,msg)})
+                trivTimer.start(1).on('end', function(){t.loop(bot,msg);});
             };
 
             bot.sendMessage(msg, `**Question #${t.count}**\n\n${t.currentQuestion["question"]}`);
@@ -419,13 +433,13 @@ var triviaSesh = {
                 var guess = msg.content.toLowerCase();
                 var num = answers.indexOf(guess);
                 if (num > -1) {
-                    bot.sendMessage(msg, `Right answer ${msg.author.name}! ${t.currentQuestion.answers[num]}!`)
+                    bot.sendMessage(msg, `Right answer ${msg.author.name}! ${t.currentQuestion.answers[num]}!`);
                     t.addPoint(bot, msg);
-                    trivTimer.stop()
-                    trivTimer.start(1).on('end', function(){t.loop(bot,msg)})
+                    trivTimer.stop();
+                    trivTimer.start(1).on('end', function(){t.loop(bot,msg);});
                 }
             });
-            trivTimer.stop()
+            trivTimer.stop();
             trivTimer.start(triviaset.delay).on('end', function() {botAnswers(bot, msg)});
 
         } catch(err) {console.log(err)}
@@ -433,6 +447,7 @@ var triviaSesh = {
 
     loop : (bot, msg) => {
         var t = triviaSesh;
+        t.currentQuestion = {};
         if (t.topscore >= triviaset.maxScore) {t.end(bot, msg); return;}
         else {
             t.count++;
@@ -454,7 +469,7 @@ var triviaSesh = {
         for (var score in t.scorelist) {
             sortable.push([score, t.scorelist[score]])
         }
-        sortable.sort((a,b) => b[1] - a[1])
+        sortable.sort((a,b) => b[1] - a[1]);
         var str = sortable.join('\n').replace(/,/g, ": ");
         bot.sendMessage(msg, `Trivia Ended!\n\n__**Scores:**__\n\`\`\`${str ? str : 'No one had points!'}\`\`\``);
         t.gameon = false;
@@ -470,11 +485,11 @@ var triviaSesh = {
 
 //Ready
 bot.on("ready", ()=>{
-    bot.setPlayingGame("Three Laws of Robotics");
+    bot.setPlayingGame("Currently Making Help Command");
     console.log("EL bot is ready");
 });
 
-//bot.on("disconnected", ()=> {process.exit(0);});
+bot.on("disconnected", ()=> {process.exit(0);});
 
 //Login
 if (settings.token) {bot.loginWithToken(settings.token);console.log("Logged in using Token");}
