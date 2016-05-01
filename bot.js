@@ -418,7 +418,7 @@ bot.on("message", (msg) => {
         var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
         var suffix = sufArr.join(' ');
         cmdHandlr(bot, msg, cmdTxt, suffix);
-    }  else if (syllable(msg.content.replace(/[^a-zA-Z0-9\s]/ig, '')) == 17) {haiku(bot, msg);}
+    } // else if (syllable(msg.content.replace(/[^a-zA-Z0-9\s]/ig, '')) == 17) {haiku(bot, msg);} // Shit keeps freezing
     else return; 
 });
 
@@ -451,7 +451,7 @@ var trivia = {
 };
 
 //Trivia Session
-//TODO add if bot plays
+
 var triviaSesh = {
     gameon : false,
     scorelist : {},
@@ -558,7 +558,7 @@ var triviaSesh = {
 
 //Ready
 bot.on("ready", ()=>{
-    bot.setPlayingGame("Currently Making Help Command");
+    bot.setPlayingGame("Three Laws of Robotics");
     console.log("EL bot is ready");
 });
 
