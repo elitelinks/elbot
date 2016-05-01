@@ -8,8 +8,8 @@
   "mashape_api_key": "",
   "imgur_id":"",
   "prefixes": [
-    "!",
-    "."
+    ".",
+    "!"
   ],
   "dev_prefixes": [
     "-",
