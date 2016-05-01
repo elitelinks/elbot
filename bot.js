@@ -9,7 +9,7 @@ const request = require("request");
 const jsonfile = require("jsonfile");
 const http = require('http');
 const fs = require('fs-extra');
-const devMode = true; //uncomment or remove in production
+const devMode = true; //set to false or remove in production
 
 //settings & data
 var settings = require("./settings/settings.json"),
@@ -28,11 +28,12 @@ const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
     switch (cmdTxt) {
         // searches
         case "goog" :
-        case "google" : commands.goog(bot, msg, suffix); break;
+        case "google" : commands.google(bot, msg, suffix); break;
         case "syl" :
         case "syllables" :
         case "syllable" : commands.syllable(bot, msg, suffix); break;
-        case "define" : commands.definition(bot, msg, suffix); break;
+        case "definition" :
+        case "define" : commands.define(bot, msg, suffix); break;
         case "weather" : commands.weather(bot, msg, suffix); break;
         
         //fun stuff
@@ -45,13 +46,13 @@ const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         case "trivia" : if (suffix === 'stop' && triviaSesh.gameon === true) {triviaSesh.end(bot, msg)}
             else trivia.start(bot, msg, suffix); break;
 
-        case "help" : help[suffix];
+        case "help" : suffix ? help[suffix](bot, msg, suffix) : help.list(bot, msg, suffix); break;
 
         //admin controls
         case "eval" : commands.eval(bot, msg, cmdTxt, suffix); break;
-        case "cleanup" : commands.cleanup(); break;
+        case "cleanup" : commands.emptycache(); break;
         case "logout" : commands.logout(bot, msg); break;
-        default: return;
+        default: break;
     }
 };
 
@@ -59,15 +60,15 @@ const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
 Commands
  */
 
-function Command (bot, msg, cmdTxt, suffix) { // TODO change commands to class
+function Command (msg, cmdTxt, suffix) { // TODO change commands to class
     this.msg = msg;
     this.cmdTxt = cmdTxt;
     this.suffix = suffix;
 }
 
-var commands = {
+var commands = { //TODO refactor command objects
 
-    goog : (bot, msg, suffix) => {
+    google : (bot, msg, suffix) => {
         'use strict';
         let search = "google";
         if(suffix){search = suffix;}
@@ -113,18 +114,18 @@ var commands = {
                 else if (weath.weather[0].description.indexOf("storm") > -1) {
                     weatherC = ":cloud_lightning:";
                 }
-                var direction = Math.floor((weath.wind.deg / 22.5) + 0.5)
-                var compass = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
+                var direction = Math.floor((weath.wind.deg / 22.5) + 0.5);
+                var compass = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
                 var msgArray = [];
-                var sunrise = new Date(weath.sys.sunrise * 1000)
-                var formattedSunrise = (sunrise.getHours()) + ':' + ("0" + sunrise.getMinutes()).substr(-2)
-                var sunset = new Date(weath.sys.sunset * 1000)
-                var formattedSunset = (sunset.getHours()) + ':' + ("0" + sunset.getMinutes()).substr(-2)
-                msgArray.push(":earth_americas: __**Weather for " + weath.name + ", " + weath.sys.country + ":**__ • (*" + weath.coord.lon + ", " + weath.coord.lat + "*)")
-                msgArray.push("**" + weatherC + "Current Weather Conditions:** " + weath.weather[0].description)
-                msgArray.push("**:sweat: Humidity:** " + weath.main.humidity + "% - **:cityscape:  Current Temperature:** " + Math.round(weath.main.temp - 273.15) + "°C / " + Math.round(((weath.main.temp - 273.15) * 1.8) + 32) + "°F")
-                msgArray.push("**:cloud: Cloudiness:** " + weath.clouds.all + "% - **:wind_blowing_face:  Wind Speed:** " + weath.wind.speed + " m/s [*" + compass[(direction % 16)] + "*]")
-                msgArray.push("**:sunrise_over_mountains:  Sunrise:** " + formattedSunrise + " UTC / **:city_dusk: Sunset:** " + formattedSunset + " UTC")
+                var sunrise = new Date(weath.sys.sunrise * 1000);
+                var formattedSunrise = (sunrise.getHours()) + ':' + ("0" + sunrise.getMinutes()).substr(-2);
+                var sunset = new Date(weath.sys.sunset * 1000);
+                var formattedSunset = (sunset.getHours()) + ':' + ("0" + sunset.getMinutes()).substr(-2);
+                msgArray.push(`:earth_americas: __**Weather for ${weath.name}, ${weath.sys.country}:**__ • (*${weath.coord.lon}, ${weath.coord.lat}*)`);
+                msgArray.push(`**${weatherC}Current Weather Conditions:** ${weath.weather[0].description}`);
+                msgArray.push(`**:sweat: Humidity:** ${weath.main.humidity}% - **:cityscape:  Current Temperature:** ${Math.round(weath.main.temp - 273.15)}°C / ${Math.round(((weath.main.temp - 273.15) * 1.8) + 32)}°F`);
+                msgArray.push(`**:cloud: Cloudiness:** ${weath.clouds.all}% - **:wind_blowing_face:  Wind Speed:** ${weath.wind.speed} m/s [*${compass[(direction % 16)]}*]`);
+                msgArray.push(`**:sunrise_over_mountains:  Sunrise:** ${formattedSunrise} UTC / **:city_dusk: Sunset:** ${formattedSunset} UTC`);
                 bot.sendMessage(msg, msgArray);
             }
             else {
@@ -161,9 +162,9 @@ var commands = {
         });
     },
 
-    definition: (bot, msg, suffix) => {
+    define: (bot, msg, suffix) => {
         var endpoint = 'https://wordsapiv1.p.mashape.com/words/{{word}}/definitions';
-        endpoint = endpoint.replace('{{word}}', encodeURIComponent(suffix));
+        endpoint = endpoint.replace('{{word}}', encodeURIComponent(suffix.trim()));
 
         var options = {
             'url': endpoint,
@@ -224,18 +225,18 @@ var commands = {
     },
 
     tsa: (bot, msg) => {
-        var arrow = Math.round(Math.random())
+        var arrow = Math.round(Math.random());
         bot.reply(msg, (arrow === 1) ? ":arrow_left:" : ":arrow_right:")
     },
-    
+
     orly: (bot, msg, suffix) => { //TODO add choose color & animal option
         fs.ensureDir('./cache', function (err) {
-            console.log(err) // => null 
+            console.log(err); // => null 
             // dir has now been created, including the directory it is to be placed in 
-        })
+        });
         var randomstring = require('randomstring');
         var filename = (startTime.getMonth()+1).toString() + startTime.getDate().toString() + startTime.getFullYear().toString() + randomstring.generate(5);
-        
+
         try {
             var orlyOpts = suffix.split(',');
             var title = encodeURIComponent(orlyOpts[0].trim());
@@ -251,6 +252,8 @@ var commands = {
             console.log(err);
         }
     },
+
+    trivia: (bot, msg, suffix) => {trivia.start(bot, msg, suffix);},
 //admin
     eval: (bot, msg, cmdTxt, suffix) => {
         if (settings.owners.indexOf(msg.author.id) > -1) {
@@ -262,23 +265,25 @@ var commands = {
                 bot.sendMessage(msg, `\`\`\`Error: ${e}\`\`\``);
             }
         } else {
-            return;
+            
         }
     },
 
-    cleanup : ()=> {
-        fs.emptyDir('./cache', function (err) {
-            if (!err) console.log(err)
-        });
+    emptycache : ()=> {
+        if (settings.owners.indexOf(msg.author.id) > -1) {
+            fs.emptyDir('./cache', function (err) {
+                if (!err) console.log(err)
+            });
+        }
     },
 
     logout: (bot, msg) => {
         if (settings.owners.indexOf(msg.author.id) > -1) {
             bot.sendMessage(msg, "Logging Out").then(bot.logout());
         } else {
-            return;
+            
         }
-    }
+    },
 };
 
 /*
@@ -286,8 +291,14 @@ Help
  */
 
 var help = {
-    "goog" : (bot, msg, suffix) => {}
-}
+    list : (bot, msg, suffix) => {
+        var cmds = Object.keys(commands);
+        bot.sendMessage(msg, `__**Available commands**__\n\`${cmds.join(', ')}\`\nFor more specific help, type \`${prefixes[0]}help [command]\``);
+    },
+    google : (bot, msg, suffix) => {
+        bot.sendMessage(msg, `Search google and return the first result. Use \`${prefixes[0]}google [search term]\``)
+    }
+};
 
 /*
 Todo Functions
@@ -328,7 +339,7 @@ var haiku = (bot, msg) => {
             lineThree.push(haiArr.shift());
         }
         if (syllable(lineOne.join(' ')) != 5 || syllable(lineTwo.join(' ')) != 7 || syllable(lineThree.join(' ')) != 5) {
-            return;
+            
         }
         else {
             bot.sendMessage(msg, `Accidental Haiku Detected! Written by ***${msg.author.username}***!\n\`\`\`${lineOne.join(' ')}\n${lineTwo.join(' ')}\n${lineThree.join(' ')}\`\`\``)
@@ -338,14 +349,14 @@ var haiku = (bot, msg) => {
 
 //msg checker
 bot.on("message", (msg) => {
-    if(msg.author === bot.user || msg.channel.isPrivate) {return;}
+    if(msg.author === bot.user || msg.channel.isPrivate) {}
     else if (prefixes.indexOf((msg.content.substr(0, 1))) > -1 ) {
         var cmdTxt = msg.content.split(' ')[0].substr(1);
         var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
         var suffix = sufArr.join(' ');
         cmdHandlr(bot, msg, cmdTxt, suffix);
-    }  else if (syllable(msg.content.replace(/[^a-zA-Z0-9\s]/ig, '')) == 17) {haiku(bot, msg);}  /*need to figure out why haiku freezes bot*/
-    else return;
+    }  else if (syllable(msg.content.replace(/[^a-zA-Z0-9\s]/ig, '')) == 17) {haiku(bot, msg);}
+    else 
 });
 
 /*
@@ -359,21 +370,21 @@ var trivia = {
     categories : fs.readdirSync(triviaset.path),
 
     list : (bot, msg) => {
-        catTxt = trivia.categories.map((x) => {return x.slice(0, -5)}).join(' ');
+        var catTxt = trivia.categories.map((x) => {return x.slice(0, -5)}).join(' ');
         bot.sendMessage(msg, `Trivia categories available are:\n\`\`\`${catTxt}\`\`\``);
     },
 
     start : (bot ,msg, suffix) => {
         var t = trivia;
         if (suffix === 'skip') {
-            if (triviaSesh.gameon === false) {return;}
+            if (triviaSesh.gameon === false) {}
             else {triviaSesh.loop(bot, msg);}
         }
-        else if (triviaSesh.gameon === true) {bot.sendMessage(msg,"There is already a trivia session in place!"); return;}
-        else if (!suffix || suffix === 'help') {t.help(bot, msg); return;}
+        else if (triviaSesh.gameon === true) {bot.sendMessage(msg,"There is already a trivia session in place!"); }
+        else if (!suffix || suffix === 'help') {t.help(bot, msg); }
         else if (suffix === 'list') {t.list(bot, msg);}
         else if (t.categories.indexOf(suffix+".json") > -1) {triviaSesh.begin(bot, msg, suffix);}
-        else {bot.sendMessage(msg, `No list with the name ${suffix}`); return;}
+        else {bot.sendMessage(msg, `No list with the name ${suffix}`); }
     }
 };
 
@@ -448,7 +459,7 @@ var triviaSesh = {
     loop : (bot, msg) => {
         var t = triviaSesh;
         t.currentQuestion = {};
-        if (t.topscore >= triviaset.maxScore) {t.end(bot, msg); return;}
+        if (t.topscore >= triviaset.maxScore) {t.end(bot, msg); }
         else {
             t.count++;
             t.round(bot, msg);
@@ -477,10 +488,10 @@ var triviaSesh = {
         t.currentList = [];
         t.currentQuestion = {};
         t.used = [];
-        t.count = 0
-        return;
+        t.count = 0;
+        
     }
-}
+};
 
 
 //Ready

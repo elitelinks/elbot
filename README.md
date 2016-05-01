@@ -1,1 +1,1 @@
-Bot for discord chatroom
+Bot for discord chatroom.
