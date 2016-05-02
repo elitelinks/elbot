@@ -40,6 +40,9 @@ var cmdHandlr = (bot, msg, cmdTxt, suffix) => {
 
         //bank
         case "bank" : commands.bank.process(bot, msg, suffix); break;
+        
+        //games
+        case "slot": slot(bot, msg, suffix); break;
 
         //fun stuff
         case "eight" :
@@ -378,7 +381,7 @@ Todo Functions
  */
 
 
-//economy / slots / games
+//Economy  TODO add transfer of funds
 var bank = {
     file : './settings/bank.json',
     accounts : bankSet.accounts,
@@ -386,7 +389,7 @@ var bank = {
     settings : bankSet.settings,
 
     //TODO add list commands funct. TODO change adding to DB by user id rather than name
-    
+
     init : (bot, msg, suffix) => {
         var id = msg.author.id;
         var name = msg.author.name;
@@ -406,6 +409,12 @@ var bank = {
             console.log(err);
         }
         bank.accounts = bankSet.accounts;
+    },
+
+    add : (bot, id, amount) => {
+        try {
+            bank.accounts[id].balance += amount;
+        } catch(err) {console.log(err);}
     },
 
     register : (bot, msg) => {
@@ -454,6 +463,29 @@ var bank = {
 
 };
 
+//Gamez
+function slot(bot, msg, suffix) {
+    var reel_pattern = [":cherries:", ":cookie:", ":two:", ":four_leaf_clover:", ":cyclone:", ":sunflower:", ":six:", ":mushroom:", ":heart:", ":snowflake:"]
+    var padding_before = [":mushroom:", ":heart:", ":snowflake:"]
+    var padding_after = [":cherries:", ":cookie:", ":two:"]
+    var reel = padding_before.concat(reel_pattern, padding_after);
+    var reels = []
+    
+
+    for (var x = 0; x < 3; x++) {
+        var n = Math.floor(Math.random()*reel_pattern.length);
+        console.log(n);
+        reels.push([reel[n - 1], reel[n], reel[n + 1]])
+    }
+
+    var line = [reels[0][1], reels[1][1], reels[2][1]];
+
+    var display_reels = "  " + reels[0][0] + " " + reels[1][0] + " " + reels[2][0] + "\n";
+    display_reels += ">" + reels[0][1] + " " + reels[1][1] + " " + reels[2][1] + "\n";
+    display_reels += "  " + reels[0][2] + " " + reels[1][2] + " " + reels[2][2] + "\n"
+    
+    console.log(display_reels);
+};
 
 /*
 Done Functions
