@@ -6,17 +6,16 @@ var Timer = require("timer.js");
 const google = require("google");
 const syllable = require("syllable");
 const request = require("request");
-const jsonfile = require("jsonfile");
 const http = require('http');
 const fs = require('fs-extra');
-const devMode = false; //set to false or remove in production
+const devMode = true; //set to false or remove in production
 
 //settings & data
 var settings = require("./settings/settings.json"),
     prefixes = devMode ? settings.dev_prefixes : settings.prefixes,
     triviaset = settings.trivia;
-var bank = require("./settings/bank.json");
 
+var bankSet = fs.readJsonSync("./settings/bank.json");
 //invoke bot
 const bot = new Discord.Client({autoReconnect:true});
 
@@ -24,8 +23,7 @@ const bot = new Discord.Client({autoReconnect:true});
 Command Handler
 */
 
-const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
-    if (settings.owners.indexOf(msg.author.id) <= -1 && commands[suffix].admin === true) {return;}
+var cmdHandlr = (bot, msg, cmdTxt, suffix) => {
     switch (cmdTxt) {
         // searches
         case "goog" :
@@ -37,7 +35,11 @@ const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         case "definition" :
         case "def" :
         case "define" : commands.define.process(bot, msg, suffix); break;
+        case "weath" :
         case "weather" : commands.weather.process(bot, msg, suffix); break;
+
+        //bank
+        case "bank" : commands.bank.process(bot, msg, suffix); break;
 
         //fun stuff
         case "eight" :
@@ -53,7 +55,7 @@ const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         case "help" :(Object.keys(commands).indexOf(suffix) > -1) ? bot.sendMessage(msg,
                 `${commands[suffix].description} \n*Usage:* ${commands[suffix].usage} \n*Alias${commands[suffix].alias.length > 1 ? "es" : ""}:* \`${commands[suffix].alias.join(', ')}\``) :
             commands.help.process(bot, msg, suffix);
-            break; //TODO refactor list in to commands
+            break; 
 
         //admin controls
         case "eval" : commands.eval.process(bot, msg, cmdTxt, suffix); break;
@@ -187,8 +189,8 @@ var commands = {
         'alias'         : ["def, definition"],
         'usage'         : `\`${prefixes[0]}define [word]\``,
         'process'       : (bot, msg, suffix) => {
-            var endpoint = 'https://wordsapiv1.p.mashape.com/words/{{word}}/syllables';
-            endpoint = endpoint.replace('{{word}}', encodeURIComponent(suffix));
+            var endpoint = 'https://wordsapiv1.p.mashape.com/words/{{word}}/definitions';
+            endpoint = endpoint.replace('{{word}}', encodeURIComponent(suffix.trim()));
 
             var options = {
                 'url': endpoint,
@@ -197,18 +199,29 @@ var commands = {
                     "Accept": "application/json"
                 }
             };
+            try {
+                request(options, (error, response, data) => {
+                    if (!error && response.statusCode == 200) {
+                        data = JSON.parse(data);
+                        if (!data.hasOwnProperty('definitions')) {
+                            return;
+                        }
 
-            request(options, (error, response, data) => {
-                if (!error && response.statusCode == 200) {
-                    data = JSON.parse(data);
-                    if (!data.hasOwnProperty('syllables')) {
-                        return;
+                        var definitions = data.definitions;
+
+                        var msgArray = [`I found the following definitions for ${suffix}:`, "\n"];
+
+                        var len = definitions.length;
+                        for (i = 0; i < len; i++) {
+                            var partOfSpeech = definitions[i].partOfSpeech;
+                            var def = definitions[i].definition;
+                            msgArray.push(`*${partOfSpeech}* | ${def}`);
+                        }
+
+                        bot.sendMessage(msg, msgArray);
                     }
-
-                    var syllables = data.syllables.count;
-                    bot.sendMessage(msg, `Syllables of ${suffix}: ${syllables}`);
-                }
-            });
+                });
+            } catch(err) {console.log(err); bot.sendMessage(msg, err)}
         },
         'admin'         : false
     },
@@ -294,6 +307,14 @@ var commands = {
         'admin'         : false
     },
 
+    'bank' : {
+        'description' : `Bank functions. \`${prefixes[0]}bank register\` to start an account`,
+        'alias' : ['none'],
+        'usage' : `\`${prefixes[0]}bank [command] or [list] to get a list of commands\``,
+        'process' : (bot, msg, suffix) => {bank.init(bot, msg, suffix)},
+        'admin' : false
+    },
+
     'help' : {
         'description'   : 'Get help for a command.',
         'alias'         : ["none"],
@@ -340,7 +361,7 @@ var commands = {
     },
 
     'logout' : {
-        'description'   : 'Empties local cache.',
+        'description'   : 'Logs me out.',
         'alias'         : ["none"],
         'usage'         : `\`${prefixes[0]}logout (admin only)\``,
         'process'       : (bot, msg) => {
@@ -352,29 +373,70 @@ var commands = {
     }
 };
 
-/*
-Help
- */
-
-var help = {
-    list : (bot, msg, suffix) => {
-        var cmds = Object.keys(commands);
-        bot.sendMessage(msg, `__**Available commands**__\n\`${cmds.join(', ')}\`\n\n*For more specific help*, type \`${prefixes[0]}help [command]\``);
-    }
-};
 
 /*
 Todo Functions
  */
 
-//TODO general help command
 
 
-//economy / slots
-var economy = {
-    register : (msg) => {
-        // TODO
+//economy / slots / games
+var bank = {
+    file : './settings/bank.json',
+    accounts : bankSet.accounts,
+    commands : ['balance', 'register', 'payday'],
+
+    //TODO add list commands funct. TODO change adding to DB by user id rather than name
+    
+    init : (bot, msg, suffix) => {
+        var id = msg.author.id;
+        var name = msg.author.name;
+        var sufSpl = suffix.split(' ');
+        if (bank.commands.indexOf(sufSpl[0]) > -1) {
+            bank[sufSpl[0]](bot, msg, sufSpl, id, name);
+        } else {
+            bot.sendMessage(msg, `Unrecognized bank command. \`${prefixes[0]}bank list\` for a list of commands.`)
+        }
+    },
+
+    reload : () => {
+        try {
+            fs.writeJsonSync(bank.file, bankSet);
+            bankSet = fs.readJsonSync(bank.file);
+        } catch(err) {
+            console.log(err);
+        };
+        bank.accounts = bankSet.accounts;
+    },
+
+    register : (bot, msg, sufSpl, id, name) => {
+        if (!bank.accounts[id]) {
+            try {
+                bank.accounts[id] = {};
+                bank.accounts[id].name = name;
+                bank.accounts[id].balance = bankSet.settings.payout;
+                bank.accounts[id].wait = Math.round(new Date() / 1000);
+                console.log("New Bank Account Created!")
+                bot.sendMessage(msg, `Account created for ${name} with balance ${bank.accounts[id].balance} credits.`);
+                bank.reload();
+            } catch(err) {console.log(err);}
+        } else {
+            bot.reply(msg, `You already have an account!`)
+        }
+    },
+
+    balance : (bot, msg, sufSpl, id, name) => {
+        var person = sufSpl[1];
+        var search = bot.users.get('name', person);
+        if (!bank.accounts[id]) {bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`)}
+        else if (search) {bot.reply(msg, `The balance of **${person}** is ${bank.accounts[search.id].balance} credits.`)}
+        else {bot.reply(msg, `Your balance is ${bank.accounts[id].balance} credits.`)}
+    },
+
+    payday : (bot, msg) => {
+        var name = msg.author.name;
     }
+
 };
 
 
@@ -412,13 +474,13 @@ var haiku = (bot, msg) => {
 
 //msg checker
 bot.on("message", (msg) => {
-    if(msg.author === bot.user || msg.channel.isPrivate) {}
+    if(msg.author === bot.user || msg.channel.isPrivate) {return;}
     else if (prefixes.indexOf((msg.content.substr(0, 1))) > -1 ) {
         var cmdTxt = msg.content.split(' ')[0].substr(1);
         var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
         var suffix = sufArr.join(' ');
         cmdHandlr(bot, msg, cmdTxt, suffix);
-    } // else if (syllable(msg.content.replace(/[^a-zA-Z0-9\s]/ig, '')) == 17) {haiku(bot, msg);} // Shit keeps freezing
+    }  else if (syllable(msg.content.replace(/[^a-zA-Z0-9\s]/ig, '')) == 17) {haiku(bot, msg);}
     else return; 
 });
 
@@ -464,8 +526,8 @@ var triviaSesh = {
 
     loadlist : (bot, msg, suffix) => {
         var t = triviaSesh;
-        t.currentList = jsonfile.readFileSync(`${triviaset.path}/${suffix}.json`);
-        console.log(`${suffix}.json loaded!`); //TODO replace with bot chat
+        t.currentList = fs.readJsonSync(`${triviaset.path}/${suffix}.json`);
+        console.log(`${suffix}.json loaded!`); 
     },
 
     loadQuestion : () => {
@@ -558,7 +620,7 @@ var triviaSesh = {
 
 //Ready
 bot.on("ready", ()=>{
-    bot.setPlayingGame("Three Laws of Robotics");
+    bot.setPlayingGame("ALPHA");
     console.log("EL bot is ready");
 });
 
@@ -566,5 +628,5 @@ bot.on("disconnected", ()=> {process.exit(0);});
 
 //Login
 if (settings.token) {bot.loginWithToken(settings.token);console.log("Logged in using Token");}
-else {bot.login(settings.email, settings.password)}
+else {bot.login(settings.email, settings.password);console.log("Logged in using Email")}
 

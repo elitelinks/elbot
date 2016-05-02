@@ -1,12 +1,12 @@
 {
-  "email" : "",
-  "password" : "",
+  "email": "",
+  "password": "",
   "token": "",
   "owners": [],
-  "gamesroom" : "",
+  "gamesroom": "",
   "weather_api_key": "",
   "mashape_api_key": "",
-  "imgur_id":"",
+  "imgur_id": "",
   "prefixes": [
     ".",
     "!"
@@ -17,11 +17,11 @@
     "$",
     "`"
   ],
-  "trivia" : {
-    "botPlays" : false,
-    "delay" : 15,
-    "maxScore" : 5,
-    "timeout" : 10000,
-    "path" : "./trivia"
+  "trivia": {
+    "botPlays": false,
+    "delay": 15,
+    "maxScore": 5,
+    "timeout": 10000,
+    "path": "./trivia"
   }
 }
