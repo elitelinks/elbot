@@ -55,7 +55,7 @@ var cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         case "help" :(Object.keys(commands).indexOf(suffix) > -1) ? bot.sendMessage(msg,
                 `${commands[suffix].description} \n*Usage:* ${commands[suffix].usage} \n*Alias${commands[suffix].alias.length > 1 ? "es" : ""}:* \`${commands[suffix].alias.join(', ')}\``) :
             commands.help.process(bot, msg, suffix);
-            break; //TODO refactor list in to commands
+            break; 
 
         //admin controls
         case "eval" : commands.eval.process(bot, msg, cmdTxt, suffix); break;
@@ -378,7 +378,6 @@ var commands = {
 Todo Functions
  */
 
-//TODO general help command
 
 
 //economy / slots / games
@@ -390,8 +389,11 @@ var bank = {
     //TODO add list commands funct. TODO change adding to DB by user id rather than name
     
     init : (bot, msg, suffix) => {
-        if (bank.commands.indexOf(suffix) > -1) {
-            bank[suffix](bot, msg, suffix);
+        var id = msg.author.id;
+        var name = msg.author.name;
+        var sufSpl = suffix.split(' ');
+        if (bank.commands.indexOf(sufSpl[0]) > -1) {
+            bank[sufSpl[0]](bot, msg, sufSpl, id, name);
         } else {
             bot.sendMessage(msg, `Unrecognized bank command. \`${prefixes[0]}bank list\` for a list of commands.`)
         }
@@ -399,44 +401,40 @@ var bank = {
 
     reload : () => {
         try {
-            fs.writeJson(bank.file, bankSet, err => console.log(err || "Bank Reloaded!"));
+            fs.writeJsonSync(bank.file, bankSet);
+            bankSet = fs.readJsonSync(bank.file);
         } catch(err) {
             console.log(err);
         };
-        fs.readJson(bank.file, (err, obj) => {
-            if (err) {console.log(err)}
-            else {bankSet = obj};
-        });
+        bank.accounts = bankSet.accounts;
     },
 
-    register : (bot, msg) => {
-        var person = msg.author.name;
-        if (!bank.accounts[person]) {
-            bank.accounts[person] = {};
-            bank.accounts[person].balance = bankSet.settings.payout;
-            bank.accounts[person].wait = Math.round(new Date() / 1000);
-            console.log("New Bank Account Created!")
-            bot.sendMessage(msg, `Account created for ${person} with balance ${bank.accounts[person].balance}`);
-            bank.reload();
+    register : (bot, msg, sufSpl, id, name) => {
+        if (!bank.accounts[id]) {
+            try {
+                bank.accounts[id] = {};
+                bank.accounts[id].name = name;
+                bank.accounts[id].balance = bankSet.settings.payout;
+                bank.accounts[id].wait = Math.round(new Date() / 1000);
+                console.log("New Bank Account Created!")
+                bot.sendMessage(msg, `Account created for ${name} with balance ${bank.accounts[id].balance} credits.`);
+                bank.reload();
+            } catch(err) {console.log(err);}
         } else {
             bot.reply(msg, `You already have an account!`)
         }
     },
 
-    balance : (bot, msg, suffix) => {
-        var person = msg.author.name;
-        var options = suffix.split(' ')[0];
-        if (!bank.accounts[person]) {
-            bot.reply(msg, `No account! Use ${prefixes[0]}bank register to get a new account!`)
-        }
-
-        else {
-            bot.reply(msg, `Your balance is ${bank.accounts[person].balance} credits.`)
-        }
+    balance : (bot, msg, sufSpl, id, name) => {
+        var person = sufSpl[1];
+        var search = bot.users.get('name', person);
+        if (!bank.accounts[id]) {bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`)}
+        else if (search) {bot.reply(msg, `The balance of **${person}** is ${bank.accounts[search.id].balance} credits.`)}
+        else {bot.reply(msg, `Your balance is ${bank.accounts[id].balance} credits.`)}
     },
 
     payday : (bot, msg) => {
-        var person = msg.author.name;
+        var name = msg.author.name;
     }
 
 };
@@ -515,7 +513,7 @@ var trivia = {
 };
 
 //Trivia Session
-//TODO add if bot plays
+
 var triviaSesh = {
     gameon : false,
     scorelist : {},
@@ -529,7 +527,7 @@ var triviaSesh = {
     loadlist : (bot, msg, suffix) => {
         var t = triviaSesh;
         t.currentList = fs.readJsonSync(`${triviaset.path}/${suffix}.json`);
-        console.log(`${suffix}.json loaded!`); //TODO replace with bot chat
+        console.log(`${suffix}.json loaded!`); 
     },
 
     loadQuestion : () => {
@@ -622,7 +620,7 @@ var triviaSesh = {
 
 //Ready
 bot.on("ready", ()=>{
-    bot.setPlayingGame("Currently Making Help Command");
+    bot.setPlayingGame("ALPHA");
     console.log("EL bot is ready");
 });
 
@@ -630,5 +628,5 @@ bot.on("disconnected", ()=> {process.exit(0);});
 
 //Login
 if (settings.token) {bot.loginWithToken(settings.token);console.log("Logged in using Token");}
-else {bot.login(settings.email, settings.password)}
+else {bot.login(settings.email, settings.password);console.log("Logged in using Email")}
 
