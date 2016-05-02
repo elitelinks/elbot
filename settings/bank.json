@@ -1,5 +1,8 @@
 {
-  "accounts" : {},
+  "accounts" : {
+    "test" : {"balance" : 1000, "wait" : 0},
+    "test2" : {"balance" : 1000, "wait" : 0}
+  },
   "settings" : {
     "payout" : 500,
     "payoutTime" : 600,

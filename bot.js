@@ -6,7 +6,6 @@ var Timer = require("timer.js");
 const google = require("google");
 const syllable = require("syllable");
 const request = require("request");
-const jsonfile = require("jsonfile");
 const http = require('http');
 const fs = require('fs-extra');
 const devMode = true; //set to false or remove in production
@@ -15,8 +14,8 @@ const devMode = true; //set to false or remove in production
 var settings = require("./settings/settings.json"),
     prefixes = devMode ? settings.dev_prefixes : settings.prefixes,
     triviaset = settings.trivia;
-var bank = require("./settings/bank.json");
 
+var bankSet = fs.readJsonSync("./settings/bank.json");
 //invoke bot
 const bot = new Discord.Client({autoReconnect:true});
 
@@ -37,7 +36,11 @@ const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         case "definition" :
         case "def" :
         case "define" : commands.define.process(bot, msg, suffix); break;
+        case "weath" :
         case "weather" : commands.weather.process(bot, msg, suffix); break;
+
+        //bank
+        case "bank" : bank.register(bot, msg); break; //TODO break up bank command
 
         //fun stuff
         case "eight" :
@@ -187,8 +190,8 @@ var commands = {
         'alias'         : ["def, definition"],
         'usage'         : `\`${prefixes[0]}define [word]\``,
         'process'       : (bot, msg, suffix) => {
-            var endpoint = 'https://wordsapiv1.p.mashape.com/words/{{word}}/syllables';
-            endpoint = endpoint.replace('{{word}}', encodeURIComponent(suffix));
+            var endpoint = 'https://wordsapiv1.p.mashape.com/words/{{word}}/definitions';
+            endpoint = endpoint.replace('{{word}}', encodeURIComponent(suffix.trim()));
 
             var options = {
                 'url': endpoint,
@@ -197,18 +200,29 @@ var commands = {
                     "Accept": "application/json"
                 }
             };
+            try {
+                request(options, (error, response, data) => {
+                    if (!error && response.statusCode == 200) {
+                        data = JSON.parse(data);
+                        if (!data.hasOwnProperty('definitions')) {
+                            return;
+                        }
 
-            request(options, (error, response, data) => {
-                if (!error && response.statusCode == 200) {
-                    data = JSON.parse(data);
-                    if (!data.hasOwnProperty('syllables')) {
-                        return;
+                        var definitions = data.definitions;
+
+                        var msgArray = [`I found the following definitions for ${suffix}:`, "\n"];
+
+                        var len = definitions.length;
+                        for (i = 0; i < len; i++) {
+                            var partOfSpeech = definitions[i].partOfSpeech;
+                            var def = definitions[i].definition;
+                            msgArray.push(`*${partOfSpeech}* | ${def}`);
+                        }
+
+                        bot.sendMessage(msg, msgArray);
                     }
-
-                    var syllables = data.syllables.count;
-                    bot.sendMessage(msg, `Syllables of ${suffix}: ${syllables}`);
-                }
-            });
+                });
+            } catch(err) {console.log(err); bot.sendMessage(msg, err)}
         },
         'admin'         : false
     },
@@ -352,16 +366,6 @@ var commands = {
     }
 };
 
-/*
-Help
- */
-
-var help = {
-    list : (bot, msg, suffix) => {
-        var cmds = Object.keys(commands);
-        bot.sendMessage(msg, `__**Available commands**__\n\`${cmds.join(', ')}\`\n\n*For more specific help*, type \`${prefixes[0]}help [command]\``);
-    }
-};
 
 /*
 Todo Functions
@@ -370,10 +374,31 @@ Todo Functions
 //TODO general help command
 
 
-//economy / slots
-var economy = {
-    register : (msg) => {
-        // TODO
+//economy / slots / games
+var bank = {
+    file : './settings/bank.json',
+    accounts : bankSet.accounts,
+
+    reload : () => {
+        fs.writeJson(bank.file, bankSet, err => console.log(err || "Bank Reloaded!"));
+        fs.readJson(bank.file, (err, obj) => {
+            if (err) {console.log(err)}
+            else {bankSet = obj};
+        });
+    },
+
+    register : (bot, msg) => {
+        var person = msg.author.name;
+        if (!bank.accounts[person]) {
+            bank.accounts[person] = {};
+            bank.accounts[person].balance = bankSet.settings.payout;
+            bank.accounts[person].wait = Math.round(new Date() / 1000);
+            console.log("New Bank Account Created!")
+            bot.sendMessage(msg, `Account created for ${person} with balance ${bank.accounts[person].balance}`);
+            bank.reload();
+        } else {
+            bot.reply(msg, `You already have an account!`)
+        }
     }
 };
 
@@ -412,7 +437,7 @@ var haiku = (bot, msg) => {
 
 //msg checker
 bot.on("message", (msg) => {
-    if(msg.author === bot.user || msg.channel.isPrivate) {}
+    if(msg.author === bot.user || msg.channel.isPrivate) {return;}
     else if (prefixes.indexOf((msg.content.substr(0, 1))) > -1 ) {
         var cmdTxt = msg.content.split(' ')[0].substr(1);
         var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
@@ -464,7 +489,7 @@ var triviaSesh = {
 
     loadlist : (bot, msg, suffix) => {
         var t = triviaSesh;
-        t.currentList = jsonfile.readFileSync(`${triviaset.path}/${suffix}.json`);
+        t.currentList = fs.readJsonSync(`${triviaset.path}/${suffix}.json`);
         console.log(`${suffix}.json loaded!`); //TODO replace with bot chat
     },
 
