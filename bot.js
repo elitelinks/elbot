@@ -444,7 +444,7 @@ var bank = {
 Done Functions
  */
 
-var haiku = (bot, msg) => {
+// var haiku = (bot, msg) => {
     'use strict';
     try {
         let haiArr = msg.content.replace(/[^a-zA-Z0-9\s]/ig, '').split(' ');
@@ -480,7 +480,7 @@ bot.on("message", (msg) => {
         var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
         var suffix = sufArr.join(' ');
         cmdHandlr(bot, msg, cmdTxt, suffix);
-    }  else if (syllable(msg.content.replace(/[^a-zA-Z0-9\s]/ig, '')) == 17) {haiku(bot, msg);}
+    }  // else if (syllable(msg.content.replace(/[^a-zA-Z0-9\s]/ig, '')) == 17) {haiku(bot, msg);}
     else return; 
 });
 
@@ -488,7 +488,7 @@ bot.on("message", (msg) => {
  Trivia
  */
 
-//trivia commands todo combine trivia & triviasesh
+//trivia commands TODO combine trivia & triviasesh
 var trivia = {
 
     categories : fs.readdirSync(triviaset.path),
