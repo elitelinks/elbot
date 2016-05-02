@@ -23,8 +23,7 @@ const bot = new Discord.Client({autoReconnect:true});
 Command Handler
 */
 
-const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
-    if (settings.owners.indexOf(msg.author.id) <= -1 && commands[suffix].admin === true) {return;}
+var cmdHandlr = (bot, msg, cmdTxt, suffix) => {
     switch (cmdTxt) {
         // searches
         case "goog" :
@@ -40,7 +39,7 @@ const cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         case "weather" : commands.weather.process(bot, msg, suffix); break;
 
         //bank
-        case "bank" : bank.register(bot, msg); break; //TODO break up bank command
+        case "bank" : commands.bank.process(bot, msg, suffix); break;
 
         //fun stuff
         case "eight" :
@@ -308,6 +307,14 @@ var commands = {
         'admin'         : false
     },
 
+    'bank' : {
+        'description' : `Bank functions. \`${prefixes[0]}bank register\` to start an account`,
+        'alias' : ['none'],
+        'usage' : `\`${prefixes[0]}bank [command] or [list] to get a list of commands\``,
+        'process' : (bot, msg, suffix) => {bank.init(bot, msg, suffix)},
+        'admin' : false
+    },
+
     'help' : {
         'description'   : 'Get help for a command.',
         'alias'         : ["none"],
@@ -354,7 +361,7 @@ var commands = {
     },
 
     'logout' : {
-        'description'   : 'Empties local cache.',
+        'description'   : 'Logs me out.',
         'alias'         : ["none"],
         'usage'         : `\`${prefixes[0]}logout (admin only)\``,
         'process'       : (bot, msg) => {
@@ -378,9 +385,24 @@ Todo Functions
 var bank = {
     file : './settings/bank.json',
     accounts : bankSet.accounts,
+    commands : ['balance', 'register', 'payday'],
+
+    //TODO add list commands funct. TODO change adding to DB by user id rather than name
+    
+    init : (bot, msg, suffix) => {
+        if (bank.commands.indexOf(suffix) > -1) {
+            bank[suffix](bot, msg, suffix);
+        } else {
+            bot.sendMessage(msg, `Unrecognized bank command. \`${prefixes[0]}bank list\` for a list of commands.`)
+        }
+    },
 
     reload : () => {
-        fs.writeJson(bank.file, bankSet, err => console.log(err || "Bank Reloaded!"));
+        try {
+            fs.writeJson(bank.file, bankSet, err => console.log(err || "Bank Reloaded!"));
+        } catch(err) {
+            console.log(err);
+        };
         fs.readJson(bank.file, (err, obj) => {
             if (err) {console.log(err)}
             else {bankSet = obj};
@@ -399,7 +421,24 @@ var bank = {
         } else {
             bot.reply(msg, `You already have an account!`)
         }
+    },
+
+    balance : (bot, msg, suffix) => {
+        var person = msg.author.name;
+        var options = suffix.split(' ')[0];
+        if (!bank.accounts[person]) {
+            bot.reply(msg, `No account! Use ${prefixes[0]}bank register to get a new account!`)
+        }
+
+        else {
+            bot.reply(msg, `Your balance is ${bank.accounts[person].balance} credits.`)
+        }
+    },
+
+    payday : (bot, msg) => {
+        var person = msg.author.name;
     }
+
 };
 
 
