@@ -1,10 +1,5 @@
 {
   "accounts": {
-    "143501433608732673": {
-      "name": "plus",
-      "balance": 500,
-      "wait": 1462212591
-    }
   },
   "settings": {
     "payout": 500,
