@@ -444,7 +444,8 @@ var bank = {
 Done Functions
  */
 
-// var haiku = (bot, msg) => {
+/*
+ var haiku = (bot, msg) => {
     'use strict';
     try {
         let haiArr = msg.content.replace(/[^a-zA-Z0-9\s]/ig, '').split(' ');
@@ -471,6 +472,7 @@ Done Functions
         }
     } catch(err) {console.log(err)}
 };
+*/
 
 //msg checker
 bot.on("message", (msg) => {
