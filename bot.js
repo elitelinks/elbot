@@ -8,7 +8,7 @@ const syllable = require("syllable");
 const request = require("request");
 const http = require('http');
 const fs = require('fs-extra');
-const devMode = true; //set to false or remove in production
+const devMode = false; //set to false or remove in production
 
 //settings & data
 var settings = require("./settings/settings.json"),
@@ -620,7 +620,7 @@ var triviaSesh = {
 
 //Ready
 bot.on("ready", ()=>{
-    bot.setPlayingGame("ALPHA");
+    bot.setPlayingGame("Three Laws of Robotics");
     console.log("EL bot is ready");
 });
 
