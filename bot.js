@@ -8,7 +8,7 @@ const syllable = require("syllable");
 const request = require("request");
 const http = require('http');
 const fs = require('fs-extra');
-const devMode = false; //set to false or remove in production
+const devMode = true; //set to false or remove in production
 
 //settings & data
 var settings = require("./settings/settings.json"),
@@ -319,7 +319,7 @@ var commands = {
         'description'   : 'Get help for a command.',
         'alias'         : ["none"],
         'usage'         : `\`${prefixes[0]}help [command]\``,
-        'process'       : (bot, msg, suffix) => {
+        'process'       : (bot, msg) => {
             var cmds = Object.keys(commands);
             bot.sendMessage(msg, `__**Available commands**__\n\`${cmds.join(', ')}\`\n\n*For more specific help*, type \`${prefixes[0]}help [command]\``);
         },
@@ -373,11 +373,9 @@ var commands = {
     }
 };
 
-
 /*
 Todo Functions
  */
-
 
 
 //economy / slots / games
@@ -385,6 +383,7 @@ var bank = {
     file : './settings/bank.json',
     accounts : bankSet.accounts,
     commands : ['balance', 'register', 'payday'],
+    settings : bankSet.settings,
 
     //TODO add list commands funct. TODO change adding to DB by user id rather than name
     
@@ -393,7 +392,7 @@ var bank = {
         var name = msg.author.name;
         var sufSpl = suffix.split(' ');
         if (bank.commands.indexOf(sufSpl[0]) > -1) {
-            bank[sufSpl[0]](bot, msg, sufSpl, id, name);
+            bank[sufSpl[0]](bot, msg, suffix, id, name, sufSpl);
         } else {
             bot.sendMessage(msg, `Unrecognized bank command. \`${prefixes[0]}bank list\` for a list of commands.`)
         }
@@ -405,11 +404,11 @@ var bank = {
             bankSet = fs.readJsonSync(bank.file);
         } catch(err) {
             console.log(err);
-        };
+        }
         bank.accounts = bankSet.accounts;
     },
 
-    register : (bot, msg, sufSpl, id, name) => {
+    register : (bot, msg) => {
         if (!bank.accounts[id]) {
             try {
                 bank.accounts[id] = {};
@@ -425,7 +424,7 @@ var bank = {
         }
     },
 
-    balance : (bot, msg, sufSpl, id, name) => {
+    balance : (bot, msg, suffix, id, name, sufSpl) => {
         var person = sufSpl[1];
         var search = bot.users.get('name', person);
         if (!bank.accounts[id]) {bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`)}
@@ -433,8 +432,24 @@ var bank = {
         else {bot.reply(msg, `Your balance is ${bank.accounts[id].balance} credits.`)}
     },
 
-    payday : (bot, msg) => {
-        var name = msg.author.name;
+    payday : (bot, msg, suffix, id, name) => {
+        try {
+            if (!bank.accounts[id]) {
+                bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`);
+            }
+            var current = Math.round(new Date() / 1000);
+            var check = current - bank.accounts[id].wait;
+            if (check >= bank.settings.payoutTime) {
+                bank.accounts[id].balance += bankSet.settings.payout;
+                bank.accounts[id].wait = Math.round(new Date() / 1000);
+                    bot.reply(msg, `+${bankSet.settings.payout} credits! Your new balance is ${bank.accounts[id].balance} credits.`);
+                bank.reload();
+            } else {
+                bot.reply(msg, `Too soon! Please wait another ${check} seconds!`)
+            }
+        } catch(err) {
+            console.log(err);
+        }
     }
 
 };
@@ -482,7 +497,7 @@ bot.on("message", (msg) => {
         var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
         var suffix = sufArr.join(' ');
         cmdHandlr(bot, msg, cmdTxt, suffix);
-    }  // else if (syllable(msg.content.replace(/[^a-zA-Z0-9\s]/ig, '')) == 17) {haiku(bot, msg);}
+    }  // else if (syllable(msg.content.replace(/[^a-zA-Z0-9\s]/ig, '')) == 17) {haiku(bot, msg);} // shit freezes
     else return; 
 });
 
@@ -490,7 +505,7 @@ bot.on("message", (msg) => {
  Trivia
  */
 
-//trivia commands TODO combine trivia & triviasesh
+//Trivia commands TODO combine trivia & triviasesh
 var trivia = {
 
     categories : fs.readdirSync(triviaset.path),
@@ -515,7 +530,6 @@ var trivia = {
 };
 
 //Trivia Session
-
 var triviaSesh = {
     gameon : false,
     scorelist : {},
@@ -622,7 +636,7 @@ var triviaSesh = {
 
 //Ready
 bot.on("ready", ()=>{
-    bot.setPlayingGame("Three Laws of Robotics");
+    bot.setPlayingGame("v0.0.3");
     console.log("EL bot is ready");
 });
 
