@@ -395,8 +395,7 @@ var bank = {
     commands : ['balance', 'register', 'payday'],
     settings : bankSet.settings,
 
-    //TODO add list commands funct. TODO change adding to DB by user id rather than name
-
+    //TODO add list commands funct.
     init : (bot, msg, suffix) => {
         var id = msg.author.id;
         var name = msg.author.name;
@@ -476,7 +475,91 @@ var bank = {
 
 };
 
-//Gamez
+//Poker?
+var poker = {
+    hand : require('pokersolver').Hand,
+    time : new Timer(),
+    deck : [],
+
+    filldeck : () => {
+        poker.deck.push('As');
+        poker.deck.push('Ks');
+        poker.deck.push('Qs');
+        poker.deck.push('Js');
+        poker.deck.push('Ts');
+        poker.deck.push('9s');
+        poker.deck.push('8s');
+        poker.deck.push('7s');
+        poker.deck.push('6s');
+        poker.deck.push('5s');
+        poker.deck.push('4s');
+        poker.deck.push('3s');
+        poker.deck.push('2s');
+        poker.deck.push('Ah');
+        poker.deck.push('Kh');
+        poker.deck.push('Qh');
+        poker.deck.push('Jh');
+        poker.deck.push('Th');
+        poker.deck.push('9h');
+        poker.deck.push('8h');
+        poker.deck.push('7h');
+        poker.deck.push('6h');
+        poker.deck.push('5h');
+        poker.deck.push('4h');
+        poker.deck.push('3h');
+        poker.deck.push('2h');
+        poker.deck.push('Ad');
+        poker.deck.push('Kd');
+        poker.deck.push('Qd');
+        poker.deck.push('Jd');
+        poker.deck.push('Td');
+        poker.deck.push('9d');
+        poker.deck.push('8d');
+        poker.deck.push('7d');
+        poker.deck.push('6d');
+        poker.deck.push('5d');
+        poker.deck.push('4d');
+        poker.deck.push('3d');
+        poker.deck.push('2d');
+        poker.deck.push('AC');
+        poker.deck.push('KC');
+        poker.deck.push('QC');
+        poker.deck.push('JC');
+        poker.deck.push('TC');
+        poker.deck.push('9C');
+        poker.deck.push('8C');
+        poker.deck.push('7C');
+        poker.deck.push('6C');
+        poker.deck.push('5C');
+        poker.deck.push('4C');
+        poker.deck.push('3C');
+        poker.deck.push('2C');
+        poker.shuffle();
+    },
+
+    shuffle : () => {
+        //Shuffle the deck array with Fisher-Yates
+        var i, j, tempi, tempj;
+        for (i = 0; i < poker.deck.length; i += 1) {
+            j = Math.floor(Math.random() * (i + 1));
+            tempi = deck[i];
+            tempj = deck[j];
+            poker.deck[i] = tempj;
+            poker.deck[j] = tempi;
+        }
+    }
+};
+
+/*
+Done Functions
+ */
+
+
+/*
+ Gamez
+ */
+
+//Slots
 function slot(bot, msg, suffix) {
     var id = msg.author.id;
     if (!bank.accounts[id]) {
@@ -554,10 +637,6 @@ function slot(bot, msg, suffix) {
     }
     bank.reload();
 };
-
-/*
-Done Functions
- */
 
 /*
  var haiku = (bot, msg) => {
