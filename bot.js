@@ -8,12 +8,13 @@ const syllable = require("syllable");
 const request = require("request");
 const http = require('http');
 const fs = require('fs-extra');
-const devMode = false; //set to false or remove in production
+
 
 //settings & data
 var settings = require("./settings/settings.json"),
-    prefixes = devMode ? settings.dev_prefixes : settings.prefixes,
-    triviaset = settings.trivia;
+    triviaset = settings.trivia,
+    devMode = settings.devmode, //set to false or remove in production
+    prefixes = devMode ? settings.dev_prefixes : settings.prefixes;
 
 var bankSet = fs.readJsonSync("./settings/bank.json");
 //invoke bot
@@ -24,6 +25,8 @@ Command Handler
 */
 
 var cmdHandlr = (bot, msg, cmdTxt, suffix) => {
+    var id = msg.author.id;
+    var name = msg.author.name
     switch (cmdTxt) {
         // searches
         case "goog" :
@@ -40,6 +43,13 @@ var cmdHandlr = (bot, msg, cmdTxt, suffix) => {
 
         //bank
         case "bank" : commands.bank.process(bot, msg, suffix); break;
+        case "payday" :
+        case "payout" :
+        case "$" : bank.payday(bot, msg, suffix, id, name); break;
+
+        
+        //games
+        case "slot": slot(bot, msg, suffix); break;
 
         //fun stuff
         case "eight" :
@@ -319,7 +329,7 @@ var commands = {
         'description'   : 'Get help for a command.',
         'alias'         : ["none"],
         'usage'         : `\`${prefixes[0]}help [command]\``,
-        'process'       : (bot, msg, suffix) => {
+        'process'       : (bot, msg) => {
             var cmds = Object.keys(commands);
             bot.sendMessage(msg, `__**Available commands**__\n\`${cmds.join(', ')}\`\n\n*For more specific help*, type \`${prefixes[0]}help [command]\``);
         },
@@ -373,27 +383,26 @@ var commands = {
     }
 };
 
-
 /*
 Todo Functions
  */
 
 
-
-//economy / slots / games
+//Economy  TODO add transfer of funds
 var bank = {
     file : './settings/bank.json',
     accounts : bankSet.accounts,
     commands : ['balance', 'register', 'payday'],
+    settings : bankSet.settings,
 
     //TODO add list commands funct. TODO change adding to DB by user id rather than name
-    
+
     init : (bot, msg, suffix) => {
         var id = msg.author.id;
         var name = msg.author.name;
         var sufSpl = suffix.split(' ');
         if (bank.commands.indexOf(sufSpl[0]) > -1) {
-            bank[sufSpl[0]](bot, msg, sufSpl, id, name);
+            bank[sufSpl[0]](bot, msg, suffix, id, name, sufSpl);
         } else {
             bot.sendMessage(msg, `Unrecognized bank command. \`${prefixes[0]}bank list\` for a list of commands.`)
         }
@@ -405,11 +414,23 @@ var bank = {
             bankSet = fs.readJsonSync(bank.file);
         } catch(err) {
             console.log(err);
-        };
+        }
         bank.accounts = bankSet.accounts;
     },
 
-    register : (bot, msg, sufSpl, id, name) => {
+    add : (id, amount) => {
+        try {
+            bank.accounts[id].balance += amount;
+        } catch(err) {console.log(err);}
+    },
+
+    subtract : (id, amount) => {
+        try {
+            bank.accounts[id].balance -= amount;
+        } catch(err) {console.log(err);}
+    },
+
+    register : (bot, msg) => {
         if (!bank.accounts[id]) {
             try {
                 bank.accounts[id] = {};
@@ -425,7 +446,7 @@ var bank = {
         }
     },
 
-    balance : (bot, msg, sufSpl, id, name) => {
+    balance : (bot, msg, suffix, id, name, sufSpl) => {
         var person = sufSpl[1];
         var search = bot.users.get('name', person);
         if (!bank.accounts[id]) {bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`)}
@@ -433,12 +454,106 @@ var bank = {
         else {bot.reply(msg, `Your balance is ${bank.accounts[id].balance} credits.`)}
     },
 
-    payday : (bot, msg) => {
-        var name = msg.author.name;
+    payday : (bot, msg, suffix, id, name) => {
+        try {
+            if (!bank.accounts[id]) {
+                bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`);
+            }
+            var current = Math.round(new Date() / 1000);
+            var check = current - bank.accounts[id].wait;
+            if (check >= bank.settings.payoutTime) {
+                bank.accounts[id].balance += bankSet.settings.payout;
+                bank.accounts[id].wait = Math.round(new Date() / 1000);
+                    bot.reply(msg, `+${bankSet.settings.payout} credits! Your new balance is ${bank.accounts[id].balance} credits.`);
+                bank.reload();
+            } else {
+                bot.reply(msg, `Too soon! Please wait another ${check} seconds!`)
+            }
+        } catch(err) {
+            console.log(err);
+        }
     }
 
 };
 
+//Gamez
+function slot(bot, msg, suffix) {
+    var id = msg.author.id;
+    if (!bank.accounts[id]) {
+        bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`);
+    }
+    if (msg.channel.id !== settings.gamesroom) {return;}
+    var bid = parseInt(suffix.toString().replace(/[\D]g/, ''), 10);
+    if (!bid || bid < bankSet.settings.minBet || bid > bankSet.settings.maxBet) {
+        bot.reply(msg, `You must place a bid between ${bankSet.settings.minBet} and ${bankSet.settings.maxBet}`); return;
+    }
+    var slotTime = new Timer();
+    var reel_pattern = [":cherries:", ":cookie:", ":two:", ":beer:", ":four_leaf_clover:", ":cyclone:", ":sunflower:", ":six:", ":beer:", ":mushroom:", ":heart:", ":snowflake:"]
+    var padding_before = [":mushroom:", ":heart:", ":snowflake:"]
+    var padding_after = [":cherries:", ":cookie:", ":two:"]
+    var reel = padding_before.concat(reel_pattern, padding_after);
+    var reels = []
+
+    try {
+        for (var x = 0; x < 3; x++) {
+            var n = Math.floor(Math.random() * reel_pattern.length) + 3;
+            reels.push([reel[n - 1], reel[n], reel[n + 1]])
+        }
+    } catch (err) {console.log(err);}
+
+    var line;
+    try {
+        line = [reels[0][1], reels[1][1], reels[2][1]];
+    } catch(err) {console.log(err);}
+
+    var display_reels;
+    try {
+        display_reels = "  " + reels[0][0] + " " + reels[1][0] + " " + reels[2][0] + "\n";
+        display_reels += ">" + reels[0][1] + " " + reels[1][1] + " " + reels[2][1] + "\n";
+        display_reels += "  " + reels[0][2] + " " + reels[1][2] + " " + reels[2][2] + "\n"
+    } catch (err) {console.log(err)}
+
+    try {
+        if (line[0] == ":two:" && line[1] == ":two:" && line[2] == ":six:") {
+            bid = bid * 5000;
+            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} JACKPOT MOTHERFUCKER! Your bet is multiplied * 5000! ${bid}! `);
+        }
+        else if (line[0] == ":four_leaf_clover:" && line[1] == ":four_leaf_clover:" && line[2] == ":four_leaf_clover:") {
+            bid += 1000;
+            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Three FLC! +1000!`);
+        }
+        else if (line[0] == ":cherries:" && line[1] == ":cherries:" && line[2] == ":cherries:") {
+            bid += 800;
+            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Three cherries! +800! `);
+        }
+        else if (line[0] == line[1] == line[2]) {
+            bid += 500;
+            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Three symbols! +500! `);
+        }
+        else if (line[0] == ":two:" && line[1] == ":six:" || line[1] == ":two:" && line[2] == ":six:") {
+            bid *= 4;
+            bot.sendMessage(msg, `{display_reels}{msg.author.mention()} 26! Your bet is multiplied * 4! {bid}! `);
+        }
+        else if (line[0] == ":cherries:" && line[1] == ":cherries:" || line[1] == ":cherries:" && line[2] == ":cherries:") {
+            bid *= 3;
+            bot.sendMessage(msg, `{display_reels}{msg.author.mention()} Two cherries! Your bet is multiplied * 3! {bid}! `);
+        }
+        else if (line[0] == line[1] || line[1] == line[2]) {
+            bid *= 2;
+            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Two symbols! Your bet is multiplied * 2! ${bid}! `);
+        }
+        else {
+            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Nothing! Lost bet.`)
+            bank.subtract(id, bid);
+        }
+    } catch(err) {console.log(err);}
+    try {
+        slotTime.start(.5).on('end', () => {bot.reply(msg, `Credits left: **${bank.accounts[id].balance}**`)})
+    } catch (err) {
+        console.log(err);
+    }
+    bank.reload();
+};
 
 /*
 Done Functions
@@ -482,7 +597,7 @@ bot.on("message", (msg) => {
         var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
         var suffix = sufArr.join(' ');
         cmdHandlr(bot, msg, cmdTxt, suffix);
-    }  // else if (syllable(msg.content.replace(/[^a-zA-Z0-9\s]/ig, '')) == 17) {haiku(bot, msg);}
+    }  // else if (syllable(msg.content.replace(/[^a-zA-Z0-9\s]/ig, '')) == 17) {haiku(bot, msg);} // shit freezes
     else return; 
 });
 
@@ -490,7 +605,7 @@ bot.on("message", (msg) => {
  Trivia
  */
 
-//trivia commands TODO combine trivia & triviasesh
+//Trivia commands TODO combine trivia & triviasesh
 var trivia = {
 
     categories : fs.readdirSync(triviaset.path),
@@ -503,7 +618,7 @@ var trivia = {
     start : (bot ,msg, suffix) => {
         var t = trivia;
         if (suffix === 'skip') {
-            if (triviaSesh.gameon === false) {}
+            if (triviaSesh.gameon === false) {return;}
             else {triviaSesh.loop(bot, msg);}
         }
         else if (triviaSesh.gameon === true) {bot.sendMessage(msg,"There is already a trivia session in place!"); }
@@ -515,7 +630,6 @@ var trivia = {
 };
 
 //Trivia Session
-
 var triviaSesh = {
     gameon : false,
     scorelist : {},
@@ -577,7 +691,7 @@ var triviaSesh = {
                 }
             });
             trivTimer.stop();
-            trivTimer.start(triviaset.delay).on('end', function() {botAnswers(bot, msg)});
+            trivTimer.start(triviaset.delay).on('end', () => {botAnswers(bot, msg)});
 
         } catch(err) {console.log(err)}
     },
@@ -622,7 +736,7 @@ var triviaSesh = {
 
 //Ready
 bot.on("ready", ()=>{
-    bot.setPlayingGame("Three Laws of Robotics");
+    bot.setPlayingGame("v0.0.3");
     console.log("EL bot is ready");
 });
 
