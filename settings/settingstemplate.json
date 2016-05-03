@@ -7,6 +7,7 @@
   "weather_api_key": "",
   "mashape_api_key": "",
   "imgur_id": "",
+  "devmode" : false,
   "prefixes": [
     ".",
     "!"
