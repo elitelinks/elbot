@@ -9,6 +9,8 @@ const http = require('http');
 const request = require("request");
 const fs = require('fs-extra');
 const google = require("google");
+const Poker = require("./modules/poker");
+const bank = require("./modules/bank")
 
 //settings & data
 var settings = require("./settings/settings.json"),
@@ -50,6 +52,10 @@ var cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         
         //games
         case "slot": slot(bot, msg, suffix); break;
+        case "poker": (function(){
+            var poker = new Poker(bot, msg, suffix);
+            poker.dealHand();
+        })(); break;
 
         //fun stuff
         case "eight" :
@@ -383,242 +389,12 @@ var commands = {
     }
 };
 
-/*
-Todo Functions
- */
 
-
-//Economy  TODO add transfer of funds
-var bank = {
-    file : './settings/bank.json',
-    accounts : bankSet.accounts,
-    commands : ['balance', 'register', 'payday'],
-    settings : bankSet.settings,
-
-    //TODO add list commands funct.
-    init : (bot, msg, suffix) => {
-        var id = msg.author.id;
-        var name = msg.author.name;
-        var sufSpl = suffix.split(' ');
-        if (bank.commands.indexOf(sufSpl[0]) > -1) {
-            bank[sufSpl[0]](bot, msg, suffix, id, name, sufSpl);
-        } else {
-            bot.sendMessage(msg, `Unrecognized bank command. \`${prefixes[0]}bank list\` for a list of commands.`)
-        }
-    },
-
-    reload : () => {
-        try {
-            fs.writeJsonSync(bank.file, bankSet);
-            bankSet = fs.readJsonSync(bank.file);
-        } catch(err) {
-            console.log(err);
-        }
-        bank.accounts = bankSet.accounts;
-    },
-
-    add : (id, amount) => {
-        try {
-            bank.accounts[id].balance += amount;
-        } catch(err) {console.log(err);}
-    },
-
-    subtract : (id, amount) => {
-        try {
-            bank.accounts[id].balance -= amount;
-        } catch(err) {console.log(err);}
-    },
-
-    register : (bot, msg, suffix, id, name, sufSpl) => {
-        if (!bank.accounts[id]) {
-            try {
-                bank.accounts[id] = {};
-                bank.accounts[id].name = name;
-                bank.accounts[id].balance = bankSet.settings.payout;
-                bank.accounts[id].wait = Math.round(new Date() / 1000);
-                console.log("New Bank Account Created!")
-                bot.sendMessage(msg, `Account created for ${name} with balance ${bank.accounts[id].balance} credits.`);
-                bank.reload();
-            } catch(err) {console.log(err);}
-        } else {
-            bot.reply(msg, `You already have an account!`)
-        }
-    },
-
-    balance : (bot, msg, suffix, id, name, sufSpl) => {
-        var person = sufSpl[1];
-        var search = bot.users.get('name', person);
-        if (!bank.accounts[id]) {bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`)}
-        else if (search) {bot.reply(msg, `The balance of **${person}** is ${bank.accounts[search.id].balance} credits.`)}
-        else {bot.reply(msg, `Your balance is ${bank.accounts[id].balance} credits.`)}
-    },
-
-    transfer: (bot, msg, suffix, id, name, sufSpl) => {},
-
-    payday : (bot, msg, suffix, id, name) => {
-        try {
-            if (!bank.accounts[id]) {
-                bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`);
-            }
-            var current = Math.round(new Date() / 1000);
-            var check = current - bank.accounts[id].wait;
-            if (check >= bank.settings.payoutTime) {
-                bank.accounts[id].balance += bankSet.settings.payout;
-                bank.accounts[id].wait = Math.round(new Date() / 1000);
-                    bot.reply(msg, `+${bankSet.settings.payout} credits! Your new balance is ${bank.accounts[id].balance} credits.`);
-                bank.reload();
-            } else {
-                bot.reply(msg, `Too soon! Please wait another ${check} seconds!`)
-            }
-        } catch(err) {
-            console.log(err);
-        }
-    }
-
-};
-
-//Poker?
-var poker = {
-    hand : require('pokersolver').Hand,
-    time : new Timer(),
-    deck : [],
-    playerhand : [],
-    replyland : [],
-    round : 0,
-    event : new EventEmitter(),
-
-    init : (bot, msg, suffix) => {
-        poker.event.setMaxListeners(20);
-        var id = msg.author.id;
-        if (!bank.accounts[id]) {
-            bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`);
-        }
-        //if (msg.channel.id !== settings.gamesroom) {return;}
-        var bid = parseInt(suffix.toString().replace(/[\D]g/, ''), 10);
-        if (bank.accounts[id].balance < bid) {bot.reply(msg, `Not enough credits dummy!`); return;}
-        poker.filldeck();
-        poker.shuffle();
-    },
-
-    filldeck : () => {
-        poker.deck.push('As');
-        poker.deck.push('Ks');
-        poker.deck.push('Qs');
-        poker.deck.push('Js');
-        poker.deck.push('Ts');
-        poker.deck.push('9s');
-        poker.deck.push('8s');
-        poker.deck.push('7s');
-        poker.deck.push('6s');
-        poker.deck.push('5s');
-        poker.deck.push('4s');
-        poker.deck.push('3s');
-        poker.deck.push('2s');
-        poker.deck.push('Ah');
-        poker.deck.push('Kh');
-        poker.deck.push('Qh');
-        poker.deck.push('Jh');
-        poker.deck.push('Th');
-        poker.deck.push('9h');
-        poker.deck.push('8h');
-        poker.deck.push('7h');
-        poker.deck.push('6h');
-        poker.deck.push('5h');
-        poker.deck.push('4h');
-        poker.deck.push('3h');
-        poker.deck.push('2h');
-        poker.deck.push('Ad');
-        poker.deck.push('Kd');
-        poker.deck.push('Qd');
-        poker.deck.push('Jd');
-        poker.deck.push('Td');
-        poker.deck.push('9d');
-        poker.deck.push('8d');
-        poker.deck.push('7d');
-        poker.deck.push('6d');
-        poker.deck.push('5d');
-        poker.deck.push('4d');
-        poker.deck.push('3d');
-        poker.deck.push('2d');
-        poker.deck.push('Ac');
-        poker.deck.push('Kc');
-        poker.deck.push('Qc');
-        poker.deck.push('Jc');
-        poker.deck.push('Tc');
-        poker.deck.push('9c');
-        poker.deck.push('8c');
-        poker.deck.push('7c');
-        poker.deck.push('6c');
-        poker.deck.push('5c');
-        poker.deck.push('4c');
-        poker.deck.push('3c');
-        poker.deck.push('2c');
-        poker.shuffle();
-    },
-
-    shuffle : () => {
-        //Shuffle the deck array with Fisher-Yates
-        var i, j, tempi, tempj;
-        for (i = 0; i < poker.deck.length; i += 1) {
-            j = Math.floor(Math.random() * (i + 1));
-            tempi = poker.deck[i];
-            tempj = poker.deck[j];
-            poker.deck[i] = tempj;
-            poker.deck[j] = tempi;
-        }
-    },
-
-    dealHand : () => {
-        var cardsNeeded = 5 - poker.playerhand.length;
-        for (; cardsNeeded >= 0; cardsNeeded--) {
-            poker.playerhand.push(poker.deck.pop());
-        }
-        poker.replyHand = poker.playerhand.map((x)=>{
-            var o = x.split('');
-            
-            if (o[1] === "d") {o[1] = ":diamonds:"};
-            if (o[1] === "s") {o[1] = ":spades:"};
-            if (o[1] === "h") {o[1] = ":hearts:"};
-            if (o[1] === "c") {o[1] = ":clubs:"};
-            return o.join('');
-        });
-        poker.replyHand = `[${poker.replyHand.join('] [')}]`
-        bot.sendMessage('155368766564204544', `${poker.playerhand}`)
-        poker.round++;
-        if (poker.round >= 2) {poker.end}
-    },
-
-    payout: () => {
-        
-    },
-
-    end : () => {
-        poker.time.stop();
-        poker.deck = [];
-        poker.playerhand = [];
-        poker.replyland = [];
-        poker.round = 0;
-    }
-};
-
-poker.filldeck();
-poker.dealHand();
-
-/*
-Done Functions
- */
-
-
-/*
- Gamez
- */
 
 //Slots
 function slot(bot, msg, suffix) {
     var id = msg.author.id;
-    if (!bank.accounts[id]) {
-        bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`); return;
-    }
+    if (bank.check(bot, msg) === false) {return};
     //if (msg.channel.id !== settings.gamesroom) {return;}
     var bid = parseInt(suffix.toString().replace(/[\D]g/, ''), 10);
     if (bank.accounts[id].balance < bid) {bot.reply(msg, `Not enough credits dummy!`); return;}
@@ -686,7 +462,7 @@ function slot(bot, msg, suffix) {
         }
     } catch(err) {console.log(err);}
     try {
-        slotTime.start(.25).on('end', () => {bot.reply(msg, `Credits left: **${bank.accounts[id].balance}**`)})
+        slotTime.start(.1).on('end', () => {bot.reply(msg, `Credits left: **${bank.accounts[id].balance}**`)})
     } catch (err) {
         console.log(err);
     }
@@ -725,7 +501,7 @@ var trivia = {
             else {triviaSesh.loop(bot, msg);}
         }
         else if (triviaSesh.gameon === true) {bot.sendMessage(msg,"There is already a trivia session in place!"); }
-        else if (!suffix || suffix === 'help') {t.help(bot, msg);}
+        else if (!suffix || suffix === 'help') {return;} //TODO help function
         else if (!suffix || suffix === 'list') {t.list(bot, msg);}
         else if (t.categories.indexOf(suffix+".json") > -1) {triviaSesh.begin(bot, msg, suffix);}
         else {bot.sendMessage(msg, `No list with the name ${suffix}`); }
@@ -843,7 +619,6 @@ var getUser = (bot, msg, suffix) => {};
 //Ready
 bot.on("ready", ()=>{
     bot.setPlayingGame("v0.0.3");
-    bot.sendMessage('155368766564204544', `${poker.replyHand}`)
     console.log("EL bot is ready");
 });
 
