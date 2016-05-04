@@ -1,14 +1,14 @@
+"use strict";
 //Requires
 process.setMaxListeners(0);
-var Discord = require("discord.js");
 var startTime = new Date();
-var Timer = require("timer.js");
-const google = require("google");
-const syllable = require("syllable");
-const request = require("request");
+const Discord = require("discord.js");
+const Timer = require("timer.js");
+const EventEmitter = require("events").EventEmitter;
 const http = require('http');
+const request = require("request");
 const fs = require('fs-extra');
-
+const google = require("google");
 
 //settings & data
 var settings = require("./settings/settings.json"),
@@ -429,7 +429,7 @@ var bank = {
         } catch(err) {console.log(err);}
     },
 
-    register : (bot, msg) => {
+    register : (bot, msg, suffix, id, name, sufSpl) => {
         if (!bank.accounts[id]) {
             try {
                 bank.accounts[id] = {};
@@ -452,6 +452,8 @@ var bank = {
         else if (search) {bot.reply(msg, `The balance of **${person}** is ${bank.accounts[search.id].balance} credits.`)}
         else {bot.reply(msg, `Your balance is ${bank.accounts[id].balance} credits.`)}
     },
+
+    transfer: (bot, msg, suffix, id, name, sufSpl) => {},
 
     payday : (bot, msg, suffix, id, name) => {
         try {
@@ -480,6 +482,23 @@ var poker = {
     hand : require('pokersolver').Hand,
     time : new Timer(),
     deck : [],
+    playerhand : [],
+    replyland : [],
+    round : 0,
+    event : new EventEmitter(),
+
+    init : (bot, msg, suffix) => {
+        poker.event.setMaxListeners(20);
+        var id = msg.author.id;
+        if (!bank.accounts[id]) {
+            bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`);
+        }
+        //if (msg.channel.id !== settings.gamesroom) {return;}
+        var bid = parseInt(suffix.toString().replace(/[\D]g/, ''), 10);
+        if (bank.accounts[id].balance < bid) {bot.reply(msg, `Not enough credits dummy!`); return;}
+        poker.filldeck();
+        poker.shuffle();
+    },
 
     filldeck : () => {
         poker.deck.push('As');
@@ -521,19 +540,19 @@ var poker = {
         poker.deck.push('4d');
         poker.deck.push('3d');
         poker.deck.push('2d');
-        poker.deck.push('AC');
-        poker.deck.push('KC');
-        poker.deck.push('QC');
-        poker.deck.push('JC');
-        poker.deck.push('TC');
-        poker.deck.push('9C');
-        poker.deck.push('8C');
-        poker.deck.push('7C');
-        poker.deck.push('6C');
-        poker.deck.push('5C');
-        poker.deck.push('4C');
-        poker.deck.push('3C');
-        poker.deck.push('2C');
+        poker.deck.push('Ac');
+        poker.deck.push('Kc');
+        poker.deck.push('Qc');
+        poker.deck.push('Jc');
+        poker.deck.push('Tc');
+        poker.deck.push('9c');
+        poker.deck.push('8c');
+        poker.deck.push('7c');
+        poker.deck.push('6c');
+        poker.deck.push('5c');
+        poker.deck.push('4c');
+        poker.deck.push('3c');
+        poker.deck.push('2c');
         poker.shuffle();
     },
 
@@ -542,13 +561,48 @@ var poker = {
         var i, j, tempi, tempj;
         for (i = 0; i < poker.deck.length; i += 1) {
             j = Math.floor(Math.random() * (i + 1));
-            tempi = deck[i];
-            tempj = deck[j];
+            tempi = poker.deck[i];
+            tempj = poker.deck[j];
             poker.deck[i] = tempj;
             poker.deck[j] = tempi;
         }
+    },
+
+    dealHand : () => {
+        var cardsNeeded = 5 - poker.playerhand.length;
+        for (; cardsNeeded >= 0; cardsNeeded--) {
+            poker.playerhand.push(poker.deck.pop());
+        }
+        poker.replyHand = poker.playerhand.map((x)=>{
+            var o = x.split('');
+            
+            if (o[1] === "d") {o[1] = ":diamonds:"};
+            if (o[1] === "s") {o[1] = ":spades:"};
+            if (o[1] === "h") {o[1] = ":hearts:"};
+            if (o[1] === "c") {o[1] = ":clubs:"};
+            return o.join('');
+        });
+        poker.replyHand = `[${poker.replyHand.join('] [')}]`
+        bot.sendMessage('155368766564204544', `${poker.playerhand}`)
+        poker.round++;
+        if (poker.round >= 2) {poker.end}
+    },
+
+    payout: () => {
+        
+    },
+
+    end : () => {
+        poker.time.stop();
+        poker.deck = [];
+        poker.playerhand = [];
+        poker.replyland = [];
+        poker.round = 0;
     }
 };
+
+poker.filldeck();
+poker.dealHand();
 
 /*
 Done Functions
@@ -563,15 +617,16 @@ Done Functions
 function slot(bot, msg, suffix) {
     var id = msg.author.id;
     if (!bank.accounts[id]) {
-        bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`);
+        bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`); return;
     }
-    if (msg.channel.id !== settings.gamesroom) {return;}
+    //if (msg.channel.id !== settings.gamesroom) {return;}
     var bid = parseInt(suffix.toString().replace(/[\D]g/, ''), 10);
-    if (!bid || bid < bankSet.settings.minBet || bid > bankSet.settings.maxBet) {
+    if (bank.accounts[id].balance < bid) {bot.reply(msg, `Not enough credits dummy!`); return;}
+    if (!bid || bid < bankSet.settings.minBet || bid > bankSet.settings.maxBet || bid === NaN) {
         bot.reply(msg, `You must place a bid between ${bankSet.settings.minBet} and ${bankSet.settings.maxBet}`); return;
     }
     var slotTime = new Timer();
-    var reel_pattern = [":cherries:", ":cookie:", ":two:", ":beer:", ":four_leaf_clover:", ":cyclone:", ":sunflower:", ":six:", ":beer:", ":mushroom:", ":heart:", ":snowflake:"]
+    var reel_pattern = [":cherries:", ":cookie:", ":two:", ":seven:", ":four_leaf_clover:" ,":cyclone:", ":sunflower:", ":six:", ":beer:", ":mushroom:", ":heart:", ":snowflake:"]
     var padding_before = [":mushroom:", ":heart:", ":snowflake:"]
     var padding_after = [":cherries:", ":cookie:", ":two:"]
     var reel = padding_before.concat(reel_pattern, padding_after);
@@ -603,7 +658,7 @@ function slot(bot, msg, suffix) {
         }
         else if (line[0] == ":four_leaf_clover:" && line[1] == ":four_leaf_clover:" && line[2] == ":four_leaf_clover:") {
             bid += 1000;
-            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Three FLC! +1000!`);
+            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Three Four Leaf Clovers! +1000!`);
         }
         else if (line[0] == ":cherries:" && line[1] == ":cherries:" && line[2] == ":cherries:") {
             bid += 800;
@@ -631,42 +686,13 @@ function slot(bot, msg, suffix) {
         }
     } catch(err) {console.log(err);}
     try {
-        slotTime.start(.5).on('end', () => {bot.reply(msg, `Credits left: **${bank.accounts[id].balance}**`)})
+        slotTime.start(.25).on('end', () => {bot.reply(msg, `Credits left: **${bank.accounts[id].balance}**`)})
     } catch (err) {
         console.log(err);
     }
     bank.reload();
 };
 
-/*
- var haiku = (bot, msg) => {
-    'use strict';
-    try {
-        let haiArr = msg.content.replace(/[^a-zA-Z0-9\s]/ig, '').split(' ');
-        if (syllable(haiArr.join(' ')) != 17) {
-            return;
-        }
-        let lineOne = [];
-        let lineTwo = [];
-        let lineThree = [];
-        while (syllable(lineOne.join(' ')) < 5) {
-            lineOne.push(haiArr.shift());
-        }
-        while (syllable(lineTwo.join(' ')) < 7) {
-            lineTwo.push(haiArr.shift());
-        }
-        while (syllable(lineThree.join(' ')) < 5) {
-            lineThree.push(haiArr.shift());
-        }
-        if (syllable(lineOne.join(' ')) != 5 || syllable(lineTwo.join(' ')) != 7 || syllable(lineThree.join(' ')) != 5) {
-            
-        }
-        else {
-            bot.sendMessage(msg, `Accidental Haiku Detected! Written by ***${msg.author.username}***!\n\`\`\`${lineOne.join(' ')}\n${lineTwo.join(' ')}\n${lineThree.join(' ')}\`\`\``)
-        }
-    } catch(err) {console.log(err)}
-};
-*/
 
 //msg checker
 bot.on("message", (msg) => {
@@ -676,14 +702,12 @@ bot.on("message", (msg) => {
         var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
         var suffix = sufArr.join(' ');
         cmdHandlr(bot, msg, cmdTxt, suffix);
-    }  // else if (syllable(msg.content.replace(/[^a-zA-Z0-9\s]/ig, '')) == 17) {haiku(bot, msg);} // shit freezes
+    }
     else return; 
 });
 
-/*
- Trivia
- */
 
+//Trivia
 //Trivia commands TODO combine trivia & triviasesh
 var trivia = {
 
@@ -813,9 +837,13 @@ var triviaSesh = {
 };
 
 
+//Useful Functions
+var getUser = (bot, msg, suffix) => {};
+
 //Ready
 bot.on("ready", ()=>{
     bot.setPlayingGame("v0.0.3");
+    bot.sendMessage('155368766564204544', `${poker.replyHand}`)
     console.log("EL bot is ready");
 });
 
@@ -824,4 +852,5 @@ bot.on("disconnected", ()=> {process.exit(0);});
 //Login
 if (settings.token) {bot.loginWithToken(settings.token);console.log("Logged in using Token");}
 else {bot.login(settings.email, settings.password);console.log("Logged in using Email")}
+
 

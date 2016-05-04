@@ -121,7 +121,6 @@ $RECYCLE.BIN/
 *.lnk
 
 #Bot Settings for now
-settings/settings.json
-settings/bank.json
+settings/*
 #bot cache
 /cache
