@@ -52,10 +52,11 @@ var cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         
         //games
         case "slot": slot(bot, msg, suffix); break;
-        case "poker": (function(){
+        case "poker": (() => {
             var id = msg.author.id;
             var poker = new Poker(bot, msg, suffix, id);
-            poker.dealHand();
+            poker.init();
+            poker = null;
         })(); break;
 
         //fun stuff
@@ -292,7 +293,7 @@ var commands = {
         'usage'         : `\`${prefixes[0]}orly [title, author, top text, middle text]\``,
         'process'       : (bot, msg, suffix) => { //TODO add choose color & animal option
             fs.ensureDir('./cache', function (err) {
-                console.log(err); // => null
+                console.log(err || 'Cache folder created!'); // => null
                 // dir has now been created, including the directory it is to be placed in
             });
             var randomstring = require('randomstring');
@@ -390,8 +391,6 @@ var commands = {
     }
 };
 
-
-
 //Slots
 function slot(bot, msg, suffix) {
     var id = msg.author.id;
@@ -402,6 +401,7 @@ function slot(bot, msg, suffix) {
     if (!bid || bid < bankSet.settings.minBet || bid > bankSet.settings.maxBet || bid === NaN) {
         bot.reply(msg, `You must place a bid between ${bankSet.settings.minBet} and ${bankSet.settings.maxBet}`); return;
     }
+    bank.subtract(id, bid);
     var slotTime = new Timer();
     var reel_pattern = [":cherries:", ":cookie:", ":two:", ":seven:", ":four_leaf_clover:" ,":cyclone:", ":sunflower:", ":six:", ":beer:", ":mushroom:", ":heart:", ":snowflake:"]
     var padding_before = [":mushroom:", ":heart:", ":snowflake:"]
@@ -459,7 +459,6 @@ function slot(bot, msg, suffix) {
         }
         else {
             bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Nothing! Lost bet.`)
-            bank.subtract(id, bid);
         }
     } catch(err) {console.log(err);}
     try {
@@ -469,10 +468,6 @@ function slot(bot, msg, suffix) {
     }
     bank.reload();
 };
-
-
-
-
 
 //Trivia
 //Trivia commands TODO combine trivia & triviasesh
@@ -603,7 +598,6 @@ var triviaSesh = {
     }
 };
 
-
 //Useful Functions
 var getUser = (bot, msg, suffix) => {};
 
@@ -618,7 +612,6 @@ bot.on("message", (msg) => {
     }
     else return;
 });
-
 //Ready
 bot.on("ready", ()=>{
     bot.setPlayingGame("v0.0.3");
