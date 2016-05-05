@@ -6,29 +6,24 @@ var bank = require("../modules/bank.js");
 var Timer = require("timer.js");
 var settings = require("../settings/settings.json");
 
-function Poker(bot, msg, suffix) {
+function Poker(bot, msg, suffix, id) {
     //if (msg.channel.id !== settings.gamesroom) {return;}
-    bank.check(bot, msg);
     var bid = parseInt(suffix.toString().replace(/[\D]g/, ''), 10);
     if (bank.check(bot, msg) === false) {return};
-    this.id = msg.author.id;
+    this.id = id;
+    if (id !== msg.author.id) {return};
     this.playerhand = [];
     this.deck = new Deck;
     this.gameon = false;
     this.round = 0;
     this.timer = new Timer();
     events.EventEmitter.call(this);
+    var that = this;
 
     this.deck.filldeck();
     this.deck.shuffle();
 
-    
-
     this.dealHand = () => {
-        idCheck(this.id, msg);
-        if (this.round >= 2) {
-            this.end();
-        };
         let cardsNeeded = 5 - this.playerhand.length;
         for (; cardsNeeded > 0; cardsNeeded--) {
             this.playerhand.push(this.deck.cards.pop());
@@ -43,22 +38,23 @@ function Poker(bot, msg, suffix) {
         });
         replyHand = `[**${replyHand.join('**]     [**')}**]\n`
         bot.sendMessage(msg, `${replyHand}`);
+        bot.on("messsage", (msg, id) => {});
         this.round++;
-        console.log(this.round, this.end());
+        console.log(this.round);
         this.timer.stop();
-        this.timer.start(1).on('end', () => this.dealHand());
-    };
-    
-    this.secondHand = (bot, msg, suffix) => {
-        
+        this.timer.start(this.round >= 2 ? 1 : 5)
+            .on('end', () => this.round >= 2 ? this.finishGame() : this.dealHand());
     };
 
-    this.end = function() {
+    this.finishGame = () => {
         this.timer.stop();
-        return;
-    }.bind(this);
+        return "hello";
+    }
 
-    var idCheck = (id, msg) => {if (id !== msg.author.id) {return false;}};
+    this.holdCards = (bot, msg, bid) => {
+
+    };
+
     this.on('end', () => {return;})
 }
 

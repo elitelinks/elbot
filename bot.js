@@ -53,7 +53,8 @@ var cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         //games
         case "slot": slot(bot, msg, suffix); break;
         case "poker": (function(){
-            var poker = new Poker(bot, msg, suffix);
+            var id = msg.author.id;
+            var poker = new Poker(bot, msg, suffix, id);
             poker.dealHand();
         })(); break;
 
@@ -470,17 +471,7 @@ function slot(bot, msg, suffix) {
 };
 
 
-//msg checker
-bot.on("message", (msg) => {
-    if(msg.author === bot.user || msg.channel.isPrivate) {return;}
-    else if (prefixes.indexOf((msg.content.substr(0, 1))) > -1 ) {
-        var cmdTxt = msg.content.split(' ')[0].substr(1);
-        var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
-        var suffix = sufArr.join(' ');
-        cmdHandlr(bot, msg, cmdTxt, suffix);
-    }
-    else return; 
-});
+
 
 
 //Trivia
@@ -615,6 +606,18 @@ var triviaSesh = {
 
 //Useful Functions
 var getUser = (bot, msg, suffix) => {};
+
+//msg checker
+bot.on("message", (msg) => {
+    if(msg.author === bot.user || msg.channel.isPrivate) {return;}
+    else if (prefixes.indexOf((msg.content.substr(0, 1))) > -1 ) {
+        var cmdTxt = msg.content.split(' ')[0].substr(1);
+        var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
+        var suffix = sufArr.join(' ');
+        cmdHandlr(bot, msg, cmdTxt, suffix);
+    }
+    else return;
+});
 
 //Ready
 bot.on("ready", ()=>{
