@@ -1,14 +1,16 @@
+"use strict";
 //Requires
 process.setMaxListeners(0);
-var Discord = require("discord.js");
 var startTime = new Date();
-var Timer = require("timer.js");
-const google = require("google");
-const syllable = require("syllable");
-const request = require("request");
+const Discord = require("discord.js");
+const Timer = require("timer.js");
+const EventEmitter = require("events").EventEmitter;
 const http = require('http');
+const request = require("request");
 const fs = require('fs-extra');
-
+const google = require("google");
+const Poker = require("./modules/poker");
+const bank = require("./modules/bank")
 
 //settings & data
 var settings = require("./settings/settings.json"),
@@ -50,6 +52,12 @@ var cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         
         //games
         case "slot": slot(bot, msg, suffix); break;
+        case "poker": (() => {
+            var id = msg.author.id;
+            var poker = new Poker(bot, msg, suffix, id);
+            poker.init();
+            poker = null;
+        })(); break;
 
         //fun stuff
         case "eight" :
@@ -285,7 +293,7 @@ var commands = {
         'usage'         : `\`${prefixes[0]}orly [title, author, top text, middle text]\``,
         'process'       : (bot, msg, suffix) => { //TODO add choose color & animal option
             fs.ensureDir('./cache', function (err) {
-                console.log(err); // => null
+                console.log(err || 'Cache folder created!'); // => null
                 // dir has now been created, including the directory it is to be placed in
             });
             var randomstring = require('randomstring');
@@ -383,112 +391,19 @@ var commands = {
     }
 };
 
-/*
-Todo Functions
- */
-
-
-//Economy  TODO add transfer of funds
-var bank = {
-    file : './settings/bank.json',
-    accounts : bankSet.accounts,
-    commands : ['balance', 'register', 'payday'],
-    settings : bankSet.settings,
-
-    //TODO add list commands funct. TODO change adding to DB by user id rather than name
-
-    init : (bot, msg, suffix) => {
-        var id = msg.author.id;
-        var name = msg.author.name;
-        var sufSpl = suffix.split(' ');
-        if (bank.commands.indexOf(sufSpl[0]) > -1) {
-            bank[sufSpl[0]](bot, msg, suffix, id, name, sufSpl);
-        } else {
-            bot.sendMessage(msg, `Unrecognized bank command. \`${prefixes[0]}bank list\` for a list of commands.`)
-        }
-    },
-
-    reload : () => {
-        try {
-            fs.writeJsonSync(bank.file, bankSet);
-            bankSet = fs.readJsonSync(bank.file);
-        } catch(err) {
-            console.log(err);
-        }
-        bank.accounts = bankSet.accounts;
-    },
-
-    add : (id, amount) => {
-        try {
-            bank.accounts[id].balance += amount;
-        } catch(err) {console.log(err);}
-    },
-
-    subtract : (id, amount) => {
-        try {
-            bank.accounts[id].balance -= amount;
-        } catch(err) {console.log(err);}
-    },
-
-    register : (bot, msg) => {
-        if (!bank.accounts[id]) {
-            try {
-                bank.accounts[id] = {};
-                bank.accounts[id].name = name;
-                bank.accounts[id].balance = bankSet.settings.payout;
-                bank.accounts[id].wait = Math.round(new Date() / 1000);
-                console.log("New Bank Account Created!")
-                bot.sendMessage(msg, `Account created for ${name} with balance ${bank.accounts[id].balance} credits.`);
-                bank.reload();
-            } catch(err) {console.log(err);}
-        } else {
-            bot.reply(msg, `You already have an account!`)
-        }
-    },
-
-    balance : (bot, msg, suffix, id, name, sufSpl) => {
-        var person = sufSpl[1];
-        var search = bot.users.get('name', person);
-        if (!bank.accounts[id]) {bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`)}
-        else if (search) {bot.reply(msg, `The balance of **${person}** is ${bank.accounts[search.id].balance} credits.`)}
-        else {bot.reply(msg, `Your balance is ${bank.accounts[id].balance} credits.`)}
-    },
-
-    payday : (bot, msg, suffix, id, name) => {
-        try {
-            if (!bank.accounts[id]) {
-                bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`);
-            }
-            var current = Math.round(new Date() / 1000);
-            var check = current - bank.accounts[id].wait;
-            if (check >= bank.settings.payoutTime) {
-                bank.accounts[id].balance += bankSet.settings.payout;
-                bank.accounts[id].wait = Math.round(new Date() / 1000);
-                    bot.reply(msg, `+${bankSet.settings.payout} credits! Your new balance is ${bank.accounts[id].balance} credits.`);
-                bank.reload();
-            } else {
-                bot.reply(msg, `Too soon! Please wait another ${check} seconds!`)
-            }
-        } catch(err) {
-            console.log(err);
-        }
-    }
-
-};
-
-//Gamez
+//Slots
 function slot(bot, msg, suffix) {
     var id = msg.author.id;
-    if (!bank.accounts[id]) {
-        bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`);
-    }
-    if (msg.channel.id !== settings.gamesroom) {return;}
+    if (bank.check(bot, msg) === false) {return};
+    //if (msg.channel.id !== settings.gamesroom) {return;}
     var bid = parseInt(suffix.toString().replace(/[\D]g/, ''), 10);
-    if (!bid || bid < bankSet.settings.minBet || bid > bankSet.settings.maxBet) {
+    if (bank.accounts[id].balance < bid) {bot.reply(msg, `Not enough credits dummy!`); return;}
+    if (!bid || bid < bankSet.settings.minBet || bid > bankSet.settings.maxBet || bid === NaN) {
         bot.reply(msg, `You must place a bid between ${bankSet.settings.minBet} and ${bankSet.settings.maxBet}`); return;
     }
+    bank.subtract(id, bid);
     var slotTime = new Timer();
-    var reel_pattern = [":cherries:", ":cookie:", ":two:", ":beer:", ":four_leaf_clover:", ":cyclone:", ":sunflower:", ":six:", ":beer:", ":mushroom:", ":heart:", ":snowflake:"]
+    var reel_pattern = [":cherries:", ":cookie:", ":two:", ":seven:", ":four_leaf_clover:" ,":cyclone:", ":sunflower:", ":six:", ":beer:", ":mushroom:", ":heart:", ":snowflake:"]
     var padding_before = [":mushroom:", ":heart:", ":snowflake:"]
     var padding_after = [":cherries:", ":cookie:", ":two:"]
     var reel = padding_before.concat(reel_pattern, padding_after);
@@ -520,7 +435,7 @@ function slot(bot, msg, suffix) {
         }
         else if (line[0] == ":four_leaf_clover:" && line[1] == ":four_leaf_clover:" && line[2] == ":four_leaf_clover:") {
             bid += 1000;
-            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Three FLC! +1000!`);
+            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Three Four Leaf Clovers! +1000!`);
         }
         else if (line[0] == ":cherries:" && line[1] == ":cherries:" && line[2] == ":cherries:") {
             bid += 800;
@@ -544,67 +459,17 @@ function slot(bot, msg, suffix) {
         }
         else {
             bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Nothing! Lost bet.`)
-            bank.subtract(id, bid);
         }
     } catch(err) {console.log(err);}
     try {
-        slotTime.start(.5).on('end', () => {bot.reply(msg, `Credits left: **${bank.accounts[id].balance}**`)})
+        slotTime.start(.1).on('end', () => {bot.reply(msg, `Credits left: **${bank.accounts[id].balance}**`)})
     } catch (err) {
         console.log(err);
     }
     bank.reload();
 };
 
-/*
-Done Functions
- */
-
-/*
- var haiku = (bot, msg) => {
-    'use strict';
-    try {
-        let haiArr = msg.content.replace(/[^a-zA-Z0-9\s]/ig, '').split(' ');
-        if (syllable(haiArr.join(' ')) != 17) {
-            return;
-        }
-        let lineOne = [];
-        let lineTwo = [];
-        let lineThree = [];
-        while (syllable(lineOne.join(' ')) < 5) {
-            lineOne.push(haiArr.shift());
-        }
-        while (syllable(lineTwo.join(' ')) < 7) {
-            lineTwo.push(haiArr.shift());
-        }
-        while (syllable(lineThree.join(' ')) < 5) {
-            lineThree.push(haiArr.shift());
-        }
-        if (syllable(lineOne.join(' ')) != 5 || syllable(lineTwo.join(' ')) != 7 || syllable(lineThree.join(' ')) != 5) {
-            
-        }
-        else {
-            bot.sendMessage(msg, `Accidental Haiku Detected! Written by ***${msg.author.username}***!\n\`\`\`${lineOne.join(' ')}\n${lineTwo.join(' ')}\n${lineThree.join(' ')}\`\`\``)
-        }
-    } catch(err) {console.log(err)}
-};
-*/
-
-//msg checker
-bot.on("message", (msg) => {
-    if(msg.author === bot.user || msg.channel.isPrivate) {return;}
-    else if (prefixes.indexOf((msg.content.substr(0, 1))) > -1 ) {
-        var cmdTxt = msg.content.split(' ')[0].substr(1);
-        var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
-        var suffix = sufArr.join(' ');
-        cmdHandlr(bot, msg, cmdTxt, suffix);
-    }  // else if (syllable(msg.content.replace(/[^a-zA-Z0-9\s]/ig, '')) == 17) {haiku(bot, msg);} // shit freezes
-    else return; 
-});
-
-/*
- Trivia
- */
-
+//Trivia
 //Trivia commands TODO combine trivia & triviasesh
 var trivia = {
 
@@ -622,7 +487,7 @@ var trivia = {
             else {triviaSesh.loop(bot, msg);}
         }
         else if (triviaSesh.gameon === true) {bot.sendMessage(msg,"There is already a trivia session in place!"); }
-        else if (!suffix || suffix === 'help') {t.help(bot, msg);}
+        else if (!suffix || suffix === 'help') {return;} //TODO help function
         else if (!suffix || suffix === 'list') {t.list(bot, msg);}
         else if (t.categories.indexOf(suffix+".json") > -1) {triviaSesh.begin(bot, msg, suffix);}
         else {bot.sendMessage(msg, `No list with the name ${suffix}`); }
@@ -639,6 +504,7 @@ var triviaSesh = {
     timer : new Timer(),
     topscore: 0,
     count : 0,
+    countdown : new Timer(),
 
     loadlist : (bot, msg, suffix) => {
         var t = triviaSesh;
@@ -664,6 +530,9 @@ var triviaSesh = {
         if (!t.scorelist[winner]) {t.scorelist[winner] = 1;}
         else t.scorelist[winner] ++;
         if (t.scorelist[winner] > t.topscore){t.topscore = t.scorelist[winner]}
+        triviaSesh.countdown.start(triviaset.timeout).on('end', function() {
+            t.end(bot, msg);
+        })
     },
 
     round : (bot, msg) => {
@@ -679,7 +548,7 @@ var triviaSesh = {
                 trivTimer.start(1).on('end', function(){t.loop(bot,msg);});
             };
 
-            bot.sendMessage(msg, `**Question #${t.count}**\n\n${t.currentQuestion["question"]}`);
+            bot.sendMessage(msg, `**Question #${t.count}**\n${t.currentQuestion["question"]}`);
             bot.on("message", (msg) => {
                 var guess = msg.content.toLowerCase();
                 var num = answers.indexOf(guess);
@@ -711,6 +580,9 @@ var triviaSesh = {
         t.loadlist(bot, msg, suffix);
         t.loop(bot ,msg);
         t.gameon = true;
+        triviaSesh.countdown.start(triviaset.timeout).on('end', function(){
+            t.end(bot, msg);
+        })
     },
 
     end : (bot, msg) => {
@@ -722,27 +594,41 @@ var triviaSesh = {
         }
         sortable.sort((a,b) => b[1] - a[1]);
         var str = sortable.join('\n').replace(/,/g, ": ");
-        bot.sendMessage(msg, `Trivia Ended!\n\n__**Scores:**__\n\`\`\`${str ? str : 'No one had points!'}\`\`\``);
+        bot.sendMessage(msg, `Trivia Ended!\n\__**Scores:**__\n\`\`\`${str ? str : 'No one had points!'}\`\`\``);
         t.gameon = false;
         t.scorelist = {};
         t.currentList = [];
         t.currentQuestion = {};
         t.used = [];
         t.count = 0;
-        
+        triviaSesh.countdown.stop();
     }
 };
 
+//Useful Functions
+var getUser = (bot, msg, suffix) => {};
 
+//msg checker
+bot.on("message", (msg) => {
+    if(msg.author === bot.user || msg.channel.isPrivate) {return;}
+    else if (prefixes.indexOf((msg.content.substr(0, 1))) > -1 ) {
+        var cmdTxt = msg.content.split(' ')[0].substr(1);
+        var sufArr = msg.content.split(' '); sufArr.splice(0, 1);
+        var suffix = sufArr.join(' ');
+        cmdHandlr(bot, msg, cmdTxt, suffix);
+    }
+    else return;
+});
 //Ready
 bot.on("ready", ()=>{
-    bot.setPlayingGame("v0.0.3");
-    console.log("EL bot is ready");
+    bot.setPlayingGame("v0.0.5");
+    console.log(`EL bot${devMode ? '(DEV)' : ''} is ready`);
 });
 
 bot.on("disconnected", ()=> {process.exit(0);});
 
 //Login
-if (settings.token) {bot.loginWithToken(settings.token);console.log("Logged in using Token");}
+if (settings.token || settings.dev_token) {bot.loginWithToken(devMode ? settings.dev_token : settings.token);console.log("Logged in using Token");}
 else {bot.login(settings.email, settings.password);console.log("Logged in using Email")}
+
 

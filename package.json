@@ -7,9 +7,9 @@
     "discord.js": "^7.0.1",
     "fs-extra": "^0.30.0",
     "google": "^2.0.0",
+    "pokersolver": "^2.1.2",
     "randomstring": "^1.1.4",
     "request": "^2.72.0",
-    "syllable": "^0.1.4",
     "timer.js": "^1.0.4"
   },
   "devDependencies": {},
