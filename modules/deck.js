@@ -1,6 +1,6 @@
-module.exports = function Deck() {
+module.exports = function Deck(settings) {
     this.cards = [];
-    this.settings = {};
+    this.settings = settings;
     
     this.filldeck = () => {
         this.cards.push('As');
@@ -55,6 +55,8 @@ module.exports = function Deck() {
         this.cards.push('4c');
         this.cards.push('3c');
         this.cards.push('2c');
+        this.settings.jokers ? this.cards.push('Or') : {};
+        this.settings.jokers ? this.cards.push('Or') : {};
     };
     this.shuffle = () => {
         //Shuffle the deck array with Fisher-Yates
