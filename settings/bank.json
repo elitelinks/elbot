@@ -1,5 +1,11 @@
 {
   "accounts": {
+    "143501433608732673": {
+      "name": "plus",
+      "balance": 94033,
+      "wait": 1462559678,
+      "playingpoker": false
+    }
   },
   "settings": {
     "payout": 500,
