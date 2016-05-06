@@ -56,6 +56,7 @@ var cmdHandlr = (bot, msg, cmdTxt, suffix) => {
             var id = msg.author.id;
             var poker = new Poker(bot, msg, suffix, id);
             poker.init();
+            poker.setMaxListeners(0);
             poker = null;
         })(); break;
 
@@ -621,7 +622,7 @@ bot.on("message", (msg) => {
 });
 //Ready
 bot.on("ready", ()=>{
-    bot.setPlayingGame("v0.0.5");
+    bot.setPlayingGame(`${devMode ? 'in development' : 'v0.0.5'}`);
     console.log(`EL bot${devMode ? '(DEV)' : ''} is ready`);
 });
 

@@ -13,13 +13,12 @@ var bankSet = fs.readJsonSync("./settings/bank.json");
 function Poker(bot, msg, suffix, id) {
     this.bot = bot;
     this.id = id;
-    var bid = parseInt(suffix.toString().replace(/[\D]g/, ''), 10);
+    let bid = parseInt(suffix.toString().replace(/[\D]g/, ''), 10);
     this.playerhand = [];
     this.deck = new Deck({'jokers' : true});
     this.round = 0;
     this.timer = new Timer();
     events.EventEmitter.call(this);
-    this.setMaxListeners(0);
     this.rules = 'standard';
 
     this.init = () => {
@@ -96,23 +95,28 @@ function Poker(bot, msg, suffix, id) {
         var payout = {
             'High Card' : 0,
             'Pair' : 0,
-            'Two Pair' : 2,
+            'Two Pair' : 1,
             'Three of a Kind' : 3,
             'Straight' : 4,
             'Flush' : 6,
             'Full House' : 9,
             'Four of a Kind' : 25,
             'Straight Flush' : 50,
-            'Royal Flush' : 1000
+            'Wild Royal Flush' : 100,
+            'Five of a Kind' : 200,
+            'Natural Royal Flush' : 800,
+            'Royal Flush' : 800
         }
-        let endHand = hand.solve(this.playerhand);
+        let endHand = hand.solve(this.playerhand, 'joker');
         let finalPay = bid * Math.round(payout[endHand.name]);
         switch (endHand.descr) {
             case 'Pair, A\'s' :
             case 'Pair, K\'s' :
             case 'Pair, Q\'s' :
             case 'Pair, J\'s' : finalPay = bid * 1; break;
-            case 'Royal Flush': finalPay = bid * 1000; break;
+            case 'Wild Royal Flush' : finalPay = bid * 100; break;
+            case 'Natural Royal Flush' : finalPay = bid * 800; break;
+            case 'Royal Flush': finalPay = bid * 800; break;
             default : break;
         }
         bot.reply(msg, `Your hand is : **${endHand.descr}** Payout: **[${finalPay} credits]**`);
