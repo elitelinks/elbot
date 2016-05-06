@@ -504,6 +504,7 @@ var triviaSesh = {
     timer : new Timer(),
     topscore: 0,
     count : 0,
+    countdown : new Timer(),
 
     loadlist : (bot, msg, suffix) => {
         var t = triviaSesh;
@@ -529,6 +530,9 @@ var triviaSesh = {
         if (!t.scorelist[winner]) {t.scorelist[winner] = 1;}
         else t.scorelist[winner] ++;
         if (t.scorelist[winner] > t.topscore){t.topscore = t.scorelist[winner]}
+        triviaSesh.countdown.start(triviaset.timeout).on('end', function() {
+            t.end(bot, msg);
+        })
     },
 
     round : (bot, msg) => {
@@ -544,7 +548,7 @@ var triviaSesh = {
                 trivTimer.start(1).on('end', function(){t.loop(bot,msg);});
             };
 
-            bot.sendMessage(msg, `**Question #${t.count}**\n\n${t.currentQuestion["question"]}`);
+            bot.sendMessage(msg, `**Question #${t.count}**\n${t.currentQuestion["question"]}`);
             bot.on("message", (msg) => {
                 var guess = msg.content.toLowerCase();
                 var num = answers.indexOf(guess);
@@ -576,6 +580,9 @@ var triviaSesh = {
         t.loadlist(bot, msg, suffix);
         t.loop(bot ,msg);
         t.gameon = true;
+        triviaSesh.countdown.start(triviaset.timeout).on('end', function(){
+            t.end(bot, msg);
+        })
     },
 
     end : (bot, msg) => {
@@ -587,14 +594,14 @@ var triviaSesh = {
         }
         sortable.sort((a,b) => b[1] - a[1]);
         var str = sortable.join('\n').replace(/,/g, ": ");
-        bot.sendMessage(msg, `Trivia Ended!\n\n__**Scores:**__\n\`\`\`${str ? str : 'No one had points!'}\`\`\``);
+        bot.sendMessage(msg, `Trivia Ended!\n\__**Scores:**__\n\`\`\`${str ? str : 'No one had points!'}\`\`\``);
         t.gameon = false;
         t.scorelist = {};
         t.currentList = [];
         t.currentQuestion = {};
         t.used = [];
         t.count = 0;
-        
+        triviaSesh.countdown.stop();
     }
 };
 
@@ -614,14 +621,14 @@ bot.on("message", (msg) => {
 });
 //Ready
 bot.on("ready", ()=>{
-    bot.setPlayingGame("v0.0.3");
-    console.log("EL bot is ready");
+    bot.setPlayingGame("v0.0.5");
+    console.log(`EL bot${devMode ? '(DEV)' : ''} is ready`);
 });
 
 bot.on("disconnected", ()=> {process.exit(0);});
 
 //Login
-if (settings.token) {bot.loginWithToken(settings.token);console.log("Logged in using Token");}
+if (settings.token || settings.dev_token) {bot.loginWithToken(devMode ? settings.dev_token : settings.token);console.log("Logged in using Token");}
 else {bot.login(settings.email, settings.password);console.log("Logged in using Email")}
 
 

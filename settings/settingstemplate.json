@@ -1,28 +1,30 @@
 {
-  "email": "",
-  "password": "",
+  "email" : "",
+  "password" : "",
   "token": "",
+  "dev_token" : "",
   "owners": [],
-  "gamesroom": "",
+  "gamesroom" : "",
+  "youtube_api_key": "",
   "weather_api_key": "",
   "mashape_api_key": "",
-  "imgur_id": "",
-  "devmode" : false,
+  "imgur_id":"",
+  "devmode": false,
   "prefixes": [
     ".",
-    "!"
+    "!",
+    "$"
   ],
   "dev_prefixes": [
     "-",
     "?",
-    "$",
     "`"
   ],
-  "trivia": {
-    "botPlays": false,
-    "delay": 15,
-    "maxScore": 5,
-    "timeout": 10000,
-    "path": "./trivia"
+  "trivia" : {
+    "botPlays" : false,
+    "delay" : 15,
+    "maxScore" : 5,
+    "timeout" : 60,
+    "path" : "./trivia"
   }
 }
