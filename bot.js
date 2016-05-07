@@ -51,8 +51,26 @@ var cmdHandlr = (bot, msg, cmdTxt, suffix) => {
 
         
         //games
-        case "slot": slot(bot, msg, suffix); break;
-        case "poker": (() => {
+        case "slot": if(suffix === 'payout' || suffix === 'payouts') {
+            bot.sendMessage(msg, 'slot payouts here'); //TODO slot payouts
+        } else slot(bot, msg, suffix); break;
+        case "poker": if(suffix === 'payout' || suffix === 'payouts') {
+            bot.sendMessage(msg, '```' +
+                '| Hand                   | Payout |\n' +
+                '|------------------------|--------|\n' +
+                '| Natural Royal Flush    | 800    |\n' +
+                '| Five of a Kind         | 200    |\n' +
+                '| Wild Royal Flush       | 100    |\n' +
+                '| Straight Flush         | 50     |\n' +
+                '| Four of a Kind         | 20     |\n' +
+                '| Full House             | 7      |\n' +
+                '| Flush                  | 5      |\n' +
+                '| Straight               | 3      |\n' +
+                '| Three of a Kind        | 2      |\n' +
+                '| Two Pair               | 1      |\n' +
+                '| Pair (Jacks or Better) | 1      |' + '```');
+        }
+        else (() => {
             var id = msg.author.id;
             var poker = new Poker(bot, msg, suffix, id);
             poker.init();
@@ -95,7 +113,6 @@ var commands = {
         'alias'         : ["goog", "g"],
         'usage'         : `\`${prefixes[0]}google [search term]\``,
         'process'       : (bot, msg, suffix) => {
-            'use strict';
             let search = "google";
             if(suffix){search = suffix;}
             google(search, (err, response) => {
@@ -395,7 +412,7 @@ var commands = {
 function slot(bot, msg, suffix) {
     var id = msg.author.id;
     if (bank.check(bot, msg) === false) {return};
-    //if (msg.channel.id !== settings.gamesroom) {return;}
+    if (msg.channel.id !== settings.gamesroom) {return;}
     var bid = parseInt(suffix.toString().replace(/[\D]g/, ''), 10);
     if (bank.accounts[id].balance < bid) {bot.reply(msg, `Not enough credits dummy!`); return;}
     if (!bid || bid < bankSet.settings.minBet || bid > bankSet.settings.maxBet || bid === NaN) {
@@ -472,7 +489,6 @@ function slot(bot, msg, suffix) {
 //Trivia
 //Trivia commands TODO combine trivia & triviasesh
 var trivia = {
-
     categories : fs.readdirSync(triviaset.path),
 
     list : (bot, msg) => {

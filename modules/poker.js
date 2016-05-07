@@ -14,10 +14,11 @@ var bankSet = fs.readJsonSync("./settings/bank.json");
 
 function Poker(bot, msg, suffix, id) {
     this.bot = bot;
+    bot.setMaxListeners(0);
     this.id = id;
     let bid = parseInt(suffix.toString().replace(/[\D]g/, ''), 10);
     this.playerhand = [];
-    this.deck = new Deck({'joker' : true});
+    this.deck = new Deck({'jokers' : 2});
     this.round = 0;
     this.timer = new Timer();
     //events.EventEmitter.call(this);
@@ -78,13 +79,13 @@ function Poker(bot, msg, suffix, id) {
             if (o[0] === "5") {o[0] = ":five:"};
             if (o[0] === "4") {o[0] = ":four:"};
             if (o[0] === "3") {o[0] = ":three:"};
-            if (o[0] === "2") {o[0] = ":two:"};*/
+            if (o[0] === "2") {o[0] = ":two:"};  uncomment for emojis */
             return o.join('');
         });
         replyHand = `[**${replyHand.join('**]     [**')}**]\n`
         this.round++;
-        bot.reply(msg, `${replyHand}`);
-        bot.reply(msg, this.round >= 2 ? `Final Hand!` : `First hand! You have **60 seconds** to reply.\n` +
+        bot.reply(msg, this.round >= 2 ? `\nFinal Hand!\n${replyHand}` : 
+            `\nFirst hand!\n${replyHand}\nYou have **60 seconds** to reply.\n` +
             `Type \`${prefixes[0]}hhhhh\` to __**h**__old cards.\n` +
             `Type \`${prefixes[0]}fffff\` to __**f**__old cards.\n` +
             `Example: \`${prefixes[0]}hhfff\` would *hold* the first **2 cards.**\n`
