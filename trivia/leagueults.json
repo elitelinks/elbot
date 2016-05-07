@@ -1,0 +1,793 @@
+[
+  {
+    "question": "Which champions ultimate is named: Spirit Rush?",
+    "answers": [
+      "Ahri"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Hemoplague?",
+    "answers": [
+      "Vladimir"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: On The Hunt?",
+    "answers": [
+      "Sivir"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Destiny?",
+    "answers": [
+      "Twisted Fate"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: UPGRADE!!!",
+    "answers": [
+      "Heimerdinger"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Enchanted Crystal Arrow?",
+    "answers": [
+      "Ashe"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Mantra?",
+    "answers": [
+      "Karma"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Keeper's Verdict?",
+    "answers": [
+      "Poppy"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Glacial Storm?",
+    "answers": [
+      "Anivia"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Rite of the Arcane?",
+    "answers": [
+      "Xerath"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Bullet Time?",
+    "answers": [
+      "Miss Fortune"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Tempered Fate?",
+    "answers": [
+      "Bard"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Void Assault?",
+    "answers": [
+      "Kha'zix",
+      "khazix",
+      "kha zix"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Fury of the Sands?",
+    "answers": [
+      "Nasus"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Shadow Assault?",
+    "answers": [
+      "Talon"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Crowstorm?",
+    "answers": [
+      "Fiddlesticks"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Thunder Claws?",
+    "answers": [
+      "Volibear"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Behind Enemy Lines?",
+    "answers": [
+      "Quinn"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Cyclone?",
+    "answers": [
+      "Wukong"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Infinite Duress?",
+    "answers": [
+      "Warwick"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Glacial Prison?",
+    "answers": [
+      "Sejuani"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Spider Form/Human Form?",
+    "answers": [
+      "Elise"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Requiem?",
+    "answers": [
+      "Karthus"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Trueshot Barrage?",
+    "answers": [
+      "Ezreal"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Life Form Disintegration Ray?",
+    "answers": [
+      "Vel'koz",
+      "vel koz",
+      "velkoz"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Command: Shockwave?",
+    "answers": [
+      "Orianna"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Children of the Grave?",
+    "answers": [
+      "Mordekaiser"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Missile Barrage?",
+    "answers": [
+      "Corki"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Lamb's Respite?",
+    "answers": [
+      "Kindred"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Paranoia?",
+    "answers": [
+      "Nocturne"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Crescent Sweep?",
+    "answers": [
+      "Xin Zhao",
+      "xinzhao"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Chain of Corruption?",
+    "answers": [
+      "Varus"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: GNAR!",
+    "answers": [
+      "Gnar"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Unstoppable Force?",
+    "answers": [
+      "Malphite"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Frozen Tomb?",
+    "answers": [
+      "Lissandra"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Ravenous Flock?",
+    "answers": [
+      "Swain"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Summon: Tibbers?",
+    "answers": [
+      "Annie"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Riftwalk?",
+    "answers": [
+      "Kassadin"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Insanity Potion?",
+    "answers": [
+      "Singed"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Transcendent Blades?",
+    "answers": [
+      "Irelia"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Super Mega Death Rocket!",
+    "answers": [
+      "Jinx"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Intervention?",
+    "answers": [
+      "Kayle"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Buster Shot?",
+    "answers": [
+      "Tristana"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Monsoon?",
+    "answers": [
+      "Janna"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Pyroclasm?",
+    "answers": [
+      "Brand"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Depth Charge?",
+    "answers": [
+      "Nautilus"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: The Equalizer?",
+    "answers": [
+      "Rumble"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Chronoshift?",
+    "answers": [
+      "Zilean"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Mercury Cannon/Mercury Hammer?",
+    "answers": [
+      "Jayce"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: The Box?",
+    "answers": [
+      "Thresh"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Thrill of the Hunt?",
+    "answers": [
+      "Rengar"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Death Lotus?",
+    "answers": [
+      "Katarina"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Slicing Maelstrom?",
+    "answers": [
+      "Kennen"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Explosive Cask?",
+    "answers": [
+      "Gragas"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Cosmic Radiance?",
+    "answers": [
+      "Taric"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Hallucinate?",
+    "answers": [
+      "Shaco"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Chronobreak?",
+    "answers": [
+      "Ekko"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Feast?",
+    "answers": [
+      "Cho'gath",
+      "cho gath",
+      "chogath"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Aspect of the Cougar?",
+    "answers": [
+      "Nidalee"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Unbreakable Will?",
+    "answers": [
+      "Alistar"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Vengeful Maelstrom?",
+    "answers": [
+      "Maokai"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Absolute Zero?",
+    "answers": [
+      "Nunu"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Cataclysm?",
+    "answers": [
+      "Jarvan"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Tremors?",
+    "answers": [
+      "Rammus"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Nether Graps?",
+    "answers": [
+      "Malzahar"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Last Breath?",
+    "answers": [
+      "Yasuo"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: The Culling?",
+    "answers": [
+      "Lucian"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Lunar Rush?",
+    "answers": [
+      "Diana"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Massacre?",
+    "answers": [
+      "Aatrox"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Noxian Guillotine?",
+    "answers": [
+      "Darius"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Soul Shackles?",
+    "answers": [
+      "Morgana"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Unstoppable Onslaught?",
+    "answers": [
+      "Sion"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Living ARtiller?",
+    "answers": [
+      "Kog'maw",
+      "kogmaw",
+      "kog maw"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Primordial Burst?",
+    "answers": [
+      "Veigar"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Dragon's Descent?",
+    "answers": [
+      "Shyvana"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Demacian Justice?",
+    "answers": [
+      "Garen"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Ace in the Hole?",
+    "answers": [
+      "Caitlyn"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Tidal Wave?",
+    "answers": [
+      "Nami"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Fate's Call?",
+    "answers": [
+      "Kalista"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Wish?",
+    "answers": [
+      "Soraka"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Blade of the Exile?",
+    "answers": [
+      "Riven"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Wild Growth?",
+    "answers": [
+      "Lulu"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Final Hour?",
+    "answers": [
+      "Vayne"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Undying Rage?",
+    "answers": [
+      "Tryndamere "
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Noxious Trap?",
+    "answers": [
+      "Teemo"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Cannon Barrage?",
+    "answers": [
+      "Gangplank"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Sadism?",
+    "answers": [
+      "Dr. Mundo",
+      "dr mundo",
+      "mundo",
+      "drmundo"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Chaos Storm?",
+    "answers": [
+      "Viktor"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Emperor's Divide?",
+    "answers": [
+      "Azir"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Static Field?",
+    "answers": [
+      "Blitzcrank"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Stranglethorns?",
+    "answers": [
+      "Zyra"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Chum the Waters?",
+    "answers": [
+      "Fizz"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Agony's Embrace?",
+    "answers": [
+      "Evelynn"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Grand Skyfall?",
+    "answers": [
+      "Pantheon"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Shadow Dance?",
+    "answers": [
+      "Akali"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Highlander?",
+    "answers": [
+      "Master Yi"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Omen of Death?",
+    "answers": [
+      "Yorick"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Final Spark?",
+    "answers": [
+      "Lux"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Onslaught of Shadows?",
+    "answers": [
+      "Hecarim"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Stand United?",
+    "answers": [
+      "Shen"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Assault and Battery?",
+    "answers": [
+      "Vi"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Abyssal Voyage?",
+    "answers": [
+      "Tahm Kench",
+      "tahmkench"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Dominus?",
+    "answers": [
+      "Renekton"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Mega Inferno Bomb?",
+    "answers": [
+      "Ziggs"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Desperate Power?",
+    "answers": [
+      "Ryze"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Solar Flare?",
+    "answers": [
+      "Leona"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Impale?",
+    "answers": [
+      "Skarner"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Grand Challenge?",
+    "answers": [
+      "Fiora"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Petrifying Gaze?",
+    "answers": [
+      "Cassiopeia"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Crescendo?",
+    "answers": [
+      "Sona"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Death Mark?",
+    "answers": [
+      "Zed"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Leap of Faith?",
+    "answers": [
+      "Illaoi"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Dragon's Rage?",
+    "answers": [
+      "Lee Sin",
+      "leesin"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Pheonix Stance?",
+    "answers": [
+      "Udyr"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Whirling Death?",
+    "answers": [
+      "Draven"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Hyper-Kinteic Position Reverser?",
+    "answers": [
+      "Urgot"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Idol of Durand?",
+    "answers": [
+      "Galio"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Glacial Fissure?",
+    "answers": [
+      "Braum"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Subjugate?",
+    "answers": [
+      "Trundle"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Unleashed Power?",
+    "answers": [
+      "Syndra"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Rat-Ta-Tat-Tat?",
+    "answers": [
+      "Twitch"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Void Rush?",
+    "answers": [
+      "Rek'sai",
+      "rek sai",
+      "reksai"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Collateral Damage?",
+    "answers": [
+      "Graves"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Ragnarok?",
+    "answers": [
+      "Olaf"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Let's Bounce!",
+    "answers": [
+      "Zac"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Mimic?",
+    "answers": [
+      "Leblanc"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Grandmaster's Might?",
+    "answers": [
+      "Jax"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Curtain Call?",
+    "answers": [
+      "Jhin"
+    ]
+  },
+  {
+    "question": "Which champions ultimate is named: Voice of Light?",
+    "answers": [
+      "Aurelion Sol",
+      "aurelionsol"
+    ]
+  }
+]

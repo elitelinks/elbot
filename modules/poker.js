@@ -1,6 +1,5 @@
 "use strict"
 var fs = require('fs-extra');
-var events = require('events');
 var Deck = require("../modules/deck");
 var ps = require('pokersolver');
 var hand = ps.Hand;
@@ -8,7 +7,7 @@ var Game = ps.Game;
 var bank = require("../modules/bank");
 var Timer = require("timer.js");
 var settings = require("../settings/settings.json"),
-    devMode = settings.devmode, //set to false or remove in production
+    devMode = settings.devmode, 
     prefixes = devMode ? settings.dev_prefixes : settings.prefixes;
 var bankSet = fs.readJsonSync("./settings/bank.json");
 
@@ -145,7 +144,8 @@ function Poker(bot, msg, suffix, id) {
         if (isNaN(finalPay)) {finalPay = 0; console.log('There was an error with poker pay')};
         bank.add(this.id, finalPay);
         this.timer.stop();
-        this.timer.start(.5).on('end', () => {bot.reply(msg, `Your hand is : **${endHand.descr}** Payout: **[${finalPay} credits]**\n` +
+        this.timer.start(.5).on('end', () => {bot.reply(msg, 
+            `Your hand is : **${endHand.descr}** Payout: **[${finalPay} credits]**\n` +
             `Credits left: **${bank.accounts[id].balance}**`)});
         bank.reload();
     }
@@ -153,5 +153,5 @@ function Poker(bot, msg, suffix, id) {
 
 //Poker.prototype.__proto__ = events.EventEmitter.prototype;
 
-module.exports = Poker;
+module.exports = exports = Poker;
 
