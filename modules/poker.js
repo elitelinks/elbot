@@ -1,8 +1,10 @@
 "use strict"
 var fs = require('fs-extra');
-var hand = require('pokersolver').Hand;
 var events = require('events');
 var Deck = require("../modules/deck");
+var ps = require('pokersolver');
+var hand = ps.Hand;
+var Game = ps.Game;
 var bank = require("../modules/bank");
 var Timer = require("timer.js");
 var settings = require("../settings/settings.json"),
@@ -15,11 +17,30 @@ function Poker(bot, msg, suffix, id) {
     this.id = id;
     let bid = parseInt(suffix.toString().replace(/[\D]g/, ''), 10);
     this.playerhand = [];
-    this.deck = new Deck({'jokers' : true});
+    this.deck = new Deck({'joker' : true});
     this.round = 0;
     this.timer = new Timer();
-    events.EventEmitter.call(this);
-    this.rules = 'standard';
+    //events.EventEmitter.call(this);
+    var elRules = {
+        'cardsInHand': 5,
+        'handValues': [ps.NaturalRoyalFlush, ps.FiveOfAKind, ps.WildRoyalFlush, ps.StraightFlush, ps.FourOfAKind, ps.FullHouse, ps.Flush, ps.Straight, ps.ThreeOfAKind, ps.TwoPair, ps.OnePair, ps.HighCard],
+        'wildValue': 'O',
+        'wildStatus': 1,
+        'wheelStatus': 0,
+        'sfQualify': 5,
+        'lowestQualified': ['Jc', 'Jd', '4h', '3s', '2c'],
+        "noKickers": true
+    };
+    var elPoker = new Game();
+    elPoker.descr = 'eliteliks';
+    elPoker.cardsInHand = elRules['cardsInHand'];
+    elPoker.handValues = elRules['handValues'];
+    elPoker.wildValue = elRules['wildValue'];
+    elPoker.wildStatus = elRules['wildStatus'];
+    elPoker.wheelStatus = elRules['wheelStatus'];
+    elPoker.sfQualify = elRules['sfQualify'];
+    elPoker.lowestQualified = elRules['lowestQualified'];
+    elPoker.noKickers = elRules['noKickers'];
 
     this.init = () => {
         if (msg.channel.id !== settings.gamesroom) {return;}
@@ -87,7 +108,7 @@ function Poker(bot, msg, suffix, id) {
                 this.timer.start(.5).on('end', () => {this.dealHand();});
             } else {return;}
         });
-        this.timer.start(this.round >= 2 ? 1 : 60)
+        this.timer.start(this.round >= 2 ? .5 : 60)
             .on('end', () => this.round >= 2 ? this.finishGame() : this.dealHand());
     };
     this.finishGame = () => {
@@ -107,7 +128,8 @@ function Poker(bot, msg, suffix, id) {
             'Natural Royal Flush' : 800,
             'Royal Flush' : 800
         }
-        let endHand = hand.solve(this.playerhand, 'joker');
+        
+        let endHand = hand.solve(this.playerhand, elPoker);
         let finalPay = bid * Math.round(payout[endHand.name]);
         switch (endHand.descr) {
             case 'Pair, A\'s' :
@@ -119,15 +141,16 @@ function Poker(bot, msg, suffix, id) {
             case 'Royal Flush': finalPay = bid * 800; break;
             default : break;
         }
-        bot.reply(msg, `Your hand is : **${endHand.descr}** Payout: **[${finalPay} credits]**`);
+        if (isNaN(finalPay)) {finalPay = 0; console.log('There was an error with poker pay')};
         bank.add(this.id, finalPay);
         this.timer.stop();
-        this.timer.start(.5).on('end', () => {bot.reply(msg, `Credits left: **${bank.accounts[id].balance}**`)});
+        this.timer.start(.5).on('end', () => {bot.reply(msg, `Your hand is : **${endHand.descr}** Payout: **[${finalPay} credits]**\n` +
+            `Credits left: **${bank.accounts[id].balance}**`)});
         bank.reload();
     }
 }
 
-Poker.prototype.__proto__ = events.EventEmitter.prototype;
+//Poker.prototype.__proto__ = events.EventEmitter.prototype;
 
 module.exports = Poker;
 

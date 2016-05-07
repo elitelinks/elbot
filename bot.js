@@ -56,7 +56,7 @@ var cmdHandlr = (bot, msg, cmdTxt, suffix) => {
             var id = msg.author.id;
             var poker = new Poker(bot, msg, suffix, id);
             poker.init();
-            poker.setMaxListeners(0);
+            //poker.setMaxListeners(0);
             poker = null;
         })(); break;
 
@@ -90,7 +90,6 @@ Commands
  */
 
 var commands = {
-
     'google' : {
         'description'   : 'Search Google and get the first result.',
         'alias'         : ["goog", "g"],
