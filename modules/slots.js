@@ -1,15 +1,13 @@
 "use strict"
 var fs = require('fs-extra');
 var Timer = require("timer.js");
-var settings = require("../settings/settings.json"),
-    devMode = settings.devmode,
-    prefixes = devMode ? settings.dev_prefixes : settings.prefixes;
+var settings = require("../settings/settings.json");
 var bank = require("../modules/bank");
 var bankSet = fs.readJsonSync("./settings/bank.json");
 
 function slot(bot, msg, suffix) {
     var id = msg.author.id;
-    if (bank.check(bot, msg) === false) {return};
+    if (bank.check(bot, msg) === false) {return;}
     if (msg.channel.id !== settings.gamesroom) {return;}
     var bid = parseInt(suffix.toString().replace(/[\D]g/, ''), 10);
     if (bank.accounts[id].balance < bid) {bot.reply(msg, `Not enough credits dummy!`); return;}
@@ -18,11 +16,11 @@ function slot(bot, msg, suffix) {
     }
     bank.subtract(id, bid);
     var slotTime = new Timer();
-    var reel_pattern = [":cherries:", ":cookie:", ":two:", ":seven:", ":four_leaf_clover:" ,":cyclone:", ":sunflower:", ":six:", ":beer:", ":mushroom:", ":heart:", ":snowflake:"]
-    var padding_before = [":mushroom:", ":heart:", ":snowflake:"]
-    var padding_after = [":cherries:", ":cookie:", ":two:"]
+    var reel_pattern = [":cherries:", ":cookie:", ":two:", ":seven:", ":four_leaf_clover:" ,":cyclone:", ":sunflower:", ":six:", ":beer:", ":mushroom:", ":heart:", ":snowflake:"];
+    var padding_before = [":mushroom:", ":heart:", ":snowflake:"];
+    var padding_after = [":cherries:", ":cookie:", ":two:"];
     var reel = padding_before.concat(reel_pattern, padding_after);
-    var reels = []
+    var reels = [];
 
     try {
         for (var x = 0; x < 3; x++) {
@@ -50,28 +48,28 @@ function slot(bot, msg, suffix) {
                 `JACKPOT MOTHERFUCKER! +800! Your bet is multiplied * 777! ${bid}!`);
         }
         else if (line[0] == ":four_leaf_clover:" && line[1] == ":four_leaf_clover:" && line[2] == ":four_leaf_clover:") {
-            bid += 1000;
-            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Three Four Leaf Clovers! +1000!`);
+            bid *= 4;
+            bank.add(id, bid);
+            bot.sendMessage(msg, `${display_reels}${msg.author.mention()}3 Clovers! Your bet is multiplied * 4! ${bid}!`);
         }
         else if (line[0] == ":cherries:" && line[1] == ":cherries:" && line[2] == ":cherries:") {
             bid *= 4;
+            bank.add(id, bid);
             bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Three cherries! Your bet is multiplied * 4! ${bid}!`);
         }
         else if (line[0] == ":beer:" && line[1] == ":beer:" && line[2] == ":beer:") {
-            bid *= 4;
-            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Three cherries! Your bet is multiplied * 4! ${bid}!`);
-        }
-        else if (line[0] == line[1] == line[2]) {
-            bid += 500;
-            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Three symbols! +500! `);
+            bid *= 3;
+            bank.add(id, bid);
+            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Three beers! Your bet is multiplied * 3! ${bid}!`);
         }
         else if (line[0] == ":cherries:" && line[1] == ":cherries:" || line[1] == ":cherries:" && line[2] == ":cherries:") {
-            bid *= 3;
-            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Two cherries! Your bet is multiplied * 3! ${bid}!`);
-        }
-        else if (line[0] == line[1] || line[1] == line[2]) {
             bid *= 2;
-            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Two symbols! Your bet is multiplied * 2! ${bid}! `);
+            bank.add(id, bid);
+            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Two cherries! Your bet is multiplied * 2! ${bid}!`);
+        }
+        else if (line[0] == line[1] == line[2]) {
+            bank.add(id, bid);
+            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Two symbols! Credits Back! `);
         }
         else {
             bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Nothing! Lost bet.`)
@@ -84,3 +82,5 @@ function slot(bot, msg, suffix) {
     }
     bank.reload();
 };
+
+module.exports = exports = slot;

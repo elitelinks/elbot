@@ -10,6 +10,7 @@ const request = require("request");
 const fs = require('fs-extra');
 const google = require("google");
 const Poker = require("./modules/poker");
+const slot = require("./modules/slots");
 const bank = require("./modules/bank")
 
 //settings & data
@@ -49,10 +50,17 @@ var cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         case "payout" :
         case "$" : bank.payday(bot, msg, suffix, id, name); break;
 
-        
         //games
         case "slot": if(suffix === 'payout' || suffix === 'payouts') {
-            bot.sendMessage(msg, 'slot payouts here'); //TODO slot payouts
+            bot.sendMessage(msg, '```' +
+                '| Result      | Payout |\n' +
+                '|-------------|--------|\n' +
+                '| 777         | 777:1  |\n' +
+                '| 3x Cherries | 4:1    |\n' +
+                '| 3x Clovers  | 4:1    |\n' +
+                '| 3x Beers    | 3:1    |\n' +
+                '| 2x Cherries | 2:1    |\n' +
+                '| 2x Any      | 1:1    |' + '```');
         } else slot(bot, msg, suffix); break;
         case "poker": if(suffix === 'payout' || suffix === 'payouts') {
             bot.sendMessage(msg, '```' +
