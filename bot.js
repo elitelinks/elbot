@@ -10,6 +10,7 @@ const request = require("request");
 const fs = require('fs-extra');
 const google = require("google");
 const Poker = require("./modules/poker");
+const slot = require("./modules/slots");
 const bank = require("./modules/bank")
 
 //settings & data
@@ -49,26 +50,33 @@ var cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         case "payout" :
         case "$" : bank.payday(bot, msg, suffix, id, name); break;
 
-        
         //games
         case "slot": if(suffix === 'payout' || suffix === 'payouts') {
-            bot.sendMessage(msg, 'slot payouts here'); //TODO slot payouts
+            bot.sendMessage(msg, '```' +
+                '| Result      | Payout |\n' +
+                '|-------------|--------|\n' +
+                '| 777         | 777:1  |\n' +
+                '| 3x Cherries | 4:1    |\n' +
+                '| 3x Clovers  | 4:1    |\n' +
+                '| 3x Beers    | 3:1    |\n' +
+                '| 2x Cherries | 2:1    |\n' +
+                '| 2x Any      | 1:1    |' + '```');
         } else slot(bot, msg, suffix); break;
         case "poker": if(suffix === 'payout' || suffix === 'payouts') {
             bot.sendMessage(msg, '```' +
                 '| Hand                   | Payout |\n' +
                 '|------------------------|--------|\n' +
-                '| Natural Royal Flush    | 800    |\n' +
-                '| Five of a Kind         | 200    |\n' +
-                '| Wild Royal Flush       | 100    |\n' +
-                '| Straight Flush         | 50     |\n' +
-                '| Four of a Kind         | 20     |\n' +
-                '| Full House             | 7      |\n' +
-                '| Flush                  | 5      |\n' +
-                '| Straight               | 3      |\n' +
-                '| Three of a Kind        | 2      |\n' +
-                '| Two Pair               | 1      |\n' +
-                '| Pair (Jacks or Better) | 1      |' + '```');
+                '| Natural Royal Flush    | 800:1  |\n' +
+                '| Five of a Kind         | 200:1  |\n' +
+                '| Wild Royal Flush       | 100:1  |\n' +
+                '| Straight Flush         | 50:1   |\n' +
+                '| Four of a Kind         | 20:1   |\n' +
+                '| Full House             | 7:1    |\n' +
+                '| Flush                  | 5:1    |\n' +
+                '| Straight               | 3:1    |\n' +
+                '| Three of a Kind        | 2:1    |\n' +
+                '| Two Pair               | 1:1    |\n' +
+                '| Pair (Jacks or Better) | 1:1    |' + '```');
         }
         else (() => {
             var id = msg.author.id;
@@ -406,84 +414,6 @@ var commands = {
         },
         'admin'         : true
     }
-};
-
-//Slots
-function slot(bot, msg, suffix) {
-    var id = msg.author.id;
-    if (bank.check(bot, msg) === false) {return};
-    if (msg.channel.id !== settings.gamesroom) {return;}
-    var bid = parseInt(suffix.toString().replace(/[\D]g/, ''), 10);
-    if (bank.accounts[id].balance < bid) {bot.reply(msg, `Not enough credits dummy!`); return;}
-    if (!bid || bid < bankSet.settings.minBet || bid > bankSet.settings.maxBet || bid === NaN) {
-        bot.reply(msg, `You must place a bid between ${bankSet.settings.minBet} and ${bankSet.settings.maxBet}`); return;
-    }
-    bank.subtract(id, bid);
-    var slotTime = new Timer();
-    var reel_pattern = [":cherries:", ":cookie:", ":two:", ":seven:", ":four_leaf_clover:" ,":cyclone:", ":sunflower:", ":six:", ":beer:", ":mushroom:", ":heart:", ":snowflake:"]
-    var padding_before = [":mushroom:", ":heart:", ":snowflake:"]
-    var padding_after = [":cherries:", ":cookie:", ":two:"]
-    var reel = padding_before.concat(reel_pattern, padding_after);
-    var reels = []
-
-    try {
-        for (var x = 0; x < 3; x++) {
-            var n = Math.floor(Math.random() * reel_pattern.length) + 3;
-            reels.push([reel[n - 1], reel[n], reel[n + 1]])
-        }
-    } catch (err) {console.log(err);}
-
-    var line;
-    try {
-        line = [reels[0][1], reels[1][1], reels[2][1]];
-    } catch(err) {console.log(err);}
-
-    var display_reels;
-    try {
-        display_reels = "  " + reels[0][0] + " " + reels[1][0] + " " + reels[2][0] + "\n";
-        display_reels += ">" + reels[0][1] + " " + reels[1][1] + " " + reels[2][1] + "\n";
-        display_reels += "  " + reels[0][2] + " " + reels[1][2] + " " + reels[2][2] + "\n"
-    } catch (err) {console.log(err)}
-
-    try {
-        if (line[0] == ":two:" && line[1] == ":two:" && line[2] == ":six:") {
-            bid = bid * 5000;
-            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} JACKPOT MOTHERFUCKER! Your bet is multiplied * 5000! ${bid}! `);
-        }
-        else if (line[0] == ":four_leaf_clover:" && line[1] == ":four_leaf_clover:" && line[2] == ":four_leaf_clover:") {
-            bid += 1000;
-            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Three Four Leaf Clovers! +1000!`);
-        }
-        else if (line[0] == ":cherries:" && line[1] == ":cherries:" && line[2] == ":cherries:") {
-            bid += 800;
-            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Three cherries! +800! `);
-        }
-        else if (line[0] == line[1] == line[2]) {
-            bid += 500;
-            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Three symbols! +500! `);
-        }
-        else if (line[0] == ":two:" && line[1] == ":six:" || line[1] == ":two:" && line[2] == ":six:") {
-            bid *= 4;
-            bot.sendMessage(msg, `{display_reels}{msg.author.mention()} 26! Your bet is multiplied * 4! {bid}! `);
-        }
-        else if (line[0] == ":cherries:" && line[1] == ":cherries:" || line[1] == ":cherries:" && line[2] == ":cherries:") {
-            bid *= 3;
-            bot.sendMessage(msg, `{display_reels}{msg.author.mention()} Two cherries! Your bet is multiplied * 3! {bid}! `);
-        }
-        else if (line[0] == line[1] || line[1] == line[2]) {
-            bid *= 2;
-            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Two symbols! Your bet is multiplied * 2! ${bid}! `);
-        }
-        else {
-            bot.sendMessage(msg, `${display_reels}${msg.author.mention()} Nothing! Lost bet.`)
-        }
-    } catch(err) {console.log(err);}
-    try {
-        slotTime.start(.1).on('end', () => {bot.reply(msg, `Credits left: **${bank.accounts[id].balance}**`)})
-    } catch (err) {
-        console.log(err);
-    }
-    bank.reload();
 };
 
 //Trivia

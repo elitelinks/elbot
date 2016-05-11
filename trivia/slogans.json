@@ -1,0 +1,1558 @@
+[
+  {
+    "question": "Better to light a candle than curse the darkness.",
+    "answers": [
+      "Amnesty International"
+    ]
+  },
+  {
+    "question": "The Power of Dreams.",
+    "answers": [
+      "Honda"
+    ]
+  },
+  {
+    "question": "Think.",
+    "answers": [
+      "IBM"
+    ]
+  },
+  {
+    "question": "Better Matters",
+    "answers": [
+      "Verizon"
+    ]
+  },
+  {
+    "question": "Connecting People.",
+    "answers": [
+      "Nokia"
+    ]
+  },
+  {
+    "question": "I'm Lovin' It.",
+    "answers": [
+      "McDonald's",
+      "McDonalds"
+    ]
+  },
+  {
+    "question": "Save Money. Live Better.",
+    "answers": [
+      "Walmart"
+    ]
+  },
+  {
+    "question": "Citius, Altius, Fortius. (Faster, Higher, Stronger.)",
+    "answers": [
+      "Olympic Games",
+      "Olympics"
+    ]
+  },
+  {
+    "question": "Vorsprung durch Technik. (literally, advantage through technology)",
+    "answers": [
+      "Audi "
+    ]
+  },
+  {
+    "question": "Leading Innovation.",
+    "answers": [
+      "Toshiba"
+    ]
+  },
+  {
+    "question": "Every Little Helps.",
+    "answers": [
+      "Tesco"
+    ]
+  },
+  {
+    "question": "Don't be evil.",
+    "answers": [
+      "Google"
+    ]
+  },
+  {
+    "question": "Just Do It.",
+    "answers": [
+      "Nike"
+    ]
+  },
+  {
+    "question": "The Passionate Pursuit of Perfection.",
+    "answers": [
+      "Lexus"
+    ]
+  },
+  {
+    "question": "The Happiest Place on Earth",
+    "answers": [
+      "DisneyWorld",
+      "DisneyLand",
+      "Disney Parks"
+    ]
+  },
+  {
+    "question": "Life's Messy. Clean it Up.",
+    "answers": [
+      "Bissell"
+    ]
+  },
+  {
+    "question": "Leave the Driving to Us",
+    "answers": [
+      "Greyhound"
+    ]
+  },
+  {
+    "question": "The World On Time.",
+    "answers": [
+      "FedEx",
+      "Federal Express"
+    ]
+  },
+  {
+    "question": "Mobilizing your world.",
+    "answers": [
+      "AT&T"
+    ]
+  },
+  {
+    "question": "Don't get mad. Get Glad.",
+    "answers": [
+      "The Glad Products Company",
+      "GLAD"
+    ]
+  },
+  {
+    "question": "Life's better when we're connected.",
+    "answers": [
+      "Bank of America"
+    ]
+  },
+  {
+    "question": "You're not you when you're hungry.",
+    "answers": [
+      "Snickers"
+    ]
+  },
+  {
+    "question": "Expect great things.",
+    "answers": [
+      "Kohls"
+    ]
+  },
+  {
+    "question": "Finger Lickin' Good.",
+    "answers": [
+      "Kentucky Fried Chicken",
+      "KFC"
+    ]
+  },
+  {
+    "question": "Betcha Can't Eat Just One",
+    "answers": [
+      "Lay's",
+      "Lays"
+    ]
+  },
+  {
+    "question": "Believe in your Smellf.",
+    "answers": [
+      "Old Spice"
+    ]
+  },
+  {
+    "question": "Driving Matters.",
+    "answers": [
+      "Mazda"
+    ]
+  },
+  {
+    "question": "Go further.",
+    "answers": [
+      "Ford"
+    ]
+  },
+  {
+    "question": "The Best or Nothing",
+    "answers": [
+      "Mercedes-Benz"
+    ]
+  },
+  {
+    "question": "Get Your Own Box.",
+    "answers": [
+      "Cheez-it",
+      "Cheezit"
+    ]
+  },
+  {
+    "question": "Easy. Breezy. Beautiful.",
+    "answers": [
+      "Covergirl"
+    ]
+  },
+  {
+    "question": "Allergy Tested. 100% Fragrance Free.",
+    "answers": [
+      "Clinique"
+    ]
+  },
+  {
+    "question": "Best Possible Start",
+    "answers": [
+      "Fisher-Price"
+    ]
+  },
+  {
+    "question": "The Best a Man Can Get",
+    "answers": [
+      "Gillette"
+    ]
+  },
+  {
+    "question": "Let your fingers do the walking.",
+    "answers": [
+      "Yellow Pages"
+    ]
+  },
+  {
+    "question": "The ultimate driving machine.",
+    "answers": [
+      "BMW",
+      "Bayerische Motoren Werke"
+    ]
+  },
+  {
+    "question": "M'm! M'm! Good!",
+    "answers": [
+      "Campbell Soup Company"
+    ]
+  },
+  {
+    "question": "Citi never sleeps.",
+    "answers": [
+      "Citibank"
+    ]
+  },
+  {
+    "question": "We live in financial times.",
+    "answers": [
+      "Financial Times"
+    ]
+  },
+  {
+    "question": "The Capitalist Tool.",
+    "answers": [
+      "Forbes"
+    ]
+  },
+  {
+    "question": "When you care enough to send the very best",
+    "answers": [
+      "Hallmark"
+    ]
+  },
+  {
+    "question": "Nothing runs like a Deere",
+    "answers": [
+      "John Deere"
+    ]
+  },
+  {
+    "question": "All the news that's fit to print.",
+    "answers": [
+      "The New York Times"
+    ]
+  },
+  {
+    "question": "Fly the friendly skies.",
+    "answers": [
+      "United Airlines"
+    ]
+  },
+  {
+    "question": "Keep climbing",
+    "answers": [
+      "Delta Airlines",
+      "Delta"
+    ]
+  },
+  {
+    "question": "Army Strong",
+    "answers": [
+      "US Army",
+      "United States Army",
+      "U.S. Army"
+    ]
+  },
+  {
+    "question": "Eat fresh.",
+    "answers": [
+      "Subway"
+    ]
+  },
+  {
+    "question": "A better life, a better world",
+    "answers": [
+      "Panasonic"
+    ]
+  },
+  {
+    "question": "Think Different",
+    "answers": [
+      "Apple"
+    ]
+  },
+  {
+    "question": "Melts in your mouth, not in your hands.",
+    "answers": [
+      "M&M"
+    ]
+  },
+  {
+    "question": "Tastes so good, cats ask for it by name",
+    "answers": [
+      "Meow Mix"
+    ]
+  },
+  {
+    "question": "The Few. The Proud.",
+    "answers": [
+      "U.S. Marine Corps",
+      "Marines",
+      "Marine Corps",
+      "US Marines",
+      "US Marine Corps"
+    ]
+  },
+  {
+    "question": "Ding! You are now free to move about the country.",
+    "answers": [
+      "Southwest Airlines",
+      "Southwest"
+    ]
+  },
+  {
+    "question": "Impossible is nothing.",
+    "answers": [
+      "Adidas"
+    ]
+  },
+  {
+    "question": "Don't leave home without it.",
+    "answers": [
+      "American Express"
+    ]
+  },
+  {
+    "question": "The quick picker upper",
+    "answers": [
+      "Bounty"
+    ]
+  },
+  {
+    "question": "The world's favorite airline",
+    "answers": [
+      "British Airways"
+    ]
+  },
+  {
+    "question": "Have it your way.",
+    "answers": [
+      "Burger King"
+    ]
+  },
+  {
+    "question": "It's good to talk",
+    "answers": [
+      "British Telecom",
+      "BT"
+    ]
+  },
+  {
+    "question": "I'd walk a mile for a camel.",
+    "answers": [
+      "Camel"
+    ]
+  },
+  {
+    "question": "Does she or doesn't she?",
+    "answers": [
+      "Clairol"
+    ]
+  },
+  {
+    "question": "When it absolutely, positively has to be there overnight.",
+    "answers": [
+      "FedEx",
+      "Federal Express"
+    ]
+  },
+  {
+    "question": "No FT, no comment",
+    "answers": [
+      "Financial Times"
+    ]
+  },
+  {
+    "question": "Because I'm worth it.",
+    "answers": [
+      "L'Oreal"
+    ]
+  },
+  {
+    "question": "Good to the last drop.",
+    "answers": [
+      "Maxwell"
+    ]
+  },
+  {
+    "question": "When it rains it pours.",
+    "answers": [
+      "Morton Salt",
+      "Morton"
+    ]
+  },
+  {
+    "question": "It takes a licking and keeps on ticking.",
+    "answers": [
+      "Timex"
+    ]
+  },
+  {
+    "question": "Let's go places",
+    "answers": [
+      "Toyota"
+    ]
+  },
+  {
+    "question": "Now that's better.",
+    "answers": [
+      "Wendy's"
+    ]
+  },
+  {
+    "question": "Hello boys.",
+    "answers": [
+      "Wonderbra"
+    ]
+  },
+  {
+    "question": "A diamond is forever.",
+    "answers": [
+      "DeBeers"
+    ]
+  },
+  {
+    "question": "Breakfast of Champions",
+    "answers": [
+      "Wheaties"
+    ]
+  },
+  {
+    "question": "Do the Dew",
+    "answers": [
+      "Mountain Dew"
+    ]
+  },
+  {
+    "question": "Now that's positive energy",
+    "answers": [
+      "Energizer"
+    ]
+  },
+  {
+    "question": "Eat more chikin",
+    "answers": [
+      "Chick-fil-A",
+      "chickfila"
+    ]
+  },
+  {
+    "question": "We didn't invent the chicken. Just the chicken sandwich.",
+    "answers": [
+      "Chick-fil-A",
+      "chickfila"
+    ]
+  },
+  {
+    "question": "Every kiss begins with kay.",
+    "answers": [
+      "Kay Jewelers"
+    ]
+  },
+  {
+    "question": "More saving. More doing.",
+    "answers": [
+      "The Home Depot",
+      "Home Depot"
+    ]
+  },
+  {
+    "question": "Flavor of Now",
+    "answers": [
+      "Pizza Hut"
+    ]
+  },
+  {
+    "question": "Gimme a break",
+    "answers": [
+      "Kit Kat",
+      "Kitkat"
+    ]
+  },
+  {
+    "question": "Live Mas",
+    "answers": [
+      "Taco Bell"
+    ]
+  },
+  {
+    "question": "Bring your challenges",
+    "answers": [
+      "Prudential Financial",
+      "Prudential"
+    ]
+  },
+  {
+    "question": "We have the meats.",
+    "answers": [
+      "Arby's"
+    ]
+  },
+  {
+    "question": "Eat like you mean it.",
+    "answers": [
+      "Carl's Jr."
+    ]
+  },
+  {
+    "question": "Be more",
+    "answers": [
+      "PBS"
+    ]
+  },
+  {
+    "question": "Imagination at work.",
+    "answers": [
+      "General Electric Company",
+      "General Electric",
+      "GE"
+    ]
+  },
+  {
+    "question": "Never Stop Improving",
+    "answers": [
+      "Lowe's"
+    ]
+  },
+  {
+    "question": "It's in there.",
+    "answers": [
+      "Prego"
+    ]
+  },
+  {
+    "question": "Bring out the best",
+    "answers": [
+      "Hellmann's",
+      "Best Foods"
+    ]
+  },
+  {
+    "question": "Open Happiness",
+    "answers": [
+      "Coca-cola"
+    ]
+  },
+  {
+    "question": "Obey your thirst",
+    "answers": [
+      "Sprite"
+    ]
+  },
+  {
+    "question": "Pizza! Pizza!",
+    "answers": [
+      "Little Caesars Pizza",
+      "Little Caesars"
+    ]
+  },
+  {
+    "question": "15 minutes could save you 15% or more on car insurance.",
+    "answers": [
+      "GEICO"
+    ]
+  },
+  {
+    "question": "Gear up for great",
+    "answers": [
+      "Office Depot"
+    ]
+  },
+  {
+    "question": "Taste the rainbow",
+    "answers": [
+      "Skittles"
+    ]
+  },
+  {
+    "question": "Are you CN what we're sayin'",
+    "answers": [
+      "Cartoon Network"
+    ]
+  },
+  {
+    "question": "The snack that smiles back.",
+    "answers": [
+      "Goldfish"
+    ]
+  },
+  {
+    "question": "The world's local bank",
+    "answers": [
+      "HSBC"
+    ]
+  },
+  {
+    "question": "Expert service. Unbeatable price.",
+    "answers": [
+      "Best Buy"
+    ]
+  },
+  {
+    "question": "Very Funny",
+    "answers": [
+      "TBS"
+    ]
+  },
+  {
+    "question": "America's most watched network",
+    "answers": [
+      "CBS"
+    ]
+  },
+  {
+    "question": "Where a kid can be a kid",
+    "answers": [
+      "Chuck E. Cheese's"
+    ]
+  },
+  {
+    "question": "The power of together",
+    "answers": [
+      "Petco"
+    ]
+  },
+  {
+    "question": "Moving forward.",
+    "answers": [
+      "Toyota"
+    ]
+  },
+  {
+    "question": "Perfect.",
+    "answers": [
+      "Reese's"
+    ]
+  },
+  {
+    "question": "Where food's the star",
+    "answers": [
+      "Hardee's"
+    ]
+  },
+  {
+    "question": "Think outside the bun",
+    "answers": [
+      "Taco Bell"
+    ]
+  },
+  {
+    "question": "World's Greatest Hamburgers",
+    "answers": [
+      "Fuddruckers"
+    ]
+  },
+  {
+    "question": "License to Grill",
+    "answers": [
+      "Chili's"
+    ]
+  },
+  {
+    "question": "It's a whole new neighborhood",
+    "answers": [
+      "Applebee's"
+    ]
+  },
+  {
+    "question": "The last great burger stand",
+    "answers": [
+      "Fat burger",
+      "fatburger"
+    ]
+  },
+  {
+    "question": "In here, it's always fridays.",
+    "answers": [
+      "T.G.I. Friday's",
+      "TGI Fridays",
+      "TGIFridays"
+    ]
+  },
+  {
+    "question": "Make it great",
+    "answers": [
+      "Pizza Hut"
+    ]
+  },
+  {
+    "question": "Better Ingredients. Better Pizza.",
+    "answers": [
+      "Papa John's"
+    ]
+  },
+  {
+    "question": "Slicing up freshness.",
+    "answers": [
+      "Arby's"
+    ]
+  },
+  {
+    "question": "American by Birth. Rebel by Choice.",
+    "answers": [
+      "Harley Davidson"
+    ]
+  },
+  {
+    "question": "There is no substitute.",
+    "answers": [
+      "Porsche"
+    ]
+  },
+  {
+    "question": "Power, beauty and soul.",
+    "answers": [
+      "Aston Martin"
+    ]
+  },
+  {
+    "question": "Save Money. Live Better.",
+    "answers": [
+      "Walmart"
+    ]
+  },
+  {
+    "question": "I am what I am.",
+    "answers": [
+      "Reebok"
+    ]
+  },
+  {
+    "question": "Between love and madness lies obsession.",
+    "answers": [
+      "Calvin Klein"
+    ]
+  },
+  {
+    "question": "Quality never goes out of style.",
+    "answers": [
+      "Levi's"
+    ]
+  },
+  {
+    "question": "Success. It's a Mind Game.",
+    "answers": [
+      "Tag Heuer"
+    ]
+  },
+  {
+    "question": "Innovation.",
+    "answers": [
+      "3M"
+    ]
+  },
+  {
+    "question": "Solutions for a smart planet.",
+    "answers": [
+      "IBM"
+    ]
+  },
+  {
+    "question": "Make Believe.",
+    "answers": [
+      "Sony"
+    ]
+  },
+  {
+    "question": "Think big.",
+    "answers": [
+      "IMAX"
+    ]
+  },
+  {
+    "question": "The miracles of science.",
+    "answers": [
+      "DuPont"
+    ]
+  },
+  {
+    "question": "Keeps going and going and going.",
+    "answers": [
+      "Energizer"
+    ]
+  },
+  {
+    "question": "Live in your world. Play in ours.",
+    "answers": [
+      "PlayStation"
+    ]
+  },
+  {
+    "question": "Challenge everything.",
+    "answers": [
+      "EA",
+      "Electronic Arts"
+    ]
+  },
+  {
+    "question": "See what we mean.",
+    "answers": [
+      "Canon"
+    ]
+  },
+  {
+    "question": "At the heart of the image.",
+    "answers": [
+      "Nikon"
+    ]
+  },
+  {
+    "question": "Share moments. Share life.",
+    "answers": [
+      "Kodak"
+    ]
+  },
+  {
+    "question": "Your vision. Our future.",
+    "answers": [
+      "Olympus"
+    ]
+  },
+  {
+    "question": "The greatest tragedy is indifference.",
+    "answers": [
+      "Red Cross"
+    ]
+  },
+  {
+    "question": "Pleasing people the world over.",
+    "answers": [
+      "Holiday Inn"
+    ]
+  },
+  {
+    "question": "For the men in charge of change.",
+    "answers": [
+      "Fortune"
+    ]
+  },
+  {
+    "question": "Stronger than dirt.",
+    "answers": [
+      "Ajax"
+    ]
+  },
+  {
+    "question": "Seafood Differently.",
+    "answers": [
+      "Red Lobster"
+    ]
+  },
+  {
+    "question": "Zoom Zoom.",
+    "answers": [
+      "Mazda"
+    ]
+  },
+  {
+    "question": "Better by Adobe.",
+    "answers": [
+      "Adobe"
+    ]
+  },
+  {
+    "question": "The road will never be the same.",
+    "answers": [
+      "Acura"
+    ]
+  },
+  {
+    "question": "Ask about it at work.",
+    "answers": [
+      "Aflac"
+    ]
+  },
+  {
+    "question": "We know money.",
+    "answers": [
+      "AIG"
+    ]
+  },
+  {
+    "question": "I can't believe I ate the whole thing.",
+    "answers": [
+      "Alka-Seltzer"
+    ]
+  },
+  {
+    "question": "The relief goes on.",
+    "answers": [
+      "Allegra"
+    ]
+  },
+  {
+    "question": "You're in good hands with Allstate.",
+    "answers": [
+      "Allstate Insurance",
+      "Allstate"
+    ]
+  },
+  {
+    "question": "Works like a dream.",
+    "answers": [
+      "Ambien"
+    ]
+  },
+  {
+    "question": "Something special in the air.",
+    "answers": [
+      "American Airlines"
+    ]
+  },
+  {
+    "question": "Behold the power of cheese.",
+    "answers": [
+      "American Dairy Association"
+    ]
+  },
+  {
+    "question": "Do more.",
+    "answers": [
+      "American Express"
+    ]
+  },
+  {
+    "question": "My life. My card.",
+    "answers": [
+      "American Express"
+    ]
+  },
+  {
+    "question": "For fast, fast, fast relief.",
+    "answers": [
+      "Anacin"
+    ]
+  },
+  {
+    "question": "Legendary reliability.",
+    "answers": [
+      "APC"
+    ]
+  },
+  {
+    "question": "Reach out and touch someone.",
+    "answers": [
+      "AT&T"
+    ]
+  },
+  {
+    "question": "Never follow.",
+    "answers": [
+      "Audi"
+    ]
+  },
+  {
+    "question": "We try harder.",
+    "answers": [
+      "Avis"
+    ]
+  },
+  {
+    "question": "Better sound through research.",
+    "answers": [
+      "BOSE"
+    ]
+  },
+  {
+    "question": "The king of beers.",
+    "answers": [
+      "Budweiser"
+    ]
+  },
+  {
+    "question": "Break through.",
+    "answers": [
+      "Cadillac"
+    ]
+  },
+  {
+    "question": "For negative people.",
+    "answers": [
+      "CameraWorld"
+    ]
+  },
+  {
+    "question": "What's in your wallet?",
+    "answers": [
+      "Capital One"
+    ]
+  },
+  {
+    "question": "For virtually spotless dishes.",
+    "answers": [
+      "Cascade"
+    ]
+  },
+  {
+    "question": "Like a rock.",
+    "answers": [
+      "Chevy Trucks",
+      "Chevy"
+    ]
+  },
+  {
+    "question": "Inspiration comes standard.",
+    "answers": [
+      "Chrysler"
+    ]
+  },
+  {
+    "question": "Will you be ready?",
+    "answers": [
+      "Cialis"
+    ]
+  },
+  {
+    "question": "Empowering the Internet generation.",
+    "answers": [
+      "Cisco Systems",
+      "Cisco"
+    ]
+  },
+  {
+    "question": "Live richly.",
+    "answers": [
+      "Citi"
+    ]
+  },
+  {
+    "question": "The antidote for civilization.",
+    "answers": [
+      "ClubMed"
+    ]
+  },
+  {
+    "question": "The source for computing and technology.",
+    "answers": [
+      "CNET"
+    ]
+  },
+  {
+    "question": "The most trusted name in news.",
+    "answers": [
+      "CNN"
+    ]
+  },
+  {
+    "question": "The silver bullet.",
+    "answers": [
+      "Coors"
+    ]
+  },
+  {
+    "question": "Healthy, beautiful smiles for life.",
+    "answers": [
+      "Crest"
+    ]
+  },
+  {
+    "question": "You'll love the way we fly.",
+    "answers": [
+      "Delta Airlines",
+      "Delta"
+    ]
+  },
+  {
+    "question": "We love to fly and it shows.",
+    "answers": [
+      "Delta Airlines",
+      "Delta"
+    ]
+  },
+  {
+    "question": "We're cooking now.",
+    "answers": [
+      "Denny's"
+    ]
+  },
+  {
+    "question": "We move the world.",
+    "answers": [
+      "DHL"
+    ]
+  },
+  {
+    "question": "Yellow. The new Brown.",
+    "answers": [
+      "DHL"
+    ]
+  },
+  {
+    "question": "Time to make the doughnuts.",
+    "answers": [
+      "Dunkin Donuts"
+    ]
+  },
+  {
+    "question": "The power of all of us.",
+    "answers": [
+      "eBay"
+    ]
+  },
+  {
+    "question": "The world's online marketplace.",
+    "answers": [
+      "eBay"
+    ]
+  },
+  {
+    "question": "When youre crazy for chicken.",
+    "answers": [
+      "El Pollo Loco"
+    ]
+  },
+  {
+    "question": "Don't just travel. Travel right.",
+    "answers": [
+      "Expedia.com",
+      "expedia"
+    ]
+  },
+  {
+    "question": "Good taste is easy to recognize.",
+    "answers": [
+      "Fancy Feast"
+    ]
+  },
+  {
+    "question": "Our business is the American dream.",
+    "answers": [
+      "FannieMae"
+    ]
+  },
+  {
+    "question": "Play. Laugh. Grow.",
+    "answers": [
+      "Fisher-Price"
+    ]
+  },
+  {
+    "question": "Fair and balanced.",
+    "answers": [
+      "Fox News"
+    ]
+  },
+  {
+    "question": "Babies are our business.",
+    "answers": [
+      "Gerber"
+    ]
+  },
+  {
+    "question": "We answer to a higher authority.",
+    "answers": [
+      "Hebrew National"
+    ]
+  },
+  {
+    "question": "57 varieties",
+    "answers": [
+      "H.J. Heinz",
+      "Heinz"
+    ]
+  },
+  {
+    "question": "Invent.",
+    "answers": [
+      "Hewlett Packard",
+      "HP"
+    ]
+  },
+  {
+    "question": "Where's the cream filling?",
+    "answers": [
+      "Hostess Cakes",
+      "Hostess"
+    ]
+  },
+  {
+    "question": "We're behind you every step of the way.",
+    "answers": [
+      "Huggies"
+    ]
+  },
+  {
+    "question": "Solutions for a small planet.",
+    "answers": [
+      "IBM"
+    ]
+  },
+  {
+    "question": "Manly yes, but I like it, too.",
+    "answers": [
+      "Irish Spring Soap"
+    ]
+  },
+  {
+    "question": "100% juice for 100% kids.",
+    "answers": [
+      "Juicy Juice"
+    ]
+  },
+  {
+    "question": "Thrive.",
+    "answers": [
+      "Kaiser Permanente"
+    ]
+  },
+  {
+    "question": "They're g-r-r-r-eat!",
+    "answers": [
+      "Kellog's Frosted Flakes",
+      "Frosted Flakes"
+    ]
+  },
+  {
+    "question": "Kid tested. Mother approved.",
+    "answers": [
+      "Kix Cereal",
+      "Kix"
+    ]
+  },
+  {
+    "question": "Share moments. Share life.",
+    "answers": [
+      "Kodak"
+    ]
+  },
+  {
+    "question": "It's time for clarity.",
+    "answers": [
+      "KPMG"
+    ]
+  },
+  {
+    "question": "When banks compete, you win.",
+    "answers": [
+      "LendingTree"
+    ]
+  },
+  {
+    "question": "Magically delicious.",
+    "answers": [
+      "Lucky Charms"
+    ]
+  },
+  {
+    "question": "Because so much is riding on your tires.",
+    "answers": [
+      "Michelin"
+    ]
+  },
+  {
+    "question": "Where do you want to go today?",
+    "answers": [
+      "Microsoft"
+    ]
+  },
+  {
+    "question": "The champagne of bottled beer.",
+    "answers": [
+      "Miller High Life"
+    ]
+  },
+  {
+    "question": "Everything you always wanted in a beer. And less.",
+    "answers": [
+      "Miller Lite"
+    ]
+  },
+  {
+    "question": "Tastes great, less filling.",
+    "answers": [
+      "Miller Lite"
+    ]
+  },
+  {
+    "question": "Wake up and drive.",
+    "answers": [
+      "Mitsubishi Motors",
+      "Mitsubishi"
+    ]
+  },
+  {
+    "question": "Medicine with muscle.",
+    "answers": [
+      "Motrin"
+    ]
+  },
+  {
+    "question": "Must see TV",
+    "answers": [
+      "NBC"
+    ]
+  },
+  {
+    "question": "Break out of the ordinary.",
+    "answers": [
+      "Nestle's Butterfinger",
+      "Butterfinger"
+    ]
+  },
+  {
+    "question": "Enjoy the ride.",
+    "answers": [
+      "Nissan"
+    ]
+  },
+  {
+    "question": "Connecting people.",
+    "answers": [
+      "Nokia"
+    ]
+  },
+  {
+    "question": "Take it all off.",
+    "answers": [
+      "Noxzema"
+    ]
+  },
+  {
+    "question": "The nighttime sniffling sneezing coughing aching stuffy head fever so you can rest medicine.",
+    "answers": [
+      "NyQuil"
+    ]
+  },
+  {
+    "question": "The mark of a man.",
+    "answers": [
+      "Old Spice"
+    ]
+  },
+  {
+    "question": "No rules. Just right.",
+    "answers": [
+      "Outback Steakhouse"
+    ]
+  },
+  {
+    "question": "Slightly ahead of its time.",
+    "answers": [
+      "Panasonic"
+    ]
+  },
+  {
+    "question": "The taste of a new generation.",
+    "answers": [
+      "Pepsi"
+    ]
+  },
+  {
+    "question": "Where the pets go.",
+    "answers": [
+      "Petco"
+    ]
+  },
+  {
+    "question": "Famously fresh.",
+    "answers": [
+      "Planter's Peanuts",
+      "Planter's"
+    ]
+  },
+  {
+    "question": "The fun develops instantly.",
+    "answers": [
+      "Polaroid"
+    ]
+  },
+  {
+    "question": "Get a piece of the rock.",
+    "answers": [
+      "Prudential"
+    ]
+  },
+  {
+    "question": "Something to smile about.",
+    "answers": [
+      "Quaker Oatmeal"
+    ]
+  },
+  {
+    "question": "Eat up",
+    "answers": [
+      "Quiznos"
+    ]
+  },
+  {
+    "question": "You've got questions, we've got answers.",
+    "answers": [
+      "Radio Shack"
+    ]
+  },
+  {
+    "question": "Ingredients for life.",
+    "answers": [
+      "Safeway"
+    ]
+  },
+  {
+    "question": "Funny name. Serious sandwich.",
+    "answers": [
+      "Schlotzky's Deli",
+      "Schlotzky's"
+    ]
+  },
+  {
+    "question": "Schhh! You know who?",
+    "answers": [
+      "Schweppes"
+    ]
+  },
+  {
+    "question": "We turn on ideas.",
+    "answers": [
+      "Seagate"
+    ]
+  },
+  {
+    "question": "The uncola.",
+    "answers": [
+      "7-Up"
+    ]
+  },
+  {
+    "question": "For the person who has everything, we have everything else.",
+    "answers": [
+      "The Sharper Image"
+    ]
+  },
+  {
+    "question": "Cover the earth.",
+    "answers": [
+      "Sherwin Williams"
+    ]
+  },
+  {
+    "question": "Always there in a pinch.",
+    "answers": [
+      "Skoal"
+    ]
+  },
+  {
+    "question": "Made from the best stuff on Earth.",
+    "answers": [
+      "Snapple"
+    ]
+  },
+  {
+    "question": "That was easy.",
+    "answers": [
+      "Staples"
+    ]
+  },
+  {
+    "question": "The network is the computer.",
+    "answers": [
+      "Sun Microsystems"
+    ]
+  },
+  {
+    "question": "Better snacking.",
+    "answers": [
+      "Sunkist"
+    ]
+  },
+  {
+    "question": "There's no equal.",
+    "answers": [
+      "Sweet 'N Low",
+      "sweet n low"
+    ]
+  },
+  {
+    "question": "Expect more. Pay less.",
+    "answers": [
+      "Target"
+    ]
+  },
+  {
+    "question": "Imagine it. Done.",
+    "answers": [
+      "Unisys"
+    ]
+  },
+  {
+    "question": "What can Brown do for you?",
+    "answers": [
+      "UPS"
+    ]
+  },
+  {
+    "question": "Visine gets the red out.",
+    "answers": [
+      "Visine"
+    ]
+  },
+  {
+    "question": "For life.",
+    "answers": [
+      "Volvo"
+    ]
+  },
+  {
+    "question": "The next stage.",
+    "answers": [
+      "Wells Fargo"
+    ]
+  },
+  {
+    "question": "We're moving beyond documents.",
+    "answers": [
+      "Xerox"
+    ]
+  },
+  {
+    "question": "Snap! Crackle! Pop!",
+    "answers": [
+      "Rice Krispies"
+    ]
+  },
+  {
+    "question": "Nothin' says lovin' like somethin' from the oven.",
+    "answers": [
+      "Pillsbury"
+    ]
+  },
+  {
+    "question": "You can trust your car to the men who wear the star.",
+    "answers": [
+      "Texaco"
+    ]
+  }
+]

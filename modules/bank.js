@@ -1,3 +1,4 @@
+'use strict';
 const fs = require('fs-extra');
 var bankSet = fs.readJsonSync("./settings/bank.json");
 var settings = require("../settings/settings.json"),
@@ -98,10 +99,9 @@ var bank = {
             console.log(err);
         }
     }
-
 };
 
-module.exports = bank;
+module.exports = exports = bank;
 
 //TODO add transfer
 //TODO fix add/sub command by getting user
