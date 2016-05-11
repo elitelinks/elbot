@@ -13,6 +13,44 @@ function onErr(err) {
     return 1;
 }
 
+function writer(result) {
+    var thingToRead;
+    isDirectory ? thingToRead = result : thingToRead = result.file;
+    var resultJson = [];
+    var lr = new LineByLineReader(thingToRead);
+
+    lr.on('error', function (err) {
+        console.log('Error loading trivia list!');
+        onErr(err);
+    });
+
+    lr.on('line', function (line) {
+        var objTemp = {question: '', answers: []};
+        var questionsAnswers = line.split(isDirectory ? dirSeparator : result.separator);
+        objTemp.question = questionsAnswers[0];
+        objTemp.answers = questionsAnswers.slice(1);
+        resultJson.push(objTemp);
+    });
+
+    lr.on('end', function () {
+        var file = thingToRead.slice(0, -4) + ".json";
+        jsonfile.writeFile(file, resultJson, (err) => {
+            if (err) { return onErr(err); }
+            console.log(`Succesfully wrote ${file}!`);
+        })
+    });
+}
+
+function dirWriter(result) {
+    fs.readdir(result.file, (err, files) => {
+        if (err) {return onErr(err);}
+        else files.forEach((file) => {
+            var full = result.file + file;
+            if (file.substr(-4) === '.txt') {writer(full)}
+        });
+    });
+}
+
 var schema = {
     properties: {
         file : {
@@ -52,41 +90,3 @@ prompt.get(schema, (err, result) => {
         dirWriter(result);
     } else {writer(result);}
 });
-
-function dirWriter(result) {
-    fs.readdir(result.file, (err, files) => {
-        if (err) {return onErr(err);}
-        else files.forEach((file) => {
-           var full = result.file + file;
-           if (file.substr(-4) === '.txt') {writer(full)};
-        });
-    });
-}
-
-function writer(result) {
-    var thingToRead;
-    isDirectory ? thingToRead = result : thingToRead = result.file;
-    var resultJson = [];
-    var lr = new LineByLineReader(thingToRead);
-
-    lr.on('error', function (err) {
-        console.log('Error loading trivia list!');
-        throw err;
-    });
-
-    lr.on('line', function (line) {
-        var objTemp = {question: '', answers: []};
-        var questionsAnswers = line.split(isDirectory ? dirSeparator : result.separator);
-        objTemp.question = questionsAnswers[0];
-        objTemp.answers = questionsAnswers.slice(1);
-        resultJson.push(objTemp);
-    });
-
-    lr.on('end', function () {
-        var file = thingToRead.slice(0, -4) + ".json";
-        jsonfile.writeFile(file, resultJson, (err) => {
-            if (err) { return onErr(err); }
-            console.log(`Succesfully wrote ${file}!`);
-        })
-    });
-}

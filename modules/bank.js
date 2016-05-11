@@ -99,7 +99,6 @@ var bank = {
             console.log(err);
         }
     }
-
 };
 
 module.exports = exports = bank;

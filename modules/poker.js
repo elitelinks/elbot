@@ -11,11 +11,11 @@ var settings = require("../settings/settings.json"),
     prefixes = devMode ? settings.dev_prefixes : settings.prefixes;
 var bankSet = fs.readJsonSync("./settings/bank.json");
 
-function Poker(bot, msg, suffix, id) {
+function Poker(bot, msg, suffix) {
     this.bot = bot;
     bot.setMaxListeners(0);
-    this.id = id;
-    let bid = parseInt(suffix.toString().replace(/[\D]g/, ''), 10);
+    this.id = msg.author.id;
+    let bid = Math.floor(parseInt(suffix.toString().replace(/[\D]g/, ''), 10));
     this.playerhand = [];
     this.deck = new Deck({'jokers' : 2});
     this.round = 0;
@@ -41,7 +41,6 @@ function Poker(bot, msg, suffix, id) {
     elPoker.sfQualify = elRules['sfQualify'];
     elPoker.lowestQualified = elRules['lowestQualified'];
     elPoker.noKickers = elRules['noKickers'];
-
     this.init = () => {
         if (msg.channel.id !== settings.gamesroom) {return;}
         if (this.id !== msg.author.id) {return};
@@ -55,7 +54,6 @@ function Poker(bot, msg, suffix, id) {
         bank.subtract(this.id, bid)
         this.dealHand();
     }
-
     this.dealHand = () => {
         this.deck.shuffle();
         bank.accounts[this.id].playingpoker = true;
@@ -78,7 +76,7 @@ function Poker(bot, msg, suffix, id) {
             if (o[0] === "5") {o[0] = ":five:"};
             if (o[0] === "4") {o[0] = ":four:"};
             if (o[0] === "3") {o[0] = ":three:"};
-            if (o[0] === "2") {o[0] = ":two:"};  uncomment for emojis */
+            if (o[0] === "2") {o[0] = ":two:"};  uncomment for emoji numbers*/
             return o.join('');
         });
         replyHand = `[**${replyHand.join('**]     [**')}**]\n`
