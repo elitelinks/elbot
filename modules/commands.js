@@ -1,10 +1,13 @@
+'use strict'
 const http = require('http');
 const request = require("request");
 const fs = require('fs-extra');
 const google = require("google");
 const Poker = require("./poker");
 const slot = require("./slots");
-const bank = require("./bank")
+const bank = require("./bank");
+const trivia = require("./trivia");
+var startTime = new Date();
 
 var settings = require("../settings/settings.json"),
     triviaset = settings.trivia,
@@ -99,7 +102,7 @@ function Commands() {
         'description'   : 'Counts how many syllables are in a word.',
         'alias'         : ["syl, syllables"],
         'usage'         : `\`${prefixes[0]}syllable [word]\``,
-        'process'       : (bot, msg, suffix) => {
+        process(bot, msg, suffix) {
             var endpoint = 'https://wordsapiv1.p.mashape.com/words/{{word}}/syllables';
             endpoint = endpoint.replace('{{word}}', encodeURIComponent(suffix));
 
@@ -119,7 +122,7 @@ function Commands() {
                     }
 
                     var syllables = data.syllables.count;
-                    if (!syllables) {bot.sendMessage(msg `Something went wrong with the syllable request!`)}
+                    if (!syllables) {bot.sendMessage(msg `Something went wrong with the syllable request!`); return;}
                     bot.sendMessage(msg, `Syllables of ${suffix}: ${syllables}`);
                 }
             });
@@ -275,12 +278,14 @@ function Commands() {
             }
         }
     };
-//admin
-    this.eval =  {
-        'description'   : 'Start a trivia session.',
+    
+    /* ADMIN COMMANDS */
+    
+    this.ev =  {
+        'description'   : 'Evaluates a message',
         'alias'         : ["none"],
         'usage'         : `\`${prefixes[0]}eval js (admin only, use at your own risk!)\``,
-        'process'       : (bot, msg, cmdTxt, suffix) => {
+        'process'       : (bot, msg, suffix) => {
             if (settings.owners.indexOf(msg.author.id) > -1) {
                 try {
                     var thing = eval(suffix.toString());
@@ -300,10 +305,10 @@ function Commands() {
         'description'   : 'Empties local cache.',
         'alias'         : ["cache"],
         'usage'         : `\`${prefixes[0]}emptycache (admin only)\``,
-        'process'       : ()=> {
+        'process'       : (bot, msg)=> {
             if (settings.owners.indexOf(msg.author.id) > -1) {
                 fs.emptyDir('./cache', function (err) {
-                    if (!err) console.log(err)
+                    if (err) console.log(err)
                 });
             }
         },
@@ -323,4 +328,4 @@ function Commands() {
     };
 };
 
-module.exports = exports = new Commands();
+module.exports = exports = Commands;

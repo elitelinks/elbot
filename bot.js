@@ -12,8 +12,8 @@ const google = require("google");
 const Poker = require("./modules/poker");
 const slot = require("./modules/slots");
 const bank = require("./modules/bank");
-const commands = require("./modules/commands")
-console.log(commands.alias);
+const Commands = require("./modules/commands");
+const commands = new Commands;
 
 //settings & data
 var settings = require("./settings/settings.json"),
@@ -115,138 +115,7 @@ var cmdHandlr = (bot, msg, suffix, id, cmdTxt, sufArr) => {
 
 //Trivia
 //Trivia commands TODO combine trivia & triviasesh
-var trivia = {
-    categories : fs.readdirSync(triviaset.path),
 
-    list : (bot, msg) => {
-        var catTxt = trivia.categories.map((x) => {return x.slice(0, -5)}).join(' ');
-        bot.sendMessage(msg, `Trivia categories available are:\n\`\`\`${catTxt}\`\`\``);
-    },
-
-    start : (bot ,msg, suffix) => {
-        var t = trivia;
-        if (suffix === 'skip') {
-            if (triviaSesh.gameon === false) {return;}
-            else {triviaSesh.loop(bot, msg);}
-        }
-        else if (triviaSesh.gameon === true) {bot.sendMessage(msg,"There is already a trivia session in place!"); }
-        else if (!suffix || suffix === 'help') {return;} //TODO help function
-        else if (!suffix || suffix === 'list') {t.list(bot, msg);}
-        else if (t.categories.indexOf(suffix+".json") > -1) {triviaSesh.begin(bot, msg, suffix);}
-        else {bot.sendMessage(msg, `No list with the name ${suffix}`); }
-    }
-};
-
-//Trivia Session
-var triviaSesh = {
-    gameon : false,
-    scorelist : {},
-    currentList : [],
-    currentQuestion : {},
-    used : [],
-    timer : new Timer(),
-    topscore: 0,
-    count : 0,
-    countdown : new Timer(),
-
-    loadlist : (bot, msg, suffix) => {
-        var t = triviaSesh;
-        t.currentList = fs.readJsonSync(`${triviaset.path}/${suffix}.json`);
-        console.log(`${suffix}.json loaded!`); 
-    },
-
-    loadQuestion : () => {
-        var t = triviaSesh;
-        if (t.currentList === []) {console.log('List not loaded!'); return;}
-        var questionCheck = Math.floor(Math.random() * t.currentList.length);
-        if (t.used.indexOf(questionCheck) <= -1) {
-            t.currentQuestion = t.currentList[questionCheck];
-            t.used.push(questionCheck);
-            console.log('Used Question #s ' + t.used);
-        } else t.loadQuestion();
-    },
-
-    addPoint : (bot, msg) => {
-        var t = triviaSesh;
-        var winner = msg.author.name;
-        if (t.scorelist[winner] > t.topscore) {t.topscore = t.scorelist[winner]}
-        if (!t.scorelist[winner]) {t.scorelist[winner] = 1;}
-        else t.scorelist[winner] ++;
-        if (t.scorelist[winner] > t.topscore){t.topscore = t.scorelist[winner]}
-        triviaSesh.countdown.start(triviaset.timeout).on('end', function() {
-            t.end(bot, msg);
-        })
-    },
-
-    round : (bot, msg) => {
-        try {
-            var t = triviaSesh;
-            var trivTimer = t.timer;
-            t.loadQuestion();
-            var answers = t.currentQuestion.answers.map((x)=>x.toLowerCase());
-
-            var botAnswers = (bot, msg) => {
-                bot.sendMessage(msg, `The answer is **${t.currentQuestion.answers[0]}**!`);
-                trivTimer.stop();
-                trivTimer.start(1).on('end', function(){t.loop(bot,msg);});
-            };
-
-            bot.sendMessage(msg, `**Question #${t.count}**\n${t.currentQuestion["question"]}`);
-            bot.on("message", (msg) => {
-                var guess = msg.content.toLowerCase();
-                var num = answers.indexOf(guess);
-                if (num > -1) {
-                    bot.sendMessage(msg, `Right answer ${msg.author.name}! ${t.currentQuestion.answers[num]}!`);
-                    t.addPoint(bot, msg);
-                    trivTimer.stop();
-                    trivTimer.start(1).on('end', function(){t.loop(bot,msg);});
-                }
-            });
-            trivTimer.stop();
-            trivTimer.start(triviaset.delay).on('end', () => {botAnswers(bot, msg)});
-
-        } catch(err) {console.log(err)}
-    },
-
-    loop : (bot, msg) => {
-        var t = triviaSesh;
-        t.currentQuestion = {};
-        if (t.topscore >= triviaset.maxScore) {t.end(bot, msg); }
-        else {
-            t.count++;
-            t.round(bot, msg);
-        }
-    },
-
-    begin : (bot, msg, suffix) => {
-        var t = triviaSesh;
-        t.loadlist(bot, msg, suffix);
-        t.loop(bot ,msg);
-        t.gameon = true;
-        triviaSesh.countdown.start(triviaset.timeout).on('end', function(){
-            t.end(bot, msg);
-        })
-    },
-
-    end : (bot, msg) => {
-        var t = triviaSesh;
-        t.timer.stop();
-        var sortable = [];
-        for (var score in t.scorelist) {
-            sortable.push([score, t.scorelist[score]])
-        }
-        sortable.sort((a,b) => b[1] - a[1]);
-        var str = sortable.join('\n').replace(/,/g, ": ");
-        bot.sendMessage(msg, `Trivia Ended!\n\__**Scores:**__\n\`\`\`${str ? str : 'No one had points!'}\`\`\``);
-        t.gameon = false;
-        t.scorelist = {};
-        t.currentList = [];
-        t.currentQuestion = {};
-        t.used = [];
-        t.count = 0;
-        triviaSesh.countdown.stop();
-    }
-};
 
 //Useful Functions
 var getUser = (bot, msg, suffix) => {};
@@ -261,7 +130,6 @@ const cmdInit = (msg) => {
     return [msg, suffix, id, cmdTxt, sufArr];
 };
 
-
 //msg checker
 bot.on("message", (msg) => {
     if(msg.author === bot.user || msg.channel.isPrivate) {return;}
@@ -269,7 +137,7 @@ bot.on("message", (msg) => {
         let args = cmdInit(msg);
         let cmdTxt = args[3];
         //if (settings.alias.hasOwnProperty(cmdTxt)) cmdTxt = settings.alias[cmdTxt];
-        if (!commands[cmdTxt]]) {return;}
+        if (!commands[cmdTxt]) {return;}
         commands[args[3]].process(bot, ...args);
     }
     else return;
