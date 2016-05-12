@@ -45,7 +45,7 @@ function Poker(bot, msg, suffix) {
         if (msg.channel.id !== settings.gamesroom) {return;}
         if (this.id !== msg.author.id) {return};
         if (bank.check(bot, msg) === false || !suffix  || bank.accounts[this.id].playingpoker === true) {return};
-        if (bank.accounts[id].balance < bid) {bot.reply(msg, `Not enough credits dummy!`); return;}
+        if (bank.accounts[this.id].balance < bid) {bot.reply(msg, `Not enough credits dummy!`); return;}
         if (!bid || bid < bankSet.settings.minBet || bid > bankSet.settings.maxBet || isNaN(bid)) {
             bot.reply(msg, `You must place a bid between ${bankSet.settings.minBet} and ${bankSet.settings.maxBet}`); return;
         }
@@ -144,7 +144,7 @@ function Poker(bot, msg, suffix) {
         this.timer.stop();
         this.timer.start(.5).on('end', () => {bot.reply(msg, 
             `Your hand is : **${endHand.descr}** Payout: **[${finalPay} credits]**\n` +
-            `Credits left: **${bank.accounts[id].balance}**`)});
+            `Credits left: **${bank.accounts[this.id].balance}**`)});
         bank.reload();
     }
 }
