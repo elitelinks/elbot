@@ -249,7 +249,7 @@ function Commands() {
         'description'   : 'Start a trivia session. (still in alpha, needs testing)',
         'alias'         : ["none"],
         'usage'         : `\`${prefixes[0]}trivia [listname] or [list] to get a list of categories\``,
-        'process'       : (bot, msg, suffix) => {trivia.start(bot, msg, suffix);},
+        'process'       : (bot, msg, suffix) => {trivia.init(bot, msg, suffix);},
         'admin'         : false
     };
 

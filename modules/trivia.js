@@ -2,15 +2,11 @@ const http = require('http');
 const fs = require('fs-extra');
 const bank = require("./bank");
 const Timer = require('timer.js');
-var startTime = new Date();
+const util = require('util');
+//const EventEmitter = require('events');
 
 var settings = require("../settings/settings.json"),
-    triviaset = settings.trivia,
-    devMode = settings.devmode,
-    prefixes = devMode ? settings.dev_prefixes : settings.prefixes;
-
-var bankSet = fs.readJsonSync("./settings/bank.json");
-
+    triviaset = settings.trivia;
 
 function Trivia() {
     this.gameon = false;
@@ -18,9 +14,12 @@ function Trivia() {
     this.currentList = [];
     this.currentQuestion = {};
     this.used = [];
-    this.timer = new Timer();
-    this.topscore= 0;
+    this.topscore = 0;
     this.count = 0;
+    this.canAnswer = false;
+    this.answers = [];
+    
+    this.timer = new Timer();
     this.countdown = new Timer();
 
     this.categories = fs.readdirSync(triviaset.path);
@@ -32,118 +31,127 @@ function Trivia() {
         bot.sendMessage(msg, `Trivia categories available are:\n\`\`\`${catTxt}\`\`\``);
     };
 
-    this.start = (bot ,msg, suffix) => {
+    this.init = (bot ,msg, suffix) => {
+        if (suffix === 'stop' && this.gameon === true) {this.end(bot, msg); return;}
         if (suffix === 'skip') {
             if (this.gameon === false) {return;}
-            else {this.loop(bot, msg);}
+            else {
+                this.loop(bot, msg);
+            }
         }
         else if (this.gameon === true) {bot.sendMessage(msg,"There is already a trivia session in place!"); }
-        else if (!suffix || suffix === 'help') {return;}
-        else if (!suffix || suffix === 'list') {t.list(bot, msg);}
-        else if (t.categories.indexOf(suffix+".json") > -1) {this.begin(bot, msg, suffix);}
+        else if (!suffix || suffix === 'list') {this.list(bot, msg);}
+        else if (this.categories.indexOf(suffix+".json") > -1) {this.begin(bot, msg, suffix);}
         else {bot.sendMessage(msg, `No list with the name ${suffix}`); }
     }
 
     this.loadlist = (bot, msg, suffix) => {
-        t.currentList = fs.readJsonSync(`${triviaset.path}/${suffix}.json`);
-        console.log(`${suffix}.json loaded!`);
+        this.currentList = fs.readJsonSync(`${triviaset.path}/${suffix}.json`);
+        console.log(`${suffix} loaded!`);
     };
 
     this.loadQuestion = () => {
-        if (t.currentList === []) {console.log('List not loaded!'); return;}
-        var questionCheck = Math.floor(Math.random() * t.currentList.length);
-        if (t.used.indexOf(questionCheck) <= -1) {
-            t.currentQuestion = t.currentList[questionCheck];
-            t.used.push(questionCheck);
-            console.log('Used Question #s ' + t.used);
-        } else t.loadQuestion();
+        if (this.currentList === []) {console.log('No List Loaded!'); return;}
+        var questionCheck = Math.floor(Math.random() * this.currentList.length);
+        if (this.used.indexOf(questionCheck) <= -1) {
+            this.currentQuestion = this.currentList[questionCheck];
+            this.used.push(questionCheck);
+        } else this.loadQuestion();
     };
 
-};
-
-var triviaSesh = {
-
-
-//TODO YOU ARE HERE
-
-    addPoint : (bot, msg) => {
-        var t = triviaSesh;
+    this.addPoint = (bot, msg) => {
         var winner = msg.author.name;
-        if (t.scorelist[winner] > t.topscore) {t.topscore = t.scorelist[winner]}
-        if (!t.scorelist[winner]) {t.scorelist[winner] = 1;}
-        else t.scorelist[winner] ++;
-        if (t.scorelist[winner] > t.topscore){t.topscore = t.scorelist[winner]}
-        triviaSesh.countdown.start(triviaset.timeout).on('end', function() {
-            t.end(bot, msg);
+        if (this.scorelist[winner] > this.topscore) {this.topscore = this.scorelist[winner]}
+        if (!this.scorelist[winner]) {this.scorelist[winner] = 1;}
+        else this.scorelist[winner] ++;
+        if (this.scorelist[winner] > this.topscore){this.topscore = this.scorelist[winner]}
+        this.countdown.stop();
+        this.countdown.start(triviaset.timeout).on('end', function() {
+            this.end(bot, msg);
         })
-    },
+    };
 
-    round : (bot, msg) => {
+    this.round = (bot, msg) => {
         try {
-            var t = triviaSesh;
-            var trivTimer = t.timer;
-            t.loadQuestion();
-            var answers = t.currentQuestion.answers.map((x)=>x.toLowerCase());
-
             var botAnswers = (bot, msg) => {
+                if (this.canAnswer === false) {return;}
+                this.canAnswer = false;
                 bot.sendMessage(msg, `The answer is **${t.currentQuestion.answers[0]}**!`);
-                trivTimer.stop();
-                trivTimer.start(1).on('end', function(){t.loop(bot,msg);});
+                this.timer.stop();
+                t.loop(bot,msg);
             };
 
-            bot.sendMessage(msg, `**Question #${t.count}**\n${t.currentQuestion["question"]}`);
+            this.timer.stop();
+            this.timer.start(triviaset.delay).on('end', () => {botAnswers(bot, msg)});
+            this.answers = [];
+            this.answers = this.currentQuestion.answers.map((x)=>x.toLowerCase());
+
+            bot.sendMessage(msg, `**Question #${this.count}**\n${this.currentQuestion["question"]}`);
+            this.canAnswer = true;
             bot.on("message", (msg) => {
                 var guess = msg.content.toLowerCase();
-                var num = answers.indexOf(guess);
-                if (num > -1) {
-                    bot.sendMessage(msg, `Right answer ${msg.author.name}! ${t.currentQuestion.answers[num]}!`);
-                    t.addPoint(bot, msg);
-                    trivTimer.stop();
-                    trivTimer.start(1).on('end', function(){t.loop(bot,msg);});
+                var num = this.answers.indexOf(guess);
+                if (num > -1 && this.canAnswer === true) {
+                    if(!this.answers || !this.currentQuestion || this.canAnswer === false || msg.author === bot.user) {return;}
+                    bot.sendMessage(msg, `Right answer ${msg.author.name}! ${this.currentQuestion.answers[num]}!`);
+                    this.canAnswer = false;
+                    this.answers = [];
+                    this.addPoint(bot, msg);
+                    this.timer.stop();
+                    t.loop(bot,msg);
                 }
             });
-            trivTimer.stop();
-            trivTimer.start(triviaset.delay).on('end', () => {botAnswers(bot, msg)});
+        } catch(err) {console.log(err); t.loop(bot, msg)}
+    };
 
-        } catch(err) {console.log(err)}
-    },
+    this.loop = (bot, msg) => {
+        this.currentQuestion = {};
+        this.loadQuestion();
+        this.timer.stop();
+        this.timer.start(.5).on('end', () => {
+            if (this.topscore >= triviaset.maxScore) {this.end(bot, msg); }
+            else {
+                this.count++;
+                this.round(bot, msg);
+            }
+        });
+    };
 
-    loop : (bot, msg) => {
-        var t = triviaSesh;
-        t.currentQuestion = {};
-        if (t.topscore >= triviaset.maxScore) {t.end(bot, msg); }
-        else {
-            t.count++;
-            t.round(bot, msg);
-        }
-    },
-
-    begin : (bot, msg, suffix) => {
-        var t = triviaSesh;
-        t.loadlist(bot, msg, suffix);
-        t.loop(bot ,msg);
-        t.gameon = true;
-        triviaSesh.countdown.start(triviaset.timeout).on('end', function(){
-            t.end(bot, msg);
+    this.begin = (bot, msg, suffix) => {
+        this.loadlist(bot, msg, suffix);
+        this.loop(bot ,msg);
+        this.gameon = true;
+        this.countdown.start(triviaset.timeout).on('end', function(){
+            this.end(bot, msg);
         })
-    },
+    };
 
-    end : (bot, msg) => {
-        var t = triviaSesh;
-        t.timer.stop();
-        var sortable = [];
-        for (var score in t.scorelist) {
-            sortable.push([score, t.scorelist[score]])
+    var reset = () => {
+        this.gameon = false;
+        this.scorelist = {};
+        this.currentList = [];
+        this.currentQuestion = {};
+        this.used = [];
+        this.topscore = 0;
+        this.count = 0;
+        this.canAnswer = false;
+        this.answers = [];
+    };
+
+    this.end = (bot, msg) => {
+        this.countdown.stop();
+        this.timer.stop();
+        let sortable = [];
+        for (var score in this.scorelist) {
+            sortable.push([score, this.scorelist[score]])
         }
         sortable.sort((a,b) => b[1] - a[1]);
         var str = sortable.join('\n').replace(/,/g, ": ");
         bot.sendMessage(msg, `Trivia Ended!\n\__**Scores:**__\n\`\`\`${str ? str : 'No one had points!'}\`\`\``);
-        t.gameon = false;
-        t.scorelist = {};
-        t.currentList = [];
-        t.currentQuestion = {};
-        t.used = [];
-        t.count = 0;
-        triviaSesh.countdown.stop();
-    }
+        reset()
+    };
 };
+
+//util.inherits(Trivia, EventEmitter);
+
+module.exports = exports = new Trivia();

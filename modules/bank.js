@@ -2,7 +2,7 @@
 const fs = require('fs-extra');
 var bankSet = fs.readJsonSync("./settings/bank.json");
 var settings = require("../settings/settings.json"),
-    devMode = settings.devmode, //set to false or remove in production
+    devMode = settings.devmode,
     prefixes = devMode ? settings.dev_prefixes : settings.prefixes;
 
 var bank = {
@@ -78,7 +78,7 @@ var bank = {
         else {bot.reply(msg, `Your balance is ${bank.accounts[id].balance} credits.`)}
     },
 
-    transfer: (bot, msg, suffix, id, name, sufSpl) => {},
+    transfer: (bot, msg, suffix, id, name, sufSpl) => {}, //TODO bank transfers
 
     payday : (bot, msg, suffix, id, name) => {
         try {
@@ -93,7 +93,7 @@ var bank = {
                 bot.reply(msg, `+${bankSet.settings.payout} credits! Your new balance is ${bank.accounts[id].balance} credits.`);
                 bank.reload();
             } else {
-                bot.reply(msg, `Too soon! Please wait another ${check} seconds!`)
+                bot.reply(msg, `Too soon! Please wait another ${bank.settings.payoutTime - check} seconds!`)
             }
         } catch(err) {
             console.log(err);
