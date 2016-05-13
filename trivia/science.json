@@ -1,0 +1,2452 @@
+[
+  {
+    "id":121,
+    "answers":"6",
+    "question":"A typical snowflake has this many sides",
+    "value":100,
+    "airdate":"1984-12-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":127,
+    "answers":"iron",
+    "question":"Common element whose refined forms include pig, cast or wrought",
+    "value":200,
+    "airdate":"1984-12-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":133,
+    "answers":"time",
+    "question":"After length, width \u0026 depth, the 4th dimension",
+    "value":300,
+    "airdate":"1984-12-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":139,
+    "answers":"a parasite",
+    "question":"Type of organism that lives off of another, contributing nothing",
+    "value":400,
+    "airdate":"1984-12-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":145,
+    "answers":"a sonic boom",
+    "question":"Shattering sound that accompanies breaking the sound barrier",
+    "value":500,
+    "airdate":"1984-12-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":301,
+    "answers":"echo",
+    "question":"A sound's repetition by reflection",
+    "value":100,
+    "airdate":"1984-11-29T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":307,
+    "answers":"Charles Darwin",
+    "question":"He originated \"The Origin of Species\"",
+    "value":200,
+    "airdate":"1984-11-29T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":313,
+    "answers":"bacterium",
+    "question":"Singular form of the word \"bacteria\"",
+    "value":300,
+    "airdate":"1984-11-29T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":319,
+    "answers":"an electron",
+    "question":"Negative particle that orbits an atom's nucleus",
+    "value":400,
+    "airdate":"1984-11-29T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":325,
+    "answers":"cells",
+    "question":"Cytology is the study of these biological building blocks",
+    "value":500,
+    "airdate":"1984-11-29T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":1090,
+    "answers":"man",
+    "question":"The only animal that has walked on the moon",
+    "value":100,
+    "airdate":"1986-01-14T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":1096,
+    "answers":"Drake",
+    "question":"Not just \"Ludwig von\" but any male duck",
+    "value":200,
+    "airdate":"1986-01-14T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":1102,
+    "answers":"nursing",
+    "question":"Research shows a mother eating a candy bar before doing this helps a baby fall asleep quicker",
+    "value":300,
+    "airdate":"1986-01-14T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":1108,
+    "answers":"sleet",
+    "question":"Partly frozen rain or rain mixed with snow",
+    "value":400,
+    "airdate":"1986-01-14T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":1114,
+    "answers":"North America",
+    "question":"If our solar system fit into a cup, our galaxy would be the size of this 3rd largest continent",
+    "value":500,
+    "airdate":"1986-01-14T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":1750,
+    "answers":"a cell",
+    "question":"Most living organisms have millions, but a prisoner only has one",
+    "value":100,
+    "airdate":"1985-10-04T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":1756,
+    "answers":"atoms",
+    "question":"A 5th C. B.C. Greek philosopher was 1st to theorize that all matter is made of these",
+    "value":200,
+    "airdate":"1985-10-04T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":1762,
+    "answers":"a scavenger",
+    "question":"Term for creatures like vultures or hermit crabs that eat carcasses \u0026 refuse",
+    "value":300,
+    "airdate":"1985-10-04T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":1768,
+    "answers":"the equator",
+    "question":"Days \u0026 nights are always 12 hours long there",
+    "value":400,
+    "airdate":"1985-10-04T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":1774,
+    "answers":"measurement",
+    "question":"If you're studying mensuration, you're studying this",
+    "value":500,
+    "airdate":"1985-10-04T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":2650,
+    "answers":"light",
+    "question":"Bioluminescence is the emission of this from living organisms",
+    "value":100,
+    "airdate":"1987-02-02T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":2656,
+    "answers":"bionics (or cybernetics)",
+    "question":"Robotics is related to this \"6 million dollar\" field of science",
+    "value":200,
+    "airdate":"1987-02-02T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":2662,
+    "answers":"a quartan",
+    "question":"Of a quartan, joule, or kilocalorie, the one that is not a unit of energy",
+    "value":300,
+    "airdate":"1987-02-02T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":2668,
+    "answers":"copper",
+    "question":"Element represented by the letters \"Cu\"",
+    "value":400,
+    "airdate":"1987-02-02T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":2674,
+    "answers":"Pennsylvania",
+    "question":"",
+    "value":null,
+    "airdate":"1987-02-02T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":2827,
+    "answers":"arteries",
+    "question":"Term for the blood vessels which take the blood from the heart",
+    "value":100,
+    "airdate":"1986-12-31T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":2833,
+    "answers":"Nobel Prizes",
+    "question":"In the scientific categories, Americans have won 142, or 38%, of these awards 1st given in 1901",
+    "value":200,
+    "airdate":"1986-12-31T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":2839,
+    "answers":"the Big Bang",
+    "question":"The Hubble constant tells how fast the universe is expanding since this \"noisy\" event occurred",
+    "value":300,
+    "airdate":"1986-12-31T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":2845,
+    "answers":"3",
+    "question":"Base 10 equivalent to the binary number \"11\"",
+    "value":400,
+    "airdate":"1986-12-31T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":2851,
+    "answers":"wire",
+    "question":"A metal that is \"ductile\" can be pulled into this while cold \u0026 under pressure",
+    "value":500,
+    "airdate":"1986-12-31T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":4117,
+    "answers":"Korea",
+    "question":"",
+    "value":null,
+    "airdate":"1987-11-19T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":4123,
+    "answers":"the United States",
+    "question":"",
+    "value":null,
+    "airdate":"1987-11-19T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":4129,
+    "answers":"a fetus",
+    "question":"After about eight weeks, a human embryo develops into this",
+    "value":300,
+    "airdate":"1987-11-19T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":4135,
+    "answers":"boil",
+    "question":"At about 63,000 ft. at normal body temperature, blood will do this",
+    "value":400,
+    "airdate":"1987-11-19T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":4141,
+    "answers":"the inert gases",
+    "question":"Because they are never found in chemical compounds, the noble gases neon, argon \u0026 helium are called this",
+    "value":500,
+    "airdate":"1987-11-19T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":5669,
+    "answers":"Computer viruses",
+    "question":"In computerese, a \"vaccine\" is a program that seeks out \u0026 destroys these",
+    "value":100,
+    "airdate":"1990-05-09T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":5675,
+    "answers":"Magnetic North Pole",
+    "question":"A compass points toward this north pole",
+    "value":200,
+    "airdate":"1990-05-09T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":5681,
+    "answers":"Algae",
+    "question":"Varieties of these simple plants include red, brown, green \u0026 blue-green",
+    "value":300,
+    "airdate":"1990-05-09T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":5687,
+    "answers":"Ivan Pavlov",
+    "question":"Behaviorists \u0026 dogs drool over the work of this Russian physiologist",
+    "value":400,
+    "airdate":"1990-05-09T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":5693,
+    "answers":"Aluminum",
+    "question":"The most abundant metal on Earth, when it was discovered in 1820 it was worth more than gold",
+    "value":500,
+    "airdate":"1990-05-09T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":7678,
+    "answers":"Horse (Mare)",
+    "question":"The mother of a mule",
+    "value":100,
+    "airdate":"1989-11-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":7684,
+    "answers":"Tailbone",
+    "question":"It's another name for your coccyx",
+    "value":200,
+    "airdate":"1989-11-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":7690,
+    "answers":"Antifreeze",
+    "question":"Union Carbide makes this common car additive that contains ethylene glycol",
+    "value":300,
+    "airdate":"1989-11-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":7696,
+    "answers":"Millibar",
+    "question":"This unit of measure in weather is abbreviated mb",
+    "value":400,
+    "airdate":"1989-11-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":7702,
+    "answers":"Pierre Curie",
+    "question":"Frenchman who discovered the Piezoelectric Effect, that certain crystals when stressed make electricity",
+    "value":500,
+    "airdate":"1989-11-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":8518,
+    "answers":"Spectrum",
+    "question":"When light is passed thru a prism, it produces this spread of colors",
+    "value":100,
+    "airdate":"1991-01-25T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":8524,
+    "answers":"Organic Chemistry",
+    "question":"It's the branch of chemistry that deals with carbon compounds",
+    "value":200,
+    "airdate":"1991-01-25T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":8530,
+    "answers":"Prime Meridian",
+    "question":"All lines of longitude are measured east or west of this line",
+    "value":300,
+    "airdate":"1991-01-25T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":8536,
+    "answers":"Ursa Major",
+    "question":"The Big Dipper is part of this constellation",
+    "value":400,
+    "airdate":"1991-01-25T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":8542,
+    "answers":"Pitchblende",
+    "question":"The most important source of uranium \u0026 radium is this mineral ore",
+    "value":500,
+    "airdate":"1991-01-25T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":8548,
+    "answers":"Polaroid Camera",
+    "question":"Invented by Edwin Land, it was the first instant camera",
+    "value":100,
+    "airdate":"1991-01-17T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":8554,
+    "answers":"Hydrogen",
+    "question":"When Henry Cavendish discovered this lightest-known element, he called it inflammable air",
+    "value":200,
+    "airdate":"1991-01-17T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":8560,
+    "answers":"Leaning Tower of Pisa",
+    "question":"Galileo is said to have done gravity experiments by dropping weights from this tower",
+    "value":300,
+    "airdate":"1991-01-17T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":8566,
+    "answers":"Compass",
+    "question":"In ancient times, lodestone was used as a form of this instrument",
+    "value":400,
+    "airdate":"1991-01-17T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":8572,
+    "answers":"Electron",
+    "question":"A positive ion is formed when an atom loses one or more of these",
+    "value":500,
+    "airdate":"1991-01-17T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":9085,
+    "answers":"smell",
+    "question":"Psychologists refer to this sense as olfaction",
+    "value":100,
+    "airdate":"1992-05-22T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":9091,
+    "answers":"the day",
+    "question":"The length of this on Jupiter is less than 10 hours",
+    "value":200,
+    "airdate":"1992-05-22T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":9097,
+    "answers":"pollen",
+    "question":"Palynology seeks knowledge about past plant distribution by studying grains of this",
+    "value":300,
+    "airdate":"1992-05-22T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":9103,
+    "answers":"a molecule",
+    "question":"Consisting of 3 atoms, water is an example of a triatomic one of these units",
+    "value":400,
+    "airdate":"1992-05-22T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":9109,
+    "answers":"photons",
+    "question":"American Arthur Compton's work proved the existence of these \"particles\" of light",
+    "value":500,
+    "airdate":"1992-05-22T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":10168,
+    "answers":"hydrogen",
+    "question":"It's the element whose atomic weight is closest to its atomic number",
+    "value":100,
+    "airdate":"1993-06-28T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":10174,
+    "answers":"batteries",
+    "question":"Inventors of these include Georges Leclanche, Gaston Plante \u0026 Alessandro Volta",
+    "value":200,
+    "airdate":"1993-06-28T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":10180,
+    "answers":"the sea",
+    "question":"Life here was the subject of the 1965 book \"World Without Sun\"",
+    "value":300,
+    "airdate":"1993-06-28T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":10186,
+    "answers":"Sputnik",
+    "question":"After 1,400 orbits it fell back to Earth January 4, 1958 \u0026 burned up",
+    "value":400,
+    "airdate":"1993-06-28T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":10192,
+    "answers":"spray cans",
+    "question":"In 1977 the U.S. banned these that used freon as the propellant",
+    "value":500,
+    "airdate":"1993-06-28T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":11615,
+    "answers":"sodium chloride",
+    "question":"Formulated NaCl it's the chemical name for common table salt",
+    "value":100,
+    "airdate":"1994-05-02T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":11621,
+    "answers":"gas",
+    "question":"Of the 3 basic states of matter, only this one, when unconfined, tends to expand indefinitely",
+    "value":200,
+    "airdate":"1994-05-02T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":11627,
+    "answers":"half-life",
+    "question":"Term for the time it takes a radioactive substance to decay to 50% of its original quantity",
+    "value":300,
+    "airdate":"1994-05-02T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":11633,
+    "answers":"genus",
+    "question":"In biological classification this comes between family \u0026 species",
+    "value":400,
+    "airdate":"1994-05-02T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":11639,
+    "answers":"212° Fahrenheit",
+    "question":"On the Fahrenheit scale, the freezing point of water is 32° \u0026 the boiling point is this",
+    "value":500,
+    "airdate":"1994-05-02T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":11765,
+    "answers":"Carbon Dioxide",
+    "question":"In breathing it's the gas you expel to the atmosphere",
+    "value":100,
+    "airdate":"1993-12-03T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":11771,
+    "answers":"glaciers",
+    "question":"Erosion from these created fjords \u0026 drumlins",
+    "value":200,
+    "airdate":"1993-12-03T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":11777,
+    "answers":"Colorblindness",
+    "question":"Scientist John Dalton suffered from the red-green type of this",
+    "value":300,
+    "airdate":"1993-12-03T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":11783,
+    "answers":"Metal",
+    "question":"The surfaces of this type of element can be anodized",
+    "value":400,
+    "airdate":"1993-12-03T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":11789,
+    "answers":"Alfred Nobel",
+    "question":"He discovered that if nitroglycerin was absorbed by an inert substance, it wouldn't explode from shock",
+    "value":500,
+    "airdate":"1993-12-03T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":13595,
+    "answers":"Salt",
+    "question":"It's the more common name for sodium chloride",
+    "value":100,
+    "airdate":"1996-04-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":13601,
+    "answers":"Biennial",
+    "question":"Foxglove is an example of this type of plant that completes its life cycle in 2 years",
+    "value":200,
+    "airdate":"1996-04-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":13607,
+    "answers":"Venus",
+    "question":"After the sun \u0026 moon, this planet is the brightest object in the sky",
+    "value":300,
+    "airdate":"1996-04-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":13613,
+    "answers":"Hydrogen",
+    "question":"The pH in pH scale stands for the \"potential of \" this element",
+    "value":400,
+    "airdate":"1996-04-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":13619,
+    "answers":"Trapezoid",
+    "question":"In geometry it's a quadrilateral with 2 parallel sides; in anatomy, it's the smallest wrist bone",
+    "value":500,
+    "airdate":"1996-04-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14138,
+    "answers":"Glaciers",
+    "question":"Drumlins are elongated, elliptical hills formed at the edges of these moving ice masses",
+    "value":100,
+    "airdate":"1996-01-24T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14144,
+    "answers":"Periodic Table of Elements",
+    "question":"Elements are arranged in order of their atomic numbers on this table",
+    "value":200,
+    "airdate":"1996-01-24T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14150,
+    "answers":"Sulphur",
+    "question":"This yellow element is found in gunpowder \u0026 matches \u0026 is used in vulcanizing rubber",
+    "value":300,
+    "airdate":"1996-01-24T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14156,
+    "answers":"Yogurt",
+    "question":"2 bacteria, Lactobacillus Bulgaricus \u0026 Streptococcus Thermophilus, turn milk into this",
+    "value":400,
+    "airdate":"1996-01-24T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14162,
+    "answers":"Foucault\\'s Pendulum",
+    "question":"Named after its 19th century inventor, this pendulum demonstrates the Earth's rotation",
+    "value":500,
+    "airdate":"1996-01-24T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14228,
+    "answers":"caffeine",
+    "question":"Among alkaloids found in plants, this stimulant is found in coffee or tea",
+    "value":100,
+    "airdate":"1996-01-18T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14234,
+    "answers":"intelligence quotient",
+    "question":"You may not need a high IQ to know IQ stands for this",
+    "value":200,
+    "airdate":"1996-01-18T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14240,
+    "answers":"metamorphosis",
+    "question":"Name for the process a caterpillar goes through to become a moth",
+    "value":300,
+    "airdate":"1996-01-18T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14246,
+    "answers":"streptococci",
+    "question":"When cocci live in pairs, they're called diplococci; in clusters, staphylococci; in chains, this",
+    "value":400,
+    "airdate":"1996-01-18T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14252,
+    "answers":"eon",
+    "question":"Next in length on the scale of geological time: age, epoch, period, era...",
+    "value":null,
+    "airdate":"1996-01-18T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14709,
+    "answers":"Pasteurization",
+    "question":"Mycobacterium tuberculosis is one of the organisms this process kills in milk",
+    "value":100,
+    "airdate":"1995-11-15T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14715,
+    "answers":"Vitamin C",
+    "question":"Like humans, the Red-vented Bulbul bird needs a dietary source of this vitamin, also called ascorbic acid",
+    "value":200,
+    "airdate":"1995-11-15T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14721,
+    "answers":"Gelatin",
+    "question":"Boiling bones \u0026 hides converts the protein collagen to this foodstuff",
+    "value":300,
+    "airdate":"1995-11-15T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14727,
+    "answers":"Fossils",
+    "question":"Horseshoe crabs \u0026 coelacanth fish are considered living ones of these",
+    "value":400,
+    "airdate":"1995-11-15T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14733,
+    "answers":"flavors",
+    "question":"Quarks have six known ones of these, which is far short of Baskin-Robbins",
+    "value":500,
+    "airdate":"1995-11-15T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14887,
+    "answers":"iron",
+    "question":"Ferrovanadium is an alloy of vanadium \u0026 this metal",
+    "value":100,
+    "airdate":"1995-09-27T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14893,
+    "answers":"hooves",
+    "question":"The horny casing of the toes of ungulates is called this",
+    "value":200,
+    "airdate":"1995-09-27T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14899,
+    "answers":"the Hubble telescope",
+    "question":"In 1990 this space telescope provided the first picture of Charon as completely separate from Pluto",
+    "value":300,
+    "airdate":"1995-09-27T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14905,
+    "answers":"Sir Isaac Newton",
+    "question":"He outlines his 3 laws of motion in \"Philosophiae Naturalis Principia Mathematica\"",
+    "value":400,
+    "airdate":"1995-09-27T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":14911,
+    "answers":"melting",
+    "question":"Fusion, the change of a solid to a liquid state, is more commonly called this",
+    "value":500,
+    "airdate":"1995-09-27T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":15005,
+    "answers":"amber",
+    "question":"This fossilized resin from prehistoric pines can preserve an insect forever",
+    "value":100,
+    "airdate":"1997-07-18T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":15011,
+    "answers":"Greenland",
+    "question":"Most icebergs in the north Atlantic come from about 20 glaciers on this island's west coast",
+    "value":200,
+    "airdate":"1997-07-18T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":15017,
+    "answers":"the moon",
+    "question":"Around 1840 chemist John William Draper took the first photograph of this heavenly body",
+    "value":300,
+    "airdate":"1997-07-18T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":15023,
+    "answers":"pollination",
+    "question":"Birds \u0026 bees perform this transfer of gametes from anthers to stigmas",
+    "value":400,
+    "airdate":"1997-07-18T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":15029,
+    "answers":"time",
+    "question":"Einstein said measurements of this depend on whether the observer is moving; it's not absolute",
+    "value":500,
+    "airdate":"1997-07-18T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":15638,
+    "answers":"Brain",
+    "question":"An EEG records the electrical activity of this organ",
+    "value":100,
+    "airdate":"1997-06-19T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":15644,
+    "answers":"Chromosomes",
+    "question":"Human beings normally have 46 of these in most of their cells",
+    "value":200,
+    "airdate":"1997-06-19T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":15650,
+    "answers":"Potassium",
+    "question":"This second-lightest metal, symbol K, is so soft it can be cut with a knife",
+    "value":300,
+    "airdate":"1997-06-19T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":15656,
+    "answers":["Robert Goddard", "goddard"],
+    "question":"He's been called the \"Father of Modern Rocketry\"",
+    "value":400,
+    "airdate":"1997-06-19T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":15662,
+    "answers":"Georg Ohm",
+    "question":"According to his law, resistance in a DC circuit is the ratio of volts to amps",
+    "value":500,
+    "airdate":"1997-06-19T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":16085,
+    "answers":"Ostrich",
+    "question":"The largest cell is the 3-inch diameter yolk of this bird's egg",
+    "value":100,
+    "airdate":"1997-05-29T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":16091,
+    "answers":"Gold",
+    "question":"In Latin this metal is known as aurum",
+    "value":200,
+    "airdate":"1997-05-29T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":16097,
+    "answers":"Isobar",
+    "question":"On a weather chart this line connects places that have the same barometric pressure",
+    "value":300,
+    "airdate":"1997-05-29T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":16103,
+    "answers":"Nevada",
+    "question":"On June 29, 1994 the temperature reached 125 degrees in Laughlin, the highest ever recorded in this state",
+    "value":400,
+    "airdate":"1997-05-29T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":16109,
+    "answers":"Liver",
+    "question":"This organ removes excess glucose from the blood \u0026 stores it as glycogen",
+    "value":500,
+    "airdate":"1997-05-29T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":16868,
+    "answers":"Crust",
+    "question":"The boundary between the mantle \u0026 this layer is called the Mohorovicic Discontinuity",
+    "value":100,
+    "airdate":"1997-04-22T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":16874,
+    "answers":"Fallopian tubes",
+    "question":"These 2 ducts lead from the ovaries to the uterus",
+    "value":200,
+    "airdate":"1997-04-22T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":16880,
+    "answers":"Neoprene",
+    "question":"In the 1920s, Julius Nieuwland polymerized acetylene, added chlorine atoms \u0026 created this synthetic rubber",
+    "value":300,
+    "airdate":"1997-04-22T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":16886,
+    "answers":"Galileo",
+    "question":"On July 10, 1996 scientists released close-up photos of Ganymede taken by this space probe",
+    "value":400,
+    "airdate":"1997-04-22T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":16892,
+    "answers":"Comet",
+    "question":"In 1993 Eugene \u0026 Carolyn Shoemaker \u0026 David Levy discovered a highly fragmented one of these",
+    "value":500,
+    "airdate":"1997-04-22T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":17408,
+    "answers":"Xenon",
+    "question":"This gas, symbol Xe, is used in stroboscopes \u0026 high-speed camera flashes",
+    "value":100,
+    "airdate":"1997-03-26T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":17414,
+    "answers":"Fructose",
+    "question":"Nearly twice as sweet as sucrose, this fruit sugar is the main sweetener in honey",
+    "value":200,
+    "airdate":"1997-03-26T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":17420,
+    "answers":"Atoll",
+    "question":"An archipelago is a group of islands \u0026 this is a ring of coral islands like Bikini in the Pacific",
+    "value":300,
+    "airdate":"1997-03-26T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":17426,
+    "answers":"Smallpox",
+    "question":"Developed by Edward Jenner, the first true vaccine was designed to protect against this disease",
+    "value":400,
+    "airdate":"1997-03-26T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":17432,
+    "answers":["Tropic of Cancer \u0026 Tropic of Capricorn", "tropic of cancer and tropic of capricorn"],
+    "question":"They're the 2 lines of latitude lying 23 1/2 degrees north \u0026 south of the Equator",
+    "value":500,
+    "airdate":"1997-03-26T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":17439,
+    "answers":"Pluto",
+    "question":"This ninth planet's unusual orbit sometimes brings it closer to the sun than the eighth planet",
+    "value":100,
+    "airdate":"1997-03-25T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":17445,
+    "answers":"Relative humidity",
+    "question":"It's the ratio of the amount of water vapor in the air to the amount the air can hold at that temperature",
+    "value":200,
+    "airdate":"1997-03-25T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":17451,
+    "answers":"Dies",
+    "question":"A parasitoid differs from a parasite in that this eventually happens to its host",
+    "value":300,
+    "airdate":"1997-03-25T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":17457,
+    "answers":"Gravity",
+    "question":"The acceleration of falling objects varies from place to place because of variations in this force",
+    "value":400,
+    "airdate":"1997-03-25T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":17463,
+    "answers":"Resistance",
+    "question":"It's the property of a body that opposes an electric current moving through it",
+    "value":500,
+    "airdate":"1997-03-25T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":17560,
+    "answers":"Gills",
+    "question":"These respiratory organs of aquatic animals occur in oysters \u0026 some insect larvae as well as in fish",
+    "value":100,
+    "airdate":"1997-03-19T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":17566,
+    "answers":"Eye",
+    "question":"Used to control glaucoma, a trabeculectomy is a procedure that reduces pressure in this organ",
+    "value":200,
+    "airdate":"1997-03-19T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":17572,
+    "answers":"Sunspots",
+    "question":"The number of these dark patches visible on the sun's surface varies from a few to several hundred",
+    "value":300,
+    "airdate":"1997-03-19T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":17578,
+    "answers":"Saturn",
+    "question":"A phrase used to remember this planet's main moons is \"Met Dr. Thip\"; Titan is the second T",
+    "value":400,
+    "airdate":"1997-03-19T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":17584,
+    "answers":"Ibuprofen",
+    "question":"This drug marketed as Motrin was patented in Great Britain in 1964",
+    "value":500,
+    "airdate":"1997-03-19T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":18335,
+    "answers":"Iron",
+    "question":"Magnetism occurs most strongly in 3 elements: nickel, cobalt \u0026 this",
+    "value":100,
+    "airdate":"1997-02-06T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":18341,
+    "answers":"Cell",
+    "question":"In 1665 Robert Hooke described \u0026 named this structural unit; bacteria have only one",
+    "value":200,
+    "airdate":"1997-02-06T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":18347,
+    "answers":"Steam",
+    "question":"In 1698 Thomas Savery designed the first practical engine to run on this power",
+    "value":300,
+    "airdate":"1997-02-06T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":18353,
+    "answers":"Globulins",
+    "question":"This blood protein now comes in alpha, beta \u0026 gamma types",
+    "value":400,
+    "airdate":"1997-02-06T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":18359,
+    "answers":"Lever",
+    "question":"Simple machine Archimedes would use to \"move the Earth\" if you gave him a firm spot on which to stand",
+    "value":500,
+    "airdate":"1997-02-06T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":20348,
+    "answers":"hair",
+    "question":"Hirsutism is having more than the normal amount of this",
+    "value":100,
+    "airdate":"1996-10-03T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":20354,
+    "answers":"delta",
+    "question":"This 4th letter of the Greek alphabet is used to describ a high-speed aircraft wing type",
+    "value":200,
+    "airdate":"1996-10-03T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":20360,
+    "answers":"lens",
+    "question":"The focal length is the distance from the center of one of these to the focal point",
+    "value":300,
+    "airdate":"1996-10-03T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":20366,
+    "answers":"Halley\\'s comet",
+    "question":"When astronomers got a close-up look at this object in 1985-86, its nucleus looked like a big potato",
+    "value":400,
+    "airdate":"1996-10-03T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":20372,
+    "answers":"interglacial",
+    "question":"This term refers to the warm periods within ice ages; we're in one of those periods now",
+    "value":500,
+    "airdate":"1996-10-03T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":26618,
+    "answers":"Ovaries",
+    "question":"The Graafian follicles of these glands contain the female reproductive cells",
+    "value":100,
+    "airdate":"1997-10-16T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":26630,
+    "answers":"Paella",
+    "question":"",
+    "value":null,
+    "airdate":"1997-10-16T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":1
+  },
+  {
+    "id":26636,
+    "answers":"18",
+    "question":"Two 9-volt batteries in a series circuit produce this many volts of electromotive force",
+    "value":400,
+    "airdate":"1997-10-16T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":26642,
+    "answers":"Inclined plane",
+    "question":"The screw \u0026 the wedge are adaptations of this type of simple machine",
+    "value":500,
+    "airdate":"1997-10-16T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":27278,
+    "answers":"Chlorophyll",
+    "question":"This green plant pigment is also found in algae \u0026 in some bacteria",
+    "value":100,
+    "airdate":"1997-09-16T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":27284,
+    "answers":"Luther Burbank",
+    "question":"In 1875 this plant breeder moved to California using profits earned on his potato",
+    "value":200,
+    "airdate":"1997-09-16T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":27290,
+    "answers":"Ion",
+    "question":"It's defined as an atom or group of atoms that has an electrical charge",
+    "value":300,
+    "airdate":"1997-09-16T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":27296,
+    "answers":"Asteroid",
+    "question":"A 1991 photo of Gaspra taken by the Galileo probe was the first close-up of one of these minor planets",
+    "value":400,
+    "airdate":"1997-09-16T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":27302,
+    "answers":["Linus Pauling", "Pauling"],
+    "question":"In the 1940s this Nobel Prize winner \u0026 vitamin C advocate studied the structure of antibodies",
+    "value":null,
+    "airdate":"1997-09-16T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":33365,
+    "answers":"Sound",
+    "question":"The SO in SONAR stands for this word",
+    "value":100,
+    "airdate":"1998-10-27T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":33371,
+    "answers":"Mir",
+    "question":"This space station turned 10 in February 1996",
+    "value":200,
+    "airdate":"1998-10-27T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":33377,
+    "answers":"Thomas Edison",
+    "question":"In 1882 this inventor opened the Pearl Street Power Station in New York",
+    "value":300,
+    "airdate":"1998-10-27T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":33383,
+    "answers":"Pinion",
+    "question":"In a car's steering system, it's the geared wheel that moves the rack",
+    "value":400,
+    "airdate":"1998-10-27T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":33389,
+    "answers":"Aluminum",
+    "question":"To produce this metal using the Bayer Process, you begin with caustic soda \u0026 bauxite",
+    "value":500,
+    "airdate":"1998-10-27T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":37205,
+    "answers":"digit",
+    "question":"In biology it's a finger; in math, a figure like 1",
+    "value":100,
+    "airdate":"2000-03-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":37211,
+    "answers":"gravity",
+    "question":"A free-falling body accelerates at a rate of about 1 g, g coming from this word",
+    "value":200,
+    "airdate":"2000-03-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":37217,
+    "answers":"eye",
+    "question":"Pre-Y1K scientists figured this organ gave out light; they were, of course, wrong",
+    "value":300,
+    "airdate":"2000-03-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":37223,
+    "answers":"hot air balloons",
+    "question":"These in the skies of Albuquerque on October 3, 1999 were a fine example of Charles' Law in action",
+    "value":400,
+    "airdate":"2000-03-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":37229,
+    "answers":"fungi",
+    "question":"The 5-kingdom system is made up of animals, bacteria, plants, protists \u0026 these",
+    "value":500,
+    "airdate":"2000-03-10T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":52958,
+    "answers":["X-rays", "xray", "x-ray", "xrays"],
+    "question":"These electromagnetic rays used to take pictures of your insides were originally known as Roentgen rays",
+    "value":200,
+    "airdate":"2003-04-28T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":52964,
+    "answers":["Albert Einstein", "Einstein"],
+    "question":"This German-born American physicist won the 1921 Nobel Prize for Physics",
+    "value":400,
+    "airdate":"2003-04-28T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":52970,
+    "answers":"hydrogen",
+    "question":"When combined with oxygen, this lightest chemical element makes water",
+    "value":null,
+    "airdate":"2003-04-28T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":52976,
+    "answers":"Pole",
+    "question":"Also a term for someone from Warsaw, it's one of the 2 strongest points in a magnetic field",
+    "value":800,
+    "airdate":"2003-04-28T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":52982,
+    "answers":"plutonium",
+    "question":"The symbol of this radioactive element is Pu \u0026 it sounds like it's named after Mickey Mouse's dog",
+    "value":1000,
+    "airdate":"2003-04-28T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":53015,
+    "answers":["turtle", "tortoise"],
+    "question":"The leatherback variety of this reptile is one of the few animals that primarily eat jellyfish",
+    "value":200,
+    "airdate":"2003-04-24T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":53021,
+    "answers":"lobotomy",
+    "question":"This \"prefrontal\" medical procedure involves the destruction of sections of the brain's cortex",
+    "value":400,
+    "airdate":"2003-04-24T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":53027,
+    "answers":"vulcanization",
+    "question":"This process of making rubber harder \u0026 more elastic by heating it with sulfur bears the name of a Roman god",
+    "value":600,
+    "airdate":"2003-04-24T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":53033,
+    "answers":["Nicholas Copernicus", "Copernicus"],
+    "question":"His 1543 book \"Concerning the Revolutions of the Celestial Spheres\" started an astronomical revolution",
+    "value":800,
+    "airdate":"2003-04-24T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":53039,
+    "answers":"ionization",
+    "question":"The process by which neutral atoms become electrically charged is called this",
+    "value":1000,
+    "airdate":"2003-04-24T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":55207,
+    "answers":"helium",
+    "question":"The vast majority of this second-lightest gas comes from natural gas fields in the U.S.",
+    "value":200,
+    "airdate":"2003-01-08T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":55213,
+    "answers":"the species",
+    "question":"Sialia mexicana is the scientific name of the western bluebird: Sialia is the genus \u0026 mexicana tells you this",
+    "value":400,
+    "airdate":"2003-01-08T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":55219,
+    "answers":"a lever",
+    "question":"In a first-class type of this, the fulcrum is between the applied force and the load",
+    "value":600,
+    "airdate":"2003-01-08T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":55225,
+    "answers":"a comet",
+    "question":"The tail of this body is formed when ice turns into gas as it gets closer to the sun",
+    "value":800,
+    "airdate":"2003-01-08T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":55231,
+    "answers":"repel",
+    "question":"This 5-letter word is the opposite of attract",
+    "value":1000,
+    "airdate":"2003-01-08T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":56465,
+    "answers":["Albert Einstein", "Einstein"],
+    "question":"His 1905 paper \"On the Electrodynamics of Moving Bodies\" contained his special Theory of Relativity",
+    "value":200,
+    "airdate":"2002-11-08T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":56471,
+    "answers":["Pierre \u0026 Marie Curie","curie", "pierre and marie curie", "marie and pierre curie"],
+    "question":"In 1935 the daughter of this famed pair won a Nobel Prize for the discovery of artificial radioactivity",
+    "value":400,
+    "airdate":"2002-11-08T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":56477,
+    "answers":"CO2",
+    "question":" It's the chemical formula for dry ice",
+    "value":600,
+    "airdate":"2002-11-08T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":56483,
+    "answers":"gravity/the Earth",
+    "question":"The term geotropism refers to the effect that this has on the direction plants grow or bend",
+    "value":800,
+    "airdate":"2002-11-08T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":56489,
+    "answers":"lichens",
+    "question":"In the Arctic, some of these organisms consisting of an alga \u0026 a fungus may be 4,000 years old",
+    "value":1000,
+    "airdate":"2002-11-08T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":66486,
+    "answers":"a hot air balloon",
+    "question":"Cosmic rays were first detected by V. F. Hess during a flight by one of these",
+    "value":200,
+    "airdate":"2005-01-24T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":66492,
+    "answers":"Saturn",
+    "question":"The crepe ring is the transparent C ring in this planet's ring system",
+    "value":400,
+    "airdate":"2005-01-24T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":66498,
+    "answers":"elements",
+    "question":"Albert Ghiorso at Lawrence Berkeley National Lab holds the record for discovering the most of these",
+    "value":600,
+    "airdate":"2005-01-24T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":66504,
+    "answers":"back-up file",
+    "question":"In MS-DOS, the .bak file extension meant the file was this type",
+    "value":800,
+    "airdate":"2005-01-24T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":66510,
+    "answers":"sunshine",
+    "question":"An isohel on a weather map is a line showing connecting places with an equal amount of this",
+    "value":null,
+    "airdate":"2005-01-24T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":72484,
+    "answers":"bronze",
+    "question":"This medal metal is usually an alloy of tin \u0026 copper",
+    "value":200,
+    "airdate":"2006-03-13T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":72490,
+    "answers":"yeast",
+    "question":"In 1883, Carlsberg developed Saccharomyces carlsbergensis, a special strain of this to ferment the sugars in beer",
+    "value":400,
+    "airdate":"2006-03-13T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":72496,
+    "answers":"nitrous oxide (or laughing gas)",
+    "question":"In testing out gases by smelling them (not a good idea) Humphry Davy found in 1800 that this one made him feel giddy",
+    "value":null,
+    "airdate":"2006-03-13T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":72502,
+    "answers":"osteoporosis",
+    "question":"The name of this disorder in which the bones become porous comes from the Greek for \"bone\" \u0026 \"passage\"",
+    "value":800,
+    "airdate":"2006-03-13T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":72508,
+    "answers":"parsec",
+    "question":"In astronomy, this unit of measure is abbreviated pc",
+    "value":1000,
+    "airdate":"2006-03-13T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":76754,
+    "answers":"neurons",
+    "question":"In the nervous system, calcium ions crossing the gap between these cause a release of acetylcholine",
+    "value":400,
+    "airdate":"2007-07-12T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":76760,
+    "answers":"deuterium",
+    "question":" Normally, an ice cube floats; this one, however, sinks right to the bottom because it's made of heavy water, or D2O; the D standing for this isotope",
+    "value":600,
+    "airdate":"2007-07-12T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":76766,
+    "answers":"endoskeleton",
+    "question":"As opposed to what arthropods have, vertebrates have this internal framework",
+    "value":800,
+    "airdate":"2007-07-12T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":76772,
+    "answers":"cantilever bridge",
+    "question":"Though the top book appears to be suspended in air, more than half the weight of the stack rests on the table - the principle is used to build this type of bridge",
+    "value":1000,
+    "airdate":"2007-07-12T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":79384,
+    "answers":"acid rain",
+    "question":"This type of rain forms when nitrogen oxides \u0026 sulfur dioxide react within growing droplets",
+    "value":200,
+    "airdate":"2007-03-12T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":79390,
+    "answers":"south",
+    "question":"Because of the tilt of the Earth's axis both in summer \u0026 winter, solar panels in the United States facing this direction receive the most sun",
+    "value":400,
+    "airdate":"2007-03-12T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":79396,
+    "answers":"ornithology",
+    "question":"This branch of study is for the birds... actually, it's of the birds",
+    "value":600,
+    "airdate":"2007-03-12T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":79402,
+    "answers":"Galileo",
+    "question":"In 1633 the Church condemned him to house arrest for astronomical heresy",
+    "value":800,
+    "airdate":"2007-03-12T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":79408,
+    "answers":"facet",
+    "question":" An insect's compound eye can detect 300 flashes of light per second compared to a human's 50, using thousands of tiny lenses known as these, as in a diamond",
+    "value":1000,
+    "airdate":"2007-03-12T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":81845,
+    "answers":"an acid",
+    "question":"The opposite of a base, it turns blue litmus red",
+    "value":200,
+    "airdate":"2006-11-16T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":81851,
+    "answers":"hepatitis",
+    "question":"Jaundice can be a symptom of this liver disease, type A, B or C",
+    "value":400,
+    "airdate":"2006-11-16T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":81857,
+    "answers":"ribs",
+    "question":"The 10th to 12th of these body parts that form a \"cage\" articulate with single vertebrae",
+    "value":600,
+    "airdate":"2006-11-16T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":81863,
+    "answers":"heart murmur",
+    "question":"Echocardiography can tell you whether this doublespeak heart issue is caused by an abnormal valve",
+    "value":800,
+    "airdate":"2006-11-16T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":81869,
+    "answers":"adrenaline",
+    "question":"Also known as epinephrine, this hormone is secreted in response to stress, like fear or injury",
+    "value":null,
+    "airdate":"2006-11-16T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":83704,
+    "answers":"light",
+    "question":"It's what the \"L\" stands for in \"laser\"",
+    "value":200,
+    "airdate":"2008-07-08T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":83710,
+    "answers":"centigrade",
+    "question":"The Celsius temperature scale is also called this, meaning \"divided into one hundred parts\"",
+    "value":400,
+    "airdate":"2008-07-08T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":83716,
+    "answers":"carbon dioxide",
+    "question":"By mixing baking soda, a chemical base, with the acid in the lime juice, this gas is produced, resulting in a bubbly liquid",
+    "value":600,
+    "airdate":"2008-07-08T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":83722,
+    "answers":"a pulley",
+    "question":"This one of the simple machines is made by using a wheel \u0026 a rope",
+    "value":800,
+    "airdate":"2008-07-08T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":83728,
+    "answers":"homeostasis",
+    "question":"Shock researcher Walter Cannon coined this word for an organism's ability to maintain internal equilibrium",
+    "value":1000,
+    "airdate":"2008-07-08T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":85864,
+    "answers":"gravity",
+    "question":"A ball of clay inside the can is enough to reposition the can's natural center of this, so the can rolls uphill",
+    "value":200,
+    "airdate":"2008-03-28T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":85870,
+    "answers":"hydrogen",
+    "question":"Every second, fusion reactions in the Sun convert about 600 million tons of this element into helium",
+    "value":400,
+    "airdate":"2008-03-28T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":85876,
+    "answers":"vitamin K",
+    "question":"Edward Doisy won a 1943 Nobel Prize for synthesizing this hemorrhage-inhibiting vitamin; isn't that \"special\"?",
+    "value":600,
+    "airdate":"2008-03-28T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":85882,
+    "answers":"metamorphic",
+    "question":"Of the 3 basic rock types, the type that was once one form but has changed to another due to heat \u0026 pressure",
+    "value":800,
+    "airdate":"2008-03-28T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":85888,
+    "answers":"gypsum",
+    "question":"Because it's water-soluble, this form of calcium sulfate is rarely found in sand, but here in New Mexico's Tularosa Basin, there are no rivers to carry it away, so it forms what famed white sand?",
+    "value":1000,
+    "airdate":"2008-03-28T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":88834,
+    "answers":"Einstein",
+    "question":"He was in Shanghai in 1921 when he found out he had won a Nobel Prize for Physics",
+    "value":200,
+    "airdate":"2009-05-29T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":88840,
+    "answers":"gravity",
+    "question":"Isaac Newton published his first mathematical formulation for this fundamental force in 1687",
+    "value":400,
+    "airdate":"2009-05-29T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":88846,
+    "answers":"a muscle",
+    "question":"In 1996 (seems late) researchers announced a new one of these body parts, the spheno-mandibularis",
+    "value":600,
+    "airdate":"2009-05-29T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":88852,
+    "answers":"smallpox",
+    "question":"During an epidemic of this disease in 1796, Edward Jenner discovered the power of vaccines \u0026 used it to save lives",
+    "value":null,
+    "airdate":"2009-05-29T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":88858,
+    "answers":"latent energy",
+    "question":"When boiling water, energy absorbed that escapes as vapor is this type of heat, from Latin latere, \"to hide\"",
+    "value":1000,
+    "airdate":"2009-05-29T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":93097,
+    "answers":"the kidneys",
+    "question":"Each of these organs contains about 1 million nephrons, which filter blood",
+    "value":200,
+    "airdate":"2008-11-12T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":93109,
+    "answers":"chromosomes",
+    "question":"These were first seen in human cells in 1882; the exact number, 46, was determined in 1956",
+    "value":600,
+    "airdate":"2008-11-12T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":93121,
+    "answers":"Linnaeus",
+    "question":"In 1758 this Swedish biologist introduced binomial nomenclature",
+    "value":1000,
+    "airdate":"2008-11-12T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":112296,
+    "answers":"the lens",
+    "question":"This transparent structure behind the iris focuses light entering the eye",
+    "value":200,
+    "airdate":"2012-01-31T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":112302,
+    "answers":"nerves",
+    "question":"Comparing MRI scans of a chimp's brain \u0026 a human's shows that the human's is not merely larger; it also contains vastly more white matter connecting these cells vital to the transmission \u0026 processing of information",
+    "value":400,
+    "airdate":"2012-01-31T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":112308,
+    "answers":"anaerobic",
+    "question":"By definition, this adjective describes certain organisms that can or must live in the absence of oxygen",
+    "value":600,
+    "airdate":"2012-01-31T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":112314,
+    "answers":"atoms",
+    "question":" We're using models of ethanol to show the 2 basic types of molecular models; 1 clarifies the bonds between these particles, while the other shows better what the molecule looks like in actual space",
+    "value":800,
+    "airdate":"2012-01-31T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":112320,
+    "answers":"mononucleosis",
+    "question":"This name of the infectious disease caused by the Epstein-Barr virus comes from words meaning \"one\" \u0026 \"kernel\"",
+    "value":1000,
+    "airdate":"2012-01-31T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":128756,
+    "answers":"zinc",
+    "question":"Oxygen combines with lots of other elements; with this one it makes ZnO, used as an ointment",
+    "value":200,
+    "airdate":"2013-10-04T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":128762,
+    "answers":"reaction",
+    "question":"Similar to reflex, humans' average for this time is roughly 1/4 second \u0026 we're going to test yours... right...now !",
+    "value":400,
+    "airdate":"2013-10-04T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":128768,
+    "answers":"albino",
+    "question":"Lack of camouflage \u0026 sensitivity to UV radiation doom any wild alligators with this condition from a mutation",
+    "value":600,
+    "airdate":"2013-10-04T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":128774,
+    "answers":"gypsum",
+    "question":"A Mars rover found this, hydrated calcium sulfate, indicating not Martian drywallers but Martian water",
+    "value":800,
+    "airdate":"2013-10-04T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":128780,
+    "answers":"compressed air",
+    "question":"Stomp rockets are powered by what's usually called this type of \"air\" that's been squished under greater than normal pressure",
+    "value":1000,
+    "airdate":"2013-10-04T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":null
+  },
+  {
+    "id":135863,
+    "answers":"the lens",
+    "question":"This transparent structure behind the iris focuses light entering the eye",
+    "value":200,
+    "airdate":"2012-01-31T12:00:00.000Z",
+    "category_id":25,
+    "game_id":3817,
+    "invalid_count":null
+  },
+  {
+    "id":135875,
+    "answers":"anaerobic",
+    "question":"By definition, this adjective describes certain organisms that can or must live in the absence of oxygen",
+    "value":600,
+    "airdate":"2012-01-31T12:00:00.000Z",
+    "category_id":25,
+    "game_id":3817,
+    "invalid_count":null
+  },
+  {
+    "id":135887,
+    "answers":"mononucleosis",
+    "question":"This name of the infectious disease caused by the Epstein-Barr virus comes from words meaning \"one\" \u0026 \"kernel\"",
+    "value":1000,
+    "airdate":"2012-01-31T12:00:00.000Z",
+    "category_id":25,
+    "game_id":3817,
+    "invalid_count":null
+  },
+  {
+    "id":152125,
+    "answers":"zinc",
+    "question":"Oxygen combines with lots of other elements; with this one it makes ZnO, used as an ointment",
+    "value":200,
+    "airdate":"2013-10-04T12:00:00.000Z",
+    "category_id":25,
+    "game_id":4320,
+    "invalid_count":null
+  },
+  {
+    "id":152131,
+    "answers":"reaction",
+    "question":"Similar to reflex, humans' average for this time is roughly 1/4 second \u0026 we're going to test yours... right...now !",
+    "value":400,
+    "airdate":"2013-10-04T12:00:00.000Z",
+    "category_id":25,
+    "game_id":4320,
+    "invalid_count":null
+  },
+  {
+    "id":152137,
+    "answers":"albino",
+    "question":"Lack of camouflage \u0026 sensitivity to UV radiation doom any wild alligators with this condition from a mutation",
+    "value":600,
+    "airdate":"2013-10-04T12:00:00.000Z",
+    "category_id":25,
+    "game_id":4320,
+    "invalid_count":null
+  },
+  {
+    "id":152143,
+    "answers":"gypsum",
+    "question":"A Mars rover found this, hydrated calcium sulfate, indicating not Martian drywallers but Martian water",
+    "value":800,
+    "airdate":"2013-10-04T12:00:00.000Z",
+    "category_id":25,
+    "game_id":4320,
+    "invalid_count":null
+  },
+  {
+    "id":152149,
+    "answers":"compressed air",
+    "question":"Stomp rockets are powered by what's usually called this type of \"air\" that's been squished under greater than normal pressure",
+    "value":1000,
+    "airdate":"2013-10-04T12:00:00.000Z",
+    "category_id":25,
+    "game_id":4320,
+    "invalid_count":null
+  },
+  {
+    "id":26624,
+    "answers":"Jupiter",
+    "question":"The sun is 333,000 times as massive as the Earth \u0026 1,047 times as massive as this planet",
+    "value":200,
+    "airdate":"1997-10-16T12:00:00.000Z",
+    "category_id":25,
+    "game_id":null,
+    "invalid_count":34
+  }
+]

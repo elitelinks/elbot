@@ -113,16 +113,17 @@ const bot = new Discord.Client({autoReconnect:true});
 
 
 //Useful Functions
-var getUser = (bot, msg, suffix) => {};
+var getUserName = (bot, msg, suffix) => {};
 
 const cmdInit = (msg) => {
     var sufArr = msg.content.split(' ');
     var cmdTxt = sufArr[0].substr(1);
+    if (settings.alias.hasOwnProperty(cmdTxt)) cmdTxt = settings.alias[cmdTxt];
     sufArr.splice(0, 1);
     var suffix = sufArr.join(' ');
     var id = msg.author.id;
     var name = msg.author.name;
-    return [msg, suffix, id, cmdTxt, sufArr];
+    return [msg, suffix, id, name, cmdTxt, sufArr];
 };
 
 //Message Event Checker
@@ -130,10 +131,10 @@ bot.on("message", (msg) => {
     if(msg.author === bot.user || msg.channel.isPrivate) {return;}
     else if (prefixes.indexOf((msg.content.substr(0, 1))) > -1 ) {
         let args = cmdInit(msg);
-        let cmdTxt = args[3];
+        let cmdTxt = args[4];
         if (!commands[cmdTxt]) {return;}
-        //if (settings.alias.hasOwnProperty(cmdTxt)) cmdTxt = settings.alias[cmdTxt]; TODO ALIASES
-        commands[args[3]].process(bot, ...args);
+        if (settings.alias.hasOwnProperty(cmdTxt)) cmdTxt = settings.alias[cmdTxt];
+        commands[cmdTxt].process(bot, ...args);
     }
     else return;
 });

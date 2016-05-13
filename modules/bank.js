@@ -11,8 +11,7 @@ var bank = {
     commands : ['balance', 'register', 'payday'],
     settings : bankSet.settings,
 
-    check : (bot, msg) => {
-        var id = msg.author.id;
+    check : (bot, msg, suffix, id) => {
         if (!bank.accounts[id]) {
             bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`);
             return false;
@@ -20,12 +19,11 @@ var bank = {
     },
 
     //TODO add list commands funct.
-    init : (bot, msg, suffix) => {
-        var id = msg.author.id;
-        var name = msg.author.name;
-        var sufSpl = suffix.split(' ');
-        if (bank.commands.indexOf(sufSpl[0]) > -1) {
-            bank[sufSpl[0]](bot, msg, suffix, id, name, sufSpl);
+    //TODO add transfer
+    //TODO add leaderboard
+    init : (bot, msg, suffix, id, name, cmdTxt, sufArr) => {
+        if (bank.commands.indexOf(sufArr[0]) > -1) {
+            bank[sufArr[0]](bot, suffix, id, name, cmdTxt, sufArr);
         } else {
             bot.sendMessage(msg, `Unrecognized bank command. \`${prefixes[0]}bank list\` for a list of commands.`)
         }
@@ -53,7 +51,7 @@ var bank = {
         } catch(err) {console.log(err);}
     },
 
-    register : (bot, msg, suffix, id, name, sufSpl) => {
+    register : (bot, suffix, id, name, cmdTxt, sufArr) => {
         if (!bank.accounts[id]) {
             try {
                 bank.accounts[id] = {};
@@ -70,17 +68,17 @@ var bank = {
         }
     },
 
-    balance : (bot, msg, suffix, id, name, sufSpl) => {
-        var person = sufSpl[1];
+    balance : (bot, msg, suffix, id, name, sufArr) => {
+        var person = sufArr[1];
         var search = bot.users.get('name', person);
         if (!bank.accounts[id]) {bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`)}
         else if (search) {bot.reply(msg, `The balance of **${person}** is ${bank.accounts[search.id].balance} credits.`)}
         else {bot.reply(msg, `Your balance is ${bank.accounts[id].balance} credits.`)}
     },
 
-    transfer: (bot, msg, suffix, id, name, sufSpl) => {}, //TODO bank transfers
+    transfer: (bot, msg, suffix, id, name, cmdTxt, sufArr) => {}, //TODO bank transfers
 
-    payday : (bot, msg, suffix, id, name) => {
+    payday : (bot, msg, suffix, id, name, cmdTxt, sufArr) => {
         try {
             if (!bank.accounts[id]) {
                 bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`);
@@ -90,7 +88,7 @@ var bank = {
             if (check >= bank.settings.payoutTime) {
                 bank.accounts[id].balance += bankSet.settings.payout;
                 bank.accounts[id].wait = Math.round(new Date() / 1000);
-                bot.reply(msg, `+${bankSet.settings.payout} credits! Your new balance is ${bank.accounts[id].balance} credits.`);
+                bot.reply(msg, `**+${bankSet.settings.payout}** credits! Your new balance is **[${bank.accounts[id].balance} credits]**`);
                 bank.reload();
             } else {
                 bot.reply(msg, `Too soon! Please wait another ${bank.settings.payoutTime - check} seconds!`)

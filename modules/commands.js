@@ -5,8 +5,8 @@ const fs = require('fs-extra');
 const google = require("google");
 const Poker = require("./poker");
 const slot = require("./slots");
-const bank = require("./bank");
-const trivia = require("./trivia");
+var bank = require("./bank");
+var trivia = require("./trivia");
 var startTime = new Date();
 
 var settings = require("../settings/settings.json"),
@@ -18,7 +18,7 @@ var bankSet = fs.readJsonSync("./settings/bank.json");
 
 function Commands() {
 
-    this.google = {
+    this.goog = {
         'description'   : 'Search Google and get the first result.',
         'alias'         : ["goog", "g"],
         'usage'         : `\`${prefixes[0]}google [search term]\``,
@@ -26,7 +26,7 @@ function Commands() {
             let search = "google";
             if(suffix){search = suffix;}
             google(search, (err, response) => {
-                if(err || !response || !response.links || response.links.length < 1){bot.sendMessage(msg, `**Your search resulted in an error. Please forgive me ** ${msg.author.username}`, (error, sentMessage) => {bot.deleteMessage(sentMessage, {"wait": 5000})});}
+                if(err || !response || !response.links || response.links.length < 1){bot.sendMessage(msg, `**Your search resulted in an error.** ${msg.author.username}`, (error, sentMessage) => {bot.deleteMessage(sentMessage, {"wait": 5000})});}
                 else {
                     if(response.links[0].link === null){
                         for(var i = 1; i < response.links.length; i++){
@@ -174,8 +174,8 @@ function Commands() {
 
     this.eight =  {
         'description'   : 'Ask a question, receive an answer from the 8 ball.',
-        'alias'         : ["eight"],
-        'usage'         : `\`${prefixes[0]}8 [question]\``,
+        'alias'         : ["8"],
+        'usage'         : `\`${prefixes[0]}eight [question]\``,
         'process'       : (bot, msg) => {
             var ball = [
                 "Signs point to yes.",
@@ -227,20 +227,17 @@ function Commands() {
             var randomstring = require('randomstring');
             var filename = (startTime.getMonth()+1).toString() + startTime.getDate().toString() + startTime.getFullYear().toString() + randomstring.generate(5);
 
-            try {
-                var orlyOpts = suffix.split(',');
-                var title = encodeURIComponent(orlyOpts[0].trim());
-                var author = orlyOpts[1] ? encodeURIComponent(orlyOpts[1].trim()) : "%20";
-                var topTxt = orlyOpts[2] ? encodeURIComponent(orlyOpts[2].trim()) : "%20";
-                var guideTxt = orlyOpts[3] ? encodeURIComponent(orlyOpts[3].trim()) : "The%20Definitive%20Guide";
-                var imgCode = Math.floor(Math.random() * 40) + 1;
-                var colorCode = Math.floor(Math.random() * 16);
-                request.get(`https://orly-appstore.herokuapp.com/generate?title=${title}&top_text=${topTxt}&author=${author}&image_code=${imgCode}&theme=${colorCode}&guide_text=${guideTxt}&guide_text_placement=bottom_right`)
-                    .pipe(fs.createWriteStream(`./cache/${filename}.png`))
-                    .on('close', () => {bot.sendFile(msg, `./cache/${filename}.png`)});
-            } catch(err) {
-                console.log(err);
-            }
+            var orlyOpts = suffix.split(',');
+            var title = encodeURIComponent(orlyOpts[0].trim());
+            var author = orlyOpts[1] ? encodeURIComponent(orlyOpts[1].trim()) : "%20";
+            var topTxt = orlyOpts[2] ? encodeURIComponent(orlyOpts[2].trim()) : "%20";
+            var guideTxt = orlyOpts[3] ? encodeURIComponent(orlyOpts[3].trim()) : "The%20Definitive%20Guide";
+            var imgCode = Math.floor(Math.random() * 40) + 1;
+            var colorCode = Math.floor(Math.random() * 16);
+            request.get(`https://orly-appstore.herokuapp.com/generate?title=${title}&top_text=${topTxt}&author=${author}&image_code=${imgCode}&theme=${colorCode}&guide_text=${guideTxt}&guide_text_placement=bottom_right`)
+                .on('error', function(err) {console.log(err)})
+                .pipe(fs.createWriteStream(`./cache/${filename}.png`))
+                .on('close', () => {bot.sendFile(msg, `./cache/${filename}.png`)});
         },
         'admin'         : false
     };
@@ -249,7 +246,7 @@ function Commands() {
         'description'   : 'Start a trivia session. (still in alpha, needs testing)',
         'alias'         : ["none"],
         'usage'         : `\`${prefixes[0]}trivia [listname] or [list] to get a list of categories\``,
-        'process'       : (bot, msg, suffix) => {trivia.init(bot, msg, suffix);},
+        'process'       : (bot, msg, suffix, id, name, cmdTxt, sufArr) => {trivia.init(bot, msg, suffix, id, name, cmdTxt, sufArr);},
         'admin'         : false
     };
 
@@ -261,9 +258,17 @@ function Commands() {
         'admin' : false
     };
 
+    this.payday = {
+        'description' : `Get paid. Use \`${prefixes[0]}bank register\` to start an account!`,
+        'alias' : ['$'],
+        'usage' : `\`${prefixes[0]}payday.\``,
+        'process' : (bot, msg, suffix, id, name, cmdTxt, sufArr) => bank.payday(bot, msg, suffix, id, name, cmdTxt, sufArr),
+        'admin' : false
+    };
+
     this.help =  {
         'description'   : 'Get help for a command.',
-        'alias'         : ["none"],
+        'alias'         : ["h"],
         'usage'         : `\`${prefixes[0]}help [command]\``,
         'admin' : false,
         process : (bot, msg, suffix) => {

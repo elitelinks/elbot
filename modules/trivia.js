@@ -76,15 +76,17 @@ function Trivia() {
             var botAnswers = (bot, msg) => {
                 if (this.canAnswer === false) {return;}
                 this.canAnswer = false;
-                bot.sendMessage(msg, `The answer is **${t.currentQuestion.answers[0]}**!`);
+                bot.sendMessage(msg, `The answer is **${(typeof this.currentQuestion.answers === 'string') ?
+                    t.currentQuestion.answers : t.currentQuestion.answers[0]}**!`);
                 this.timer.stop();
                 t.loop(bot,msg);
             };
 
             this.timer.stop();
             this.timer.start(triviaset.delay).on('end', () => {botAnswers(bot, msg)});
-            this.answers = [];
-            this.answers = this.currentQuestion.answers.map((x)=>x.toLowerCase());
+            this.answers = '';
+            this.answers = (typeof this.currentQuestion.answers === 'string') ?
+                [this.currentQuestion.answers.toLowerCase()] : this.currentQuestion.answers.map((x)=>x.toLowerCase());
 
             bot.sendMessage(msg, `**Question #${this.count}**\n${this.currentQuestion["question"]}`);
             this.canAnswer = true;
@@ -93,7 +95,7 @@ function Trivia() {
                 var num = this.answers.indexOf(guess);
                 if (num > -1 && this.canAnswer === true) {
                     if(!this.answers || !this.currentQuestion || this.canAnswer === false || msg.author === bot.user) {return;}
-                    bot.sendMessage(msg, `Right answer ${msg.author.name}! ${this.currentQuestion.answers[num]}!`);
+                    bot.sendMessage(msg, `Right answer ${msg.author.name}! ${[this.currentQuestion.answers][num]}!`);
                     this.canAnswer = false;
                     this.answers = [];
                     this.addPoint(bot, msg);
