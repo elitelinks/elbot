@@ -2,10 +2,10 @@
 Bot for discord chatroom made with discord.js
 
 ##Features
-*Poker
-*Slots
-*Trivia
-*Various Searches & Fun Stuff
+* Poker
+* Slots
+* Trivia
+* Various Searches & Fun Stuff
 
 ##Installation
 Requires Node.js
