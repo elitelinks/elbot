@@ -5,7 +5,7 @@ var settings = require("../settings/settings.json");
 var bank = require("../modules/bank");
 var bankSet = fs.readJsonSync("./settings/bank.json");
 
-function slot(bot, msg, suffix) {
+exports.slot= (bot, msg, suffix) => {
     var id = msg.author.id;
     if (bank.check(bot, msg) === false) {return;}
     if (msg.channel.id !== settings.gamesroom) {return;}
@@ -82,5 +82,3 @@ function slot(bot, msg, suffix) {
     }
     bank.reload();
 };
-
-module.exports = exports = slot;

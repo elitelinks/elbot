@@ -3,9 +3,9 @@ var defaults = {
     "decks" : 1,
     "jokers" : 0
 }
-function Deck(settings=defaults) {
+function Deck(settings) {
     this.cards = [];
-    var settings = settings;
+    var settings = settings || defaults;
     this.filldeck = () => {
         var decksNeeded = settings.decks || defaults.decks
         var jokersNeeded = settings.jokers || defaults.jokers

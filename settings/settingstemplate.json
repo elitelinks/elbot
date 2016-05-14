@@ -22,9 +22,25 @@
   ],
   "trivia" : {
     "botPlays" : false,
-    "delay" : 15,
+    "delay" : 20,
     "maxScore" : 5,
     "timeout" : 60,
     "path" : "./trivia"
+  },
+  "alias" : {
+    "goog": "google",
+    "g" : "google",
+    "weath" : "weather",
+    "syl" : "syllables",
+    "def" : "define",
+    "definition" : "define",
+    "8" : "eight",
+    "$" : "payday",
+    "h" : "help",
+    "p" : "poker",
+    "slots" : "slot",
+    "lot" : "slot",
+    "cache" : "emptycache",
+    "eval" : "ev"
   }
 }

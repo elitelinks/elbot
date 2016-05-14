@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 const Timer = require('timer.js');
 const util = require('util');
 //const EventEmitter = require('events');
-
+//TODO fix trivia w/ event emitter
 var settings = require("../settings/settings.json"),
     triviaset = settings.trivia;
 

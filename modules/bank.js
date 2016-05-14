@@ -24,7 +24,6 @@ function Bank() {
     };
 
     //TODO add list commands funct.
-    //TODO add transfer
     //TODO add leaderboard
     this.init = (bot, msg) => {
         fn.getOpt(msg, b);

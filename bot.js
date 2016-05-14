@@ -9,7 +9,7 @@ const http = require('http');
 const request = require("request");
 const fs = require('fs-extra');
 const google = require("google");
-const Poker = require("./modules/poker");
+var Poker = require("./modules/poker");
 const slot = require("./modules/slots");
 const bank = require('./modules/bank');
 const fn = require('./modules/functions');
@@ -130,16 +130,14 @@ bot.on("message", (msg) => {
         commands[cmdTxt].process(bot, msg);
     }
     else return;
+}).on('error', (err) => {
+    console.log('whoops! there was an error', err);
 });
 
 //Ready
 bot.on("ready", ()=>{
     bot.setPlayingGame(`${devMode ? 'in development' : 'v0.0.6'}`);
     console.log(`EL bot${devMode ? '(DEV)' : ''} is ready`);
-});
-
-bot.on('error', (err) => {
-    console.log('whoops! there was an error', err);
 });
 
 //On Disconnected

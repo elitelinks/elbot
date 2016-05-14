@@ -1,5 +1,6 @@
 "use strict"
 process.setMaxListeners(0);
+
 var fs = require('fs-extra');
 var Deck = require("./deck");
 var ps = require('pokersolver');
@@ -9,7 +10,7 @@ var Game = ps.Game;
 var bank = require('./bank');
 var Timer = require("timer.js");
 var settings = require("../settings/settings.json"),
-    devMode = settings.devmode, 
+    devMode = settings.devmode,
     prefixes = devMode ? settings.dev_prefixes : settings.prefixes;
 var path = require('path');
 var appDir = path.dirname(require.main.filename);
@@ -18,9 +19,7 @@ var bankSet = fs.readJsonSync(file);
 
 function Poker(bot, msg) {
     var p = this;
-    fn.getOpt(msg, p);
-    this.msg = msg;
-    let bid = Math.floor(parseInt(this.suffix.toString().replace(/[\D]g/, ''), 10));
+    var bid = 0;
     this.playerhand = [];
     this.deck = new Deck({'jokers' : 2});
     this.round = 0;
@@ -36,6 +35,24 @@ function Poker(bot, msg) {
         'lowestQualified': ['Jc', 'Jd', '4h', '3s', '2c'],
         "noKickers": true
     };
+
+    this.showPayout = () => {
+        bot.sendMessage(msg, '```' +
+            '| Hand                   | Payout |\n' +
+            '|------------------------|--------|\n' +
+            '| Natural Royal Flush    | 800:1  |\n' +
+            '| Five of a Kind         | 200:1  |\n' +
+            '| Wild Royal Flush       | 100:1  |\n' +
+            '| Straight Flush         | 50:1   |\n' +
+            '| Four of a Kind         | 20:1   |\n' +
+            '| Full House             | 7:1    |\n' +
+            '| Flush                  | 5:1    |\n' +
+            '| Straight               | 3:1    |\n' +
+            '| Three of a Kind        | 2:1    |\n' +
+            '| Two Pair               | 1:1    |\n' +
+            '| Pair (Jacks or Better) | 1:1    |' + '```');
+        }
+
     var elPoker = new Game();
     elPoker.descr = 'elitelinks';
     elPoker.cardsInHand = elRules['cardsInHand'];
@@ -46,19 +63,24 @@ function Poker(bot, msg) {
     elPoker.sfQualify = elRules['sfQualify'];
     elPoker.lowestQualified = elRules['lowestQualified'];
     elPoker.noKickers = elRules['noKickers'];
+
     this.init = () => {
-        if (msg.channel.id !== settings.gamesroom) {return;}
-        if (this.id !== msg.author.id) {return};
-        if (bank.check(bot, msg) === false || !this.suffix  || bank.accounts[this.id].playingpoker === true) {return};
+        fn.getOpt(msg, p);
+        bid = Math.floor(parseInt(this.suffix.toString().replace(/[\D]g/, ''), 10));;
+        if (this.suffix === 'payout' || this.suffix === 'payouts') {this.showPayout(); return}
+        if (msg.channel.id !== settings.gamesroom) {return}
+        if (this.id !== msg.author.id) {return}
+        if (bank.check(bot, msg) === false || !this.suffix  || bank.accounts[this.id].playingpoker === true) {return}
         if (bank.accounts[this.id].balance < bid) {bot.reply(msg, `Not enough credits dummy!`); return;}
         if (!bid || bid < bankSet.settings.minBet || bid > bankSet.settings.maxBet || isNaN(bid)) {
-            bot.reply(msg, `You must place a bid between ${bankSet.settings.minBet} and ${bankSet.settings.maxBet}`); return;
+            bot.reply(msg, `You must place a bid between ${bankSet.settings.minBet} and ${bankSet.settings.maxBet}`); {return}
         }
         this.deck.filldeck();
         this.deck.shuffle();
-        bank.subtract(this.id, bid)
+        bank.subtract(this.id, bid);
         this.dealHand();
-    }
+    };
+
     this.dealHand = () => {
         this.deck.shuffle();
         bank.accounts[this.id].playingpoker = true;
@@ -69,22 +91,22 @@ function Poker(bot, msg) {
         let replyHand = this.playerhand.map((x)=>{
             if (x === "Or") {return "J:black_joker:"}
             var o = x.split('');
-            if (o[1] === "d") {o[1] = ":diamonds:"};
-            if (o[1] === "s") {o[1] = ":spades:"};
-            if (o[1] === "h") {o[1] = ":hearts:"};
-            if (o[1] === "c") {o[1] = ":clubs:"};
-/*          if (o[0] === "T") {o[0] = ":ten:"};
-            if (o[0] === "9") {o[0] = ":nine:"};
-            if (o[0] === "8") {o[0] = ":eight:"};
-            if (o[0] === "7") {o[0] = ":seven:"};
-            if (o[0] === "6") {o[0] = ":six:"};
-            if (o[0] === "5") {o[0] = ":five:"};
-            if (o[0] === "4") {o[0] = ":four:"};
-            if (o[0] === "3") {o[0] = ":three:"};
-            if (o[0] === "2") {o[0] = ":two:"};  uncomment for emoji numbers*/
+                if (o[1] === "d") {o[1] = ":diamonds:"}
+                if (o[1] === "s") {o[1] = ":spades:"}
+                if (o[1] === "h") {o[1] = ":hearts:"}
+                if (o[1] === "c") {o[1] = ":clubs:"}
+                // if (o[0] === "T") {o[0] = ":ten:"}
+                // if (o[0] === "9") {o[0] = ":nine:"}
+                // if (o[0] === "8") {o[0] = ":eight:"}
+                // if (o[0] === "7") {o[0] = ":seven:"}
+                // if (o[0] === "6") {o[0] = ":six:"}
+                // if (o[0] === "5") {o[0] = ":five:"}
+                // if (o[0] === "4") {o[0] = ":four:"}
+                // if (o[0] === "3") {o[0] = ":three:"}
+                // if (o[0] === "2") {o[0] = ":two:"}
             return o.join('');
         });
-        replyHand = `[**${replyHand.join('**]     [**')}**]\n`
+        replyHand = `[**${replyHand.join('**]     [**')}**]\n`;
         this.round++;
         bot.reply(msg, this.round >= 2 ? `\nFinal Hand!\n${replyHand}` : 
             `\nFirst hand!\n${replyHand}\nYou have **60 seconds** to reply.\n` +
@@ -94,22 +116,22 @@ function Poker(bot, msg) {
         );
         this.timer.stop();
         bot.on("message", (msg) => {
-            if (this.id !== msg.author.id || msg.author.bot || msg.channel.isPrivate || this.round >= 2) {return};
+            if (this.id !== msg.author.id || msg.author.bot || msg.channel.isPrivate || this.round >= 2) {return}
             let cmdTxt = msg.content.split(' ')[0].substr(1);
             let prefix = (msg.content.substr(0, 1));
             if (prefixes.indexOf(prefix) > -1 ) {
                 var holdOpt = cmdTxt.split('');
                 if (holdOpt.length !== 5 || (cmdTxt.toLowerCase() === 'poker' && this.round === 1)) {return;}
                 let q = [];
-                if (holdOpt[0].toLowerCase() === "h" || holdOpt[0].toLowerCase() === "a") {q.push(this.playerhand[0])};
-                if (holdOpt[1].toLowerCase() === "h" || holdOpt[1].toLowerCase() === "a") {q.push(this.playerhand[1])};
-                if (holdOpt[2].toLowerCase() === "h" || holdOpt[2].toLowerCase() === "a") {q.push(this.playerhand[2])};
-                if (holdOpt[3].toLowerCase() === "h" || holdOpt[3].toLowerCase() === "a") {q.push(this.playerhand[3])};
-                if (holdOpt[4].toLowerCase() === "h" || holdOpt[4].toLowerCase() === "a") {q.push(this.playerhand[4])};
+                if (holdOpt[0].toLowerCase() === "h" || holdOpt[0].toLowerCase() === "a") {q.push(this.playerhand[0])}
+                if (holdOpt[1].toLowerCase() === "h" || holdOpt[1].toLowerCase() === "a") {q.push(this.playerhand[1])}
+                if (holdOpt[2].toLowerCase() === "h" || holdOpt[2].toLowerCase() === "a") {q.push(this.playerhand[2])}
+                if (holdOpt[3].toLowerCase() === "h" || holdOpt[3].toLowerCase() === "a") {q.push(this.playerhand[3])}
+                if (holdOpt[4].toLowerCase() === "h" || holdOpt[4].toLowerCase() === "a") {q.push(this.playerhand[4])}
                 this.playerhand = q;
                 this.timer.stop();
                 this.timer.start(.5).on('end', () => {this.dealHand();});
-            } else {return;}
+            }
         });
         this.timer.start(this.round >= 2 ? .5 : 60)
             .on('end', () => this.round >= 2 ? this.finishGame() : this.dealHand());
@@ -130,7 +152,7 @@ function Poker(bot, msg) {
             'Five of a Kind' : 200,
             'Natural Royal Flush' : 800,
             'Royal Flush' : 800
-        }
+        };
         
         let endHand = hand.solve(this.playerhand, elPoker);
         let finalPay = bid * Math.round(payout[endHand.name]);
@@ -138,13 +160,13 @@ function Poker(bot, msg) {
             case 'Pair, A\'s' :
             case 'Pair, K\'s' :
             case 'Pair, Q\'s' :
-            case 'Pair, J\'s' : finalPay = bid * 1; break;
+            case 'Pair, J\'s' : finalPay = bid; break;
             case 'Wild Royal Flush' : finalPay = bid * 100; break;
             case 'Natural Royal Flush' : finalPay = bid * 800; break;
             case 'Royal Flush': finalPay = bid * 800; break;
             default : break;
         }
-        if (isNaN(finalPay)) {finalPay = 0; console.log('There was an error with poker pay')};
+        if (isNaN(finalPay)) {finalPay = 0; console.log('There was an error with poker pay')}
         bank.add(this.id, finalPay);
         this.timer.stop();
         this.timer.start(.5).on('end', () => {bot.reply(msg, 

@@ -1,3 +1,4 @@
+"use strict";
 const http = require('http');
 const request = require("request");
 const fs = require('fs-extra');
@@ -229,14 +230,15 @@ function Commands() {
         'description'   : 'Generate a parody O\'Reilly book.',
         'alias'         : ["none"],
         'usage'         : `\`${prefixes[0]}orly [title, author, top text, middle text]\``,
-        'process'       : (bot, msg, suffix) => { //TODO add choose color & animal option
+        'process'       : (bot, msg) => {
             fs.ensureDir('./cache', function (err) {
-                console.log(err || 'Cache folder created!'); // => null
-                // dir has now been created, including the directory it is to be placed in
+                console.log(err || 'Cache folder created!');
             });
+            let o = {};
+            fn.getOpt(msg, o);
+            let suffix = o.suffix;
             var randomstring = require('randomstring');
             var filename = (startTime.getMonth()+1).toString() + startTime.getDate().toString() + startTime.getFullYear().toString() + randomstring.generate(5);
-
             var orlyOpts = suffix.split(',');
             var title = encodeURIComponent(orlyOpts[0].trim());
             var author = orlyOpts[1] ? encodeURIComponent(orlyOpts[1].trim()) : "%20";
@@ -305,27 +307,8 @@ function Commands() {
         'description' : `Play poker and win credits! Must be in the gaming channel`,
         'alias' : ['p'],
         'usage' : `\`${prefixes[0]}poker [bid amount]\``,
-        'process' : (bot, msg, suffix, id, name, cmdTxt, sufArr) => {
-            if (suffix === 'payout' || suffix === 'payouts') {
-                bot.sendMessage(msg, '```' + 'markdown\n' +
-                    '| Hand                   | Payout |\n' +
-                    '|------------------------|--------|\n' +
-                    '| Natural Royal Flush    | 800:1  |\n' +
-                    '| Five of a Kind         | 200:1  |\n' +
-                    '| Wild Royal Flush       | 100:1  |\n' +
-                    '| Straight Flush         | 50:1   |\n' +
-                    '| Four of a Kind         | 20:1   |\n' +
-                    '| Full House             | 7:1    |\n' +
-                    '| Flush                  | 5:1    |\n' +
-                    '| Straight               | 3:1    |\n' +
-                    '| Three of a Kind        | 2:1    |\n' +
-                    '| Two Pair               | 1:1    |\n' +
-                    '| Pair (Jacks or Better) | 1:1    |' + '```');
-            } else
-                (function(bot, msg, suffix, id){
-                    var poker = new Poker(bot, msg, suffix, id);
-                    poker.init(bot, msg, suffix, id);
-                })(bot, msg, suffix, id);
+        process :(bot, msg) => {
+            new Poker(bot, msg).init();
         },
         'admin' : false
     };
@@ -333,9 +316,13 @@ function Commands() {
     this.slot = {
         'description'   : 'Play Slots and win money!',
         'alias'         : ["slots", "slot", "lot"],
-        'usage'         : `\`${prefixes[0]}help [command]\``,
+        'usage'         : `\`${prefixes[0]}slot [bid amount]\``,
         'admin' : false,
-        process : (bot, msg) => slot(bot, msg)//TODO update slot
+        process : (bot, msg) => {
+            let s = {}
+            fn.getOpt(msg, s);
+            slot.slot(bot, msg, s.suffix);
+        }
     };
 
     /* ADMIN COMMANDS */
