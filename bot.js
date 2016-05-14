@@ -11,10 +11,18 @@ const fs = require('fs-extra');
 const google = require("google");
 const Poker = require("./modules/poker");
 const slot = require("./modules/slots");
-const bank = require("./modules/bank");
-const Commands = require("./modules/commands");
-const commands = new Commands;
+const bank = require('./modules/bank');
+const fn = require('./modules/functions');
+const commands = require("./modules/commands");
 const trivia = require("./modules/trivia");
+
+var commandList = Object.keys(commands);
+var userCmds = Object.keys(commands).filter(x=> {
+    if (commands[x]['admin'] === false) return x;
+});
+var adminCmds = Object.keys(commands).filter(x=> {
+    if (commands[x]['admin'] === true) return x;
+});
 
 //settings & data
 var settings = require("./settings/settings.json"),
@@ -111,30 +119,15 @@ const bot = new Discord.Client({autoReconnect:true});
 // };
 
 
-
-//Useful Functions
-var getUserName = (bot, msg, suffix) => {};
-
-const cmdInit = (msg) => {
-    var sufArr = msg.content.split(' ');
-    var cmdTxt = sufArr[0].substr(1);
-    if (settings.alias.hasOwnProperty(cmdTxt)) cmdTxt = settings.alias[cmdTxt];
-    sufArr.splice(0, 1);
-    var suffix = sufArr.join(' ');
-    var id = msg.author.id;
-    var name = msg.author.name;
-    return [msg, suffix, id, name, cmdTxt, sufArr];
-};
-
 //Message Event Checker
 bot.on("message", (msg) => {
     if(msg.author === bot.user || msg.channel.isPrivate) {return;}
-    else if (prefixes.indexOf((msg.content.substr(0, 1))) > -1 ) {
-        let args = cmdInit(msg);
-        let cmdTxt = args[4];
-        if (!commands[cmdTxt]) {return;}
-        if (settings.alias.hasOwnProperty(cmdTxt)) cmdTxt = settings.alias[cmdTxt];
-        commands[cmdTxt].process(bot, ...args);
+    else if (prefixes.indexOf((msg.content[0])) > -1 ) {
+        let cmdOpt = {};
+        fn.getOpt(msg, cmdOpt)
+        let cmdTxt = cmdOpt.cmdTxt;
+        if (!fn.commandAvailable(cmdTxt, commandList)) return;
+        commands[cmdTxt].process(bot, msg);
     }
     else return;
 });

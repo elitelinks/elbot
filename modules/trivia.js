@@ -1,6 +1,7 @@
+"use strict";
+process.setMaxListeners(0);
 const http = require('http');
 const fs = require('fs-extra');
-const bank = require("./bank");
 const Timer = require('timer.js');
 const util = require('util');
 //const EventEmitter = require('events');
@@ -51,7 +52,7 @@ function Trivia() {
     };
 
     this.loadQuestion = () => {
-        if (this.currentList === []) {console.log('No List Loaded!'); return;}
+        if (!this.currentList) {console.log('No List Loaded!'); return;}
         var questionCheck = Math.floor(Math.random() * this.currentList.length);
         if (this.used.indexOf(questionCheck) <= -1) {
             this.currentQuestion = this.currentList[questionCheck];
@@ -79,7 +80,7 @@ function Trivia() {
                 bot.sendMessage(msg, `The answer is **${(typeof this.currentQuestion.answers === 'string') ?
                     t.currentQuestion.answers : t.currentQuestion.answers[0]}**!`);
                 this.timer.stop();
-                t.loop(bot,msg);
+                this.loop(bot,msg);
             };
 
             this.timer.stop();
@@ -97,10 +98,11 @@ function Trivia() {
                     if(!this.answers || !this.currentQuestion || this.canAnswer === false || msg.author === bot.user) {return;}
                     bot.sendMessage(msg, `Right answer ${msg.author.name}! ${[this.currentQuestion.answers][num]}!`);
                     this.canAnswer = false;
+                    this.currentQuestion = {};
                     this.answers = [];
                     this.addPoint(bot, msg);
                     this.timer.stop();
-                    t.loop(bot,msg);
+                    this.loop(bot,msg);
                 }
             });
         } catch(err) {console.log(err); t.loop(bot, msg)}
@@ -108,12 +110,12 @@ function Trivia() {
 
     this.loop = (bot, msg) => {
         this.currentQuestion = {};
-        this.loadQuestion();
         this.timer.stop();
         this.timer.start(.5).on('end', () => {
             if (this.topscore >= triviaset.maxScore) {this.end(bot, msg); }
             else {
                 this.count++;
+                this.loadQuestion();
                 this.round(bot, msg);
             }
         });

@@ -1,105 +1,149 @@
-'use strict';
-const fs = require('fs-extra');
-var bankSet = fs.readJsonSync("./settings/bank.json");
-var settings = require("../settings/settings.json"),
-    devMode = settings.devmode,
-    prefixes = devMode ? settings.dev_prefixes : settings.prefixes;
+"use strict";
 
-var bank = {
-    file : './settings/bank.json',
-    accounts : bankSet.accounts,
-    commands : ['balance', 'register', 'payday'],
-    settings : bankSet.settings,
 
-    check : (bot, msg, suffix, id) => {
-        if (!bank.accounts[id]) {
+function Bank() {
+    const fs = require('fs-extra');
+    const fn = require('./functions');
+    var prefixes = require("../settings/settings.json").prefixes;
+    var path = require('path');
+    var appDir = path.dirname(require.main.filename);
+    var file = appDir+"/settings/bank.json";
+    var bankSet = fs.readJsonSync(file);
+    this.accounts = bankSet.accounts;
+    var commands = ['balance', 'register', 'payday', 'transfer'];
+    var adminCmd = ['reload'];
+    var settings = bankSet.settings;
+    var b = this;
+
+    this.check = (bot, msg) => {
+        fn.getOpt(msg, b);
+        if (!this.accounts[this.id]) {
             bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`);
             return false;
-        };
-    },
+        } else return true;
+    };
 
     //TODO add list commands funct.
     //TODO add transfer
     //TODO add leaderboard
-    init : (bot, msg, suffix, id, name, cmdTxt, sufArr) => {
-        if (bank.commands.indexOf(sufArr[0]) > -1) {
-            bank[sufArr[0]](bot, suffix, id, name, cmdTxt, sufArr);
+    this.init = (bot, msg) => {
+        fn.getOpt(msg, b);
+        if (fn.commandAvailable(this.subCmd, commands) || fn.commandAvailable(this.subCmd, adminCmd)) {
+            this[this.subCmd](bot, msg);
         } else {
             bot.sendMessage(msg, `Unrecognized bank command. \`${prefixes[0]}bank list\` for a list of commands.`)
         }
-    },
+    };
+    
+    this.list = (bot, msg) => {
+        
+    }
 
-    reload : () => {
+    this.reload = () => {
         try {
-            fs.writeJsonSync(bank.file, bankSet);
-            bankSet = fs.readJsonSync(bank.file);
+            fs.writeJsonSync(file, bankSet);
+            bankSet = fs.readJsonSync(file);
         } catch(err) {
             console.log(err);
         }
-        bank.accounts = bankSet.accounts;
-    },
+        this.accounts = bankSet.accounts;
+    };
 
-    add : (id, amount) => {
+    this.add = (id, amount) => {
         try {
-            bank.accounts[id].balance += amount;
+            this.accounts[id].balance += amount;
         } catch(err) {console.log(err);}
-    },
+    };
 
-    subtract : (id, amount) => {
+    this.subtract = (id, amount) => {
         try {
-            bank.accounts[id].balance -= amount;
+            this.accounts[id].balance -= amount;
         } catch(err) {console.log(err);}
-    },
+    };
 
-    register : (bot, suffix, id, name, cmdTxt, sufArr) => {
-        if (!bank.accounts[id]) {
+    this.register = (bot, msg) => {
+        if (!this.accounts[this.id]) {
             try {
-                bank.accounts[id] = {};
-                bank.accounts[id].name = name;
-                bank.accounts[id].balance = bankSet.settings.payout;
-                bank.accounts[id].wait = Math.round(new Date() / 1000);
-                bank.accounts[id].playingpoker = false;
-                console.log("New Bank Account Created!")
-                bot.sendMessage(msg, `Account created for ${name} with balance ${bank.accounts[id].balance} credits.`);
-                bank.reload();
+                this.accounts[this.id] = {};
+                this.accounts[this.id].name = name;
+                this.accounts[this.id].balance = bankSet.settings.payout;
+                this.accounts[this.id].wait = Math.round(new Date() / 1000);
+                this.accounts[this.id].playingpoker = false;
+                bot.sendMessage(msg, `Account created for ${name} with balance ${this.accounts[this.id].balance} credits.`);
+                this.reload();
             } catch(err) {console.log(err);}
-        } else {
+        } else if (this.accounts[this.id]) {
             bot.reply(msg, `You already have an account!`)
         }
-    },
+    };
 
-    balance : (bot, msg, suffix, id, name, sufArr) => {
-        var person = sufArr[1];
+    this.numberChecker = (bot, msg, num) => {
+        if (typeof num === 'string') num.toString().replace(/[\D]g/, '');
+        if (isNaN(Math.floor(parseInt(num, 10)))) {
+            bot.reply(msg, "That is not a valid amount!");
+            return false;
+        } else return true;
+    };
+
+    this.enoughCredits = (bot, msg, amount) => {
+        let x = {};
+        fn.getOpt(msg, x);
+        let balance = this.accounts[x.id].balance;
+        if (amount > balance) {
+            bot.reply(msg, `Not enough credits!`);
+            return false;
+        } else return true;
+    };
+
+    this.balance = (bot, msg) => {
+        var person = this.sufArr[1];
         var search = bot.users.get('name', person);
-        if (!bank.accounts[id]) {bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`)}
-        else if (search) {bot.reply(msg, `The balance of **${person}** is ${bank.accounts[search.id].balance} credits.`)}
-        else {bot.reply(msg, `Your balance is ${bank.accounts[id].balance} credits.`)}
-    },
+        if (!this.check(bot, msg)) return;
+        else if (search) {bot.reply(msg, `**${person}**'s balance is **[${this.accounts[search.id].balance}]** credits.`)}
+        else {bot.reply(msg, `Your balance is **[${this.accounts[this.id].balance}]** credits.`)}
+    };
 
-    transfer: (bot, msg, suffix, id, name, cmdTxt, sufArr) => {}, //TODO bank transfers
+    this.transfer = (bot, msg) => {
+        //sufArr should = [0]transfer [1]getting [2]amount
+        let giving = this.id;
+        let getting = fn.getUserID(msg, this.sufArr[1]);
+        let amount = this.sufArr[2];
+        console.log(giving, getting, amount);
+        if(!this.numberChecker(bot, amount)) return;
+        if(!this.enoughCredits(bot, msg, amount)) return;
+        this.subtract(giving, amount);
+        this.add(getting, amount);
+        let getName = fn.getUserName(msg, getting);
+        bot.reply(msg, `+${amount} deposited into ${getName}'s account!`)
+    }; //TODO fix transfer
 
-    payday : (bot, msg, suffix, id, name, cmdTxt, sufArr) => {
+    this.payday = (bot, msg) => {
         try {
-            if (!bank.accounts[id]) {
-                bot.reply(msg, `No account! Use \`${prefixes[0]}bank register\` to get a new account!`);
-            }
+            if(this.check(bot, msg) === false) return;
             var current = Math.round(new Date() / 1000);
-            var check = current - bank.accounts[id].wait;
-            if (check >= bank.settings.payoutTime) {
-                bank.accounts[id].balance += bankSet.settings.payout;
-                bank.accounts[id].wait = Math.round(new Date() / 1000);
-                bot.reply(msg, `**+${bankSet.settings.payout}** credits! Your new balance is **[${bank.accounts[id].balance} credits]**`);
-                bank.reload();
+            var check = current - this.accounts[this.id].wait;
+            if (check >= settings.payoutTime) {
+                this.accounts[this.id].balance += bankSet.settings.payout;
+                this.accounts[this.id].wait = Math.round(new Date() / 1000);
+                bot.reply(msg, `**+${bankSet.settings.payout}** credits! Your new balance is **[${this.accounts[this.id].balance} credits]**`);
+                this.reload();
             } else {
-                bot.reply(msg, `Too soon! Please wait another ${bank.settings.payoutTime - check} seconds!`)
+                bot.reply(msg, `Too soon! Please wait another ${check - settings.payoutTime} seconds!`)
             }
         } catch(err) {
             console.log(err);
         }
-    }
-};
+    };
+    
+    this.attributes = {
+        'description' : `Bank functions. \`${prefixes[0]}bank register\` to start an account`,
+        'alias' : ['none'],
+        'usage' : `\`${prefixes[0]}bank [command] or [list] to get a list of commands\``,
+        'admin' : false,
+        process : (bot, msg) => bank.init(bot, msg)
+    };
+    
+}
 
-module.exports = exports = bank;
+module.exports = exports = new Bank;
 
-//TODO add transfer
-//TODO fix add/sub command by getting user

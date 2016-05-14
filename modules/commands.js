@@ -1,24 +1,34 @@
-'use strict'
 const http = require('http');
 const request = require("request");
 const fs = require('fs-extra');
-const google = require("google");
+var google = require("google");
 const Poker = require("./poker");
 const slot = require("./slots");
-var bank = require("./bank");
+const bank = require("./bank");
+const fn = require("./functions")
 var trivia = require("./trivia");
 var startTime = new Date();
 
-var settings = require("../settings/settings.json"),
+var path = require('path');
+var appDir = path.dirname(require.main.filename);
+
+var settings = require(appDir+"/settings/settings.json"),
     triviaset = settings.trivia,
     devMode = settings.devmode,
     prefixes = devMode ? settings.dev_prefixes : settings.prefixes;
 
-var bankSet = fs.readJsonSync("./settings/bank.json");
+var file = appDir+"/settings/bank.json";
+var bankSet = fs.readJsonSync(file);
+
+
+console.log
 
 function Commands() {
 
-    this.goog = {
+    var c = this;
+    var o = {};
+
+    this.google = {
         'description'   : 'Search Google and get the first result.',
         'alias'         : ["goog", "g"],
         'usage'         : `\`${prefixes[0]}google [search term]\``,
@@ -254,14 +264,14 @@ function Commands() {
         'description' : `Bank functions. \`${prefixes[0]}bank register\` to start an account`,
         'alias' : ['none'],
         'usage' : `\`${prefixes[0]}bank [command] or [list] to get a list of commands\``,
-        'process' : (bot, msg, suffix) => {bank.init(bot, msg, suffix)},
-        'admin' : false
+        'admin' : false,
+        process : (bot, msg) => bank.init(bot, msg)
     };
 
     this.payday = {
         'description' : `Get paid. Use \`${prefixes[0]}bank register\` to start an account!`,
         'alias' : ['$'],
-        'usage' : `\`${prefixes[0]}payday.\``,
+        'usage' : `\`${prefixes[0]}payday\``,
         'process' : (bot, msg, suffix, id, name, cmdTxt, sufArr) => bank.payday(bot, msg, suffix, id, name, cmdTxt, sufArr),
         'admin' : false
     };
@@ -271,29 +281,73 @@ function Commands() {
         'alias'         : ["h"],
         'usage'         : `\`${prefixes[0]}help [command]\``,
         'admin' : false,
-        process : (bot, msg, suffix) => {
+        process : (bot, msg) => {
+            fn.getOpt(msg, o);
+            let suffix = o.suffix;
+            var cmdsT = Object.keys(this).filter(x=> {
+                if (this[x]['admin'] === false) return x;
+            });
+            var adminCmdsT = Object.keys(this).filter(x=> {
+                if (this[x]['admin'] === true) return x;
+            });
             if (!suffix || suffix === 'list') {
-                var cmds = Object.keys(this).filter(x=> {
-                    if (this[x]['admin'] === false) return x;
-                });
-                bot.sendMessage(msg, `__**Available commands**__\n\`${cmds.join(', ')}\`\n\n*For more specific help*, type \`${prefixes[0]}help [command]\``);
+                bot.sendMessage(msg, `__**Available commands**__\n\`${cmdsT.join(', ')}\`\n\n*For more specific help*, type \`${prefixes[0]}help [command]\``);
             } else {
+                if(!fn.commandAvailable(suffix, cmdsT)) {return;}
                 bot.sendMessage(msg,
                     `${this[suffix].description} \n*Usage:* ${this[suffix].usage} \n*Alias${this[suffix].alias.length > 1 ? "es" : ""}:* \`${this[suffix].alias.join(', ')}\``)
             }
         }
     };
-    
+    /* CASINO */
+
+    this.poker = {
+        'description' : `Play poker and win credits! Must be in the gaming channel`,
+        'alias' : ['p'],
+        'usage' : `\`${prefixes[0]}poker [bid amount]\``,
+        'process' : (bot, msg, suffix, id, name, cmdTxt, sufArr) => {
+            if (suffix === 'payout' || suffix === 'payouts') {
+                bot.sendMessage(msg, '```' + 'markdown\n' +
+                    '| Hand                   | Payout |\n' +
+                    '|------------------------|--------|\n' +
+                    '| Natural Royal Flush    | 800:1  |\n' +
+                    '| Five of a Kind         | 200:1  |\n' +
+                    '| Wild Royal Flush       | 100:1  |\n' +
+                    '| Straight Flush         | 50:1   |\n' +
+                    '| Four of a Kind         | 20:1   |\n' +
+                    '| Full House             | 7:1    |\n' +
+                    '| Flush                  | 5:1    |\n' +
+                    '| Straight               | 3:1    |\n' +
+                    '| Three of a Kind        | 2:1    |\n' +
+                    '| Two Pair               | 1:1    |\n' +
+                    '| Pair (Jacks or Better) | 1:1    |' + '```');
+            } else
+                (function(bot, msg, suffix, id){
+                    var poker = new Poker(bot, msg, suffix, id);
+                    poker.init(bot, msg, suffix, id);
+                })(bot, msg, suffix, id);
+        },
+        'admin' : false
+    };
+
+    this.slot = {
+        'description'   : 'Play Slots and win money!',
+        'alias'         : ["slots", "slot", "lot"],
+        'usage'         : `\`${prefixes[0]}help [command]\``,
+        'admin' : false,
+        process : (bot, msg) => slot(bot, msg)//TODO update slot
+    };
+
     /* ADMIN COMMANDS */
-    
+
     this.ev =  {
         'description'   : 'Evaluates a message',
         'alias'         : ["none"],
-        'usage'         : `\`${prefixes[0]}eval js (admin only, use at your own risk!)\``,
+        'usage'         : `\`${prefixes[0]}eval js (admin only, currently broken (strict mode), use at your own risk!)\``,
         'process'       : (bot, msg, suffix) => {
             if (settings.owners.indexOf(msg.author.id) > -1) {
                 try {
-                    var thing = eval(suffix.toString());
+                    var thing = eval(suffix);
                     bot.sendMessage(msg, `\`\`\`javascript\n${thing}\`\`\``);
                 } catch(e) {
                     console.log(e);
@@ -333,4 +387,4 @@ function Commands() {
     };
 };
 
-module.exports = exports = Commands;
+module.exports = exports = new Commands();

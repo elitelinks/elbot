@@ -1,21 +1,26 @@
 "use strict"
+process.setMaxListeners(0);
 var fs = require('fs-extra');
-var Deck = require("../modules/deck");
+var Deck = require("./deck");
 var ps = require('pokersolver');
+var fn = require('./functions');
 var hand = ps.Hand;
 var Game = ps.Game;
-var bank = require("../modules/bank");
+var bank = require('./bank');
 var Timer = require("timer.js");
 var settings = require("../settings/settings.json"),
     devMode = settings.devmode, 
     prefixes = devMode ? settings.dev_prefixes : settings.prefixes;
-var bankSet = fs.readJsonSync("./settings/bank.json");
+var path = require('path');
+var appDir = path.dirname(require.main.filename);
+var file = appDir+"/settings/bank.json";
+var bankSet = fs.readJsonSync(file);
 
-function Poker(bot, msg, suffix) {
-    this.bot = bot;
-    bot.setMaxListeners(0);
-    this.id = msg.author.id;
-    let bid = Math.floor(parseInt(suffix.toString().replace(/[\D]g/, ''), 10));
+function Poker(bot, msg) {
+    var p = this;
+    fn.getOpt(msg, p);
+    this.msg = msg;
+    let bid = Math.floor(parseInt(this.suffix.toString().replace(/[\D]g/, ''), 10));
     this.playerhand = [];
     this.deck = new Deck({'jokers' : 2});
     this.round = 0;
@@ -32,7 +37,7 @@ function Poker(bot, msg, suffix) {
         "noKickers": true
     };
     var elPoker = new Game();
-    elPoker.descr = 'eliteliks';
+    elPoker.descr = 'elitelinks';
     elPoker.cardsInHand = elRules['cardsInHand'];
     elPoker.handValues = elRules['handValues'];
     elPoker.wildValue = elRules['wildValue'];
@@ -44,7 +49,7 @@ function Poker(bot, msg, suffix) {
     this.init = () => {
         if (msg.channel.id !== settings.gamesroom) {return;}
         if (this.id !== msg.author.id) {return};
-        if (bank.check(bot, msg) === false || !suffix  || bank.accounts[this.id].playingpoker === true) {return};
+        if (bank.check(bot, msg) === false || !this.suffix  || bank.accounts[this.id].playingpoker === true) {return};
         if (bank.accounts[this.id].balance < bid) {bot.reply(msg, `Not enough credits dummy!`); return;}
         if (!bid || bid < bankSet.settings.minBet || bid > bankSet.settings.maxBet || isNaN(bid)) {
             bot.reply(msg, `You must place a bid between ${bankSet.settings.minBet} and ${bankSet.settings.maxBet}`); return;

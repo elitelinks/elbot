@@ -1,14 +1,14 @@
 'use strict';
-function Deck(settings) {
+var defaults = {
+    "decks" : 1,
+    "jokers" : 0
+}
+function Deck(settings=defaults) {
     this.cards = [];
-    this.settings = settings || {
-            'decks' : 1,
-            'jokers' : 0
-        };
-    
+    var settings = settings;
     this.filldeck = () => {
-        var decksNeeded = this.settings['decks'] ? this.settings['decks'] : 1;
-        var jokersNeeded = this.settings['jokers'] ? this.settings['jokers'] : 0;
+        var decksNeeded = settings.decks || defaults.decks
+        var jokersNeeded = settings.jokers || defaults.jokers
         while (decksNeeded > 0) {
             this.cards.push('As');
             this.cards.push('Ks');
@@ -67,7 +67,6 @@ function Deck(settings) {
         while (jokersNeeded > 0) {this.cards.push('Or'); jokersNeeded--;}
     };
     this.shuffle = () => {
-        //Shuffle the deck array with Fisher-Yates
         var i, j, tempi, tempj;
         for (i = 0; i < this.cards.length; i += 1) {
             j = Math.floor(Math.random() * (i + 1));
