@@ -5,7 +5,17 @@ var settings = require("../settings/settings.json");
 var bank = require("../modules/bank");
 var bankSet = fs.readJsonSync("./settings/bank.json");
 
-exports.slot= (bot, msg, suffix) => {
+exports.slot = (bot, msg, suffix) => {
+    if (suffix === 'payout' || suffix === 'payouts') {bot.sendMessage(msg,
+        '```' +
+            '| Result      | Payout |\n' +
+            '|-------------|--------|\n' +
+            '| 777         | 777:1  |\n' +
+            '| 3x Cherries | 4:1    |\n' +
+            '| 3x Clovers  | 4:1    |\n' +
+            '| 3x Beers    | 3:1    |\n' +
+            '| 2x Cherries | 2:1    |\n' +
+            '| 2x Any      | 1:1    |' + '```'); return;}
     var id = msg.author.id;
     if (bank.check(bot, msg) === false) {return;}
     if (msg.channel.id !== settings.gamesroom) {return;}
@@ -82,3 +92,5 @@ exports.slot= (bot, msg, suffix) => {
     }
     bank.reload();
 };
+
+exports

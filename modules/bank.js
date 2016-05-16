@@ -1,16 +1,17 @@
 "use strict";
-
+const fs = require('fs-extra');
+const fn = require('./functions');
+var settings = require("../settings/settings.json"),
+    devMode = settings.devmode, 
+    prefixes = devMode ? settings.dev_prefixes : settings.prefixes;
+var path = require('path');
+var appDir = path.dirname(require.main.filename);
+var file = appDir+"/settings/bank.json";
+var bankSet = fs.readJsonSync(file);
 
 function Bank() {
-    const fs = require('fs-extra');
-    const fn = require('./functions');
-    var prefixes = require("../settings/settings.json").prefixes;
-    var path = require('path');
-    var appDir = path.dirname(require.main.filename);
-    var file = appDir+"/settings/bank.json";
-    var bankSet = fs.readJsonSync(file);
     this.accounts = bankSet.accounts;
-    var commands = ['balance', 'register', 'payday', 'transfer'];
+    var commands = ['balance', 'register', 'payday', 'transfer', 'list'];
     var adminCmd = ['reload'];
     var settings = bankSet.settings;
     var b = this;
@@ -22,8 +23,7 @@ function Bank() {
             return false;
         } else return true;
     };
-
-    //TODO add list commands funct.
+    
     //TODO add leaderboard
     this.init = (bot, msg) => {
         fn.getOpt(msg, b);
@@ -35,8 +35,8 @@ function Bank() {
     };
     
     this.list = (bot, msg) => {
-        
-    }
+        bot.sendMessage(msg, `__**Available bank commands**__\n\`${commands.join(', ')}\``)
+    };
 
     this.reload = () => {
         try {
@@ -50,13 +50,17 @@ function Bank() {
 
     this.add = (id, amount) => {
         try {
-            this.accounts[id].balance += amount;
+            let a = parseInt(amount, 10);
+            if (isNaN(a)) {throw new Error("Amount added is NaN"); return;}
+            this.accounts[id].balance = parseInt(this.accounts[id].balance, 10) + parseInt(a, 10);
         } catch(err) {console.log(err);}
     };
 
     this.subtract = (id, amount) => {
         try {
-            this.accounts[id].balance -= amount;
+            let s = parseInt(amount, 10);
+            if (isNaN(s)) {throw new Error("Amount subtracted is NaN"); return;}
+            this.accounts[id].balance = parseInt(this.accounts[id].balance, 10) - parseInt(s, 10);
         } catch(err) {console.log(err);}
     };
 
@@ -76,9 +80,15 @@ function Bank() {
         }
     };
 
+    this.numParser = (num) => {
+        if (typeof num === 'string') {
+            num = parseInt(num.replace(/[\D]g/, ''), 10);
+        }
+        return Math.floor(parseInt(num, 10));
+    }
+
     this.numberChecker = (bot, msg, num) => {
-        if (typeof num === 'string') num.toString().replace(/[\D]g/, '');
-        if (isNaN(Math.floor(parseInt(num, 10)))) {
+        if (isNaN(parseInt(num, 10))) {
             bot.reply(msg, "That is not a valid amount!");
             return false;
         } else return true;
@@ -96,25 +106,26 @@ function Bank() {
 
     this.balance = (bot, msg) => {
         var person = this.sufArr[1];
-        var search = bot.users.get('name', person);
-        if (!this.check(bot, msg)) return;
-        else if (search) {bot.reply(msg, `**${person}**'s balance is **[${this.accounts[search.id].balance}]** credits.`)}
-        else {bot.reply(msg, `Your balance is **[${this.accounts[this.id].balance}]** credits.`)}
+        if (this.check(bot, msg) === false) {return}
+        if (!person) {bot.reply(msg, `Your balance is **[${this.accounts[this.id].balance}]** credits.`); return}
+        else {
+            var search = fn.getUser(msg, person);
+            bot.reply(msg, `**${person}**'s balance is **[${this.accounts[search.id].balance}]** credits.`)
+        }
     };
 
     this.transfer = (bot, msg) => {
         //sufArr should = [0]transfer [1]getting [2]amount
         let giving = this.id;
-        let getting = fn.getUserID(msg, this.sufArr[1]);
-        let amount = this.sufArr[2];
-        console.log(giving, getting, amount);
-        if(!this.numberChecker(bot, amount)) return;
-        if(!this.enoughCredits(bot, msg, amount)) return;
+        let getting = fn.getUser(msg, this.sufArr[1]);
+        let amount = this.numParser(this.sufArr[2]);
+        if(this.numberChecker(bot, msg, amount) === false) {return}
+        if(this.enoughCredits(bot, msg, amount) === false) {return}
         this.subtract(giving, amount);
-        this.add(getting, amount);
-        let getName = fn.getUserName(msg, getting);
-        bot.reply(msg, `+${amount} deposited into ${getName}'s account!`)
-    }; //TODO fix transfer
+        this.add(getting.id, amount);
+        bot.reply(msg, `**+${amount}** deposited into **${getting.name}'s** account!`)
+        this.reload();
+    };
 
     this.payday = (bot, msg) => {
         try {
@@ -127,7 +138,7 @@ function Bank() {
                 bot.reply(msg, `**+${bankSet.settings.payout}** credits! Your new balance is **[${this.accounts[this.id].balance} credits]**`);
                 this.reload();
             } else {
-                bot.reply(msg, `Too soon! Please wait another ${check - settings.payoutTime} seconds!`)
+                bot.reply(msg, `Too soon! Please wait another ${settings.payoutTime - check} seconds!`)
             }
         } catch(err) {
             console.log(err);
@@ -138,10 +149,8 @@ function Bank() {
         'description' : `Bank functions. \`${prefixes[0]}bank register\` to start an account`,
         'alias' : ['none'],
         'usage' : `\`${prefixes[0]}bank [command] or [list] to get a list of commands\``,
-        'admin' : false,
-        process : (bot, msg) => bank.init(bot, msg)
+        'admin' : false
     };
-    
 }
 
 module.exports = exports = new Bank;

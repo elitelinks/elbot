@@ -308,7 +308,8 @@ function Commands() {
         'alias' : ['p'],
         'usage' : `\`${prefixes[0]}poker [bid amount]\``,
         process :(bot, msg) => {
-            new Poker(bot, msg).init();
+            let p = new Poker();
+            p.init(bot, msg);
         },
         'admin' : false
     };

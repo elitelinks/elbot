@@ -17,7 +17,7 @@ var appDir = path.dirname(require.main.filename);
 var file = appDir+"/settings/bank.json";
 var bankSet = fs.readJsonSync(file);
 
-function Poker(bot, msg) {
+function Poker() {
     var p = this;
     var bid = 0;
     this.playerhand = [];
@@ -36,7 +36,7 @@ function Poker(bot, msg) {
         "noKickers": true
     };
 
-    this.showPayout = () => {
+    this.showPayout = (bot, msg) => {
         bot.sendMessage(msg, '```' +
             '| Hand                   | Payout |\n' +
             '|------------------------|--------|\n' +
@@ -51,7 +51,7 @@ function Poker(bot, msg) {
             '| Three of a Kind        | 2:1    |\n' +
             '| Two Pair               | 1:1    |\n' +
             '| Pair (Jacks or Better) | 1:1    |' + '```');
-        }
+    };
 
     var elPoker = new Game();
     elPoker.descr = 'elitelinks';
@@ -64,11 +64,11 @@ function Poker(bot, msg) {
     elPoker.lowestQualified = elRules['lowestQualified'];
     elPoker.noKickers = elRules['noKickers'];
 
-    this.init = () => {
+    this.init = (bot, msg) => {
         fn.getOpt(msg, p);
         bid = Math.floor(parseInt(this.suffix.toString().replace(/[\D]g/, ''), 10));;
-        if (this.suffix === 'payout' || this.suffix === 'payouts') {this.showPayout(); return}
-        if (msg.channel.id !== settings.gamesroom) {return}
+        if (this.suffix === 'payout' || this.suffix === 'payouts') {this.showPayout(bot, msg); return}
+        //if (msg.channel.id !== settings.gamesroom) {return}
         if (this.id !== msg.author.id) {return}
         if (bank.check(bot, msg) === false || !this.suffix  || bank.accounts[this.id].playingpoker === true) {return}
         if (bank.accounts[this.id].balance < bid) {bot.reply(msg, `Not enough credits dummy!`); return;}
@@ -78,10 +78,10 @@ function Poker(bot, msg) {
         this.deck.filldeck();
         this.deck.shuffle();
         bank.subtract(this.id, bid);
-        this.dealHand();
+        this.dealHand(bot, msg);
     };
 
-    this.dealHand = () => {
+    this.dealHand = (bot, msg) => {
         this.deck.shuffle();
         bank.accounts[this.id].playingpoker = true;
         let cardsNeeded = 5 - this.playerhand.length;
@@ -130,13 +130,13 @@ function Poker(bot, msg) {
                 if (holdOpt[4].toLowerCase() === "h" || holdOpt[4].toLowerCase() === "a") {q.push(this.playerhand[4])}
                 this.playerhand = q;
                 this.timer.stop();
-                this.timer.start(.5).on('end', () => {this.dealHand();});
+                this.timer.start(.5).on('end', () => {this.dealHand(bot, msg);});
             }
         });
         this.timer.start(this.round >= 2 ? .5 : 60)
-            .on('end', () => this.round >= 2 ? this.finishGame() : this.dealHand());
+            .on('end', () => this.round >= 2 ? this.finishGame(bot, msg) : this.dealHand(bot, msg));
     };
-    this.finishGame = () => {
+    this.finishGame = (bot, msg) => {
         bank.accounts[this.id].playingpoker = false;
         var payout = {
             'High Card' : 0,

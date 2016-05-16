@@ -23,23 +23,19 @@ exports.adminCheck = (bot, msg) => {
 };
 
 exports.commandAvailable = (cmd, arr) => {
-    if (!cmd || !arr) {console.log()}
+    if (!cmd || !arr) {throw new Error('Error checking command')}
     if (arr.indexOf(cmd) > -1) return true;
     else return false;
 };
 
-exports.getUserName = (msg, searchTerm) => {
+exports.getUser = (msg, searchTerm) => {
     var toSearch = new RegExp(searchTerm, "i");
-    return msg.channel.server.members.get('name', toSearch);
+    return usersCache = msg.channel.server.members.get('name', toSearch);
 };
 
 exports.getUserID = (msg, srch) => {
     var toSearch = new RegExp(srch, "i");
-    return msg.channel.server.members.get('id', toSearch);
-};
-
-exports.getUserAvatar = (msg, srch) => {
-    var toSearch = new RegExp(srch, "i");
-    return msg.channel.server.members.get('avatar', toSearch);
+    console.log(msg.channel.server.members);
+    return usersCache = msg.channel.server.members.get('id', toSearch);
 };
 
