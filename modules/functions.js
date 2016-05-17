@@ -29,6 +29,7 @@ exports.commandAvailable = (cmd, arr) => {
 };
 
 exports.getUser = (msg, searchTerm) => {
+    if (msg.mentions) {searchTerm = msg.mentions[0].name}
     var toSearch = new RegExp(searchTerm, "i");
     return usersCache = msg.channel.server.members.get('name', toSearch);
 };

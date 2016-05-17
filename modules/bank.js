@@ -11,7 +11,7 @@ var bankSet = fs.readJsonSync(file);
 
 function Bank() {
     this.accounts = bankSet.accounts;
-    var commands = ['balance', 'register', 'payday', 'transfer', 'list'];
+    var commands = ['balance', 'register', 'payday', 'transfer', 'list', 'leaderboard'];
     var adminCmd = ['reload'];
     var settings = bankSet.settings;
     var b = this;
@@ -38,15 +38,16 @@ function Bank() {
         bot.sendMessage(msg, `__**Available bank commands**__\n\`${commands.join(', ')}\``)
     };
 
-    this.reload = () => {
-        try {
-            fs.writeJsonSync(file, bankSet);
-            bankSet = fs.readJsonSync(file);
-        } catch(err) {
-            console.log(err);
+    this.leaderboard = (bot, msg) => {
+        this.reload();
+        let board = [];
+        for (var account in this.accounts) {
+            board.push([this.accounts[account]["name"], this.accounts[account]["balance"] + " Credits"])
         }
-        this.accounts = bankSet.accounts;
-    };
+        board.sort((a,b) => b[1] - a[1]);
+        let str = board.join('\n').replace(/,/g, ": ");
+        bot.sendMessage(msg, `\n\__**Leaderboard:**__\n\`\`\`${str ? str : 'No has credits!'}\`\`\`` )
+    }
 
     this.add = (id, amount) => {
         try {
@@ -110,20 +111,26 @@ function Bank() {
         if (!person) {bot.reply(msg, `Your balance is **[${this.accounts[this.id].balance}]** credits.`); return}
         else {
             var search = fn.getUser(msg, person);
-            bot.reply(msg, `**${person}**'s balance is **[${this.accounts[search.id].balance}]** credits.`)
+            bot.reply(msg, `**${search.name}**'s balance is **[${this.accounts[search.id].balance}]** credits.`)
         }
     };
 
     this.transfer = (bot, msg) => {
         //sufArr should = [0]transfer [1]getting [2]amount
-        let giving = this.id;
-        let getting = fn.getUser(msg, this.sufArr[1]);
-        let amount = this.numParser(this.sufArr[2]);
-        if(this.numberChecker(bot, msg, amount) === false) {return}
-        if(this.enoughCredits(bot, msg, amount) === false) {return}
-        this.subtract(giving, amount);
-        this.add(getting.id, amount);
-        bot.reply(msg, `**+${amount}** deposited into **${getting.name}'s** account!`)
+        try {
+            let giving = this.id;
+            let getting = fn.getUser(msg, this.sufArr[1]);
+            let amount = this.numParser(this.sufArr[2]);
+            if (this.numberChecker(bot, msg, amount) === false) {
+                return
+            }
+            if (this.enoughCredits(bot, msg, amount) === false) {
+                return
+            }
+            this.subtract(giving, amount);
+            this.add(getting.id, amount);
+            bot.reply(msg, `**+${amount}** deposited into **${getting.name}'s** account!`)
+        } catch (error) {console.log(error)}
         this.reload();
     };
 
@@ -143,6 +150,16 @@ function Bank() {
         } catch(err) {
             console.log(err);
         }
+    };
+
+    this.reload = () => {
+        try {
+            fs.writeJsonSync(file, bankSet);
+            bankSet = fs.readJsonSync(file);
+        } catch(err) {
+            console.log(err);
+        }
+        this.accounts = bankSet.accounts;
     };
     
     this.attributes = {

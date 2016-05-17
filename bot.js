@@ -38,7 +38,7 @@ const bot = new Discord.Client({autoReconnect:true});
 //Message Event Checker
 bot.on("message", (msg) => {
     if(msg.author === bot.user || msg.channel.isPrivate) {return;}
-    else if (prefixes.indexOf((msg.content[0])) > -1 ) {
+    else if (prefixes.indexOf(msg.content[0]) > -1 ) {
         let cmdOpt = {};
         fn.getOpt(msg, cmdOpt)
         let cmdTxt = cmdOpt.cmdTxt;
@@ -47,7 +47,7 @@ bot.on("message", (msg) => {
     }
     else return;
 }).on('error', (err) => {
-    console.log('whoops! there was an error', err);
+    console.log('Whoops! there was an error', err);
 });
 
 //Ready

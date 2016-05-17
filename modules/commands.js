@@ -348,6 +348,15 @@ function Commands() {
         'admin'         : true
     };
 
+    this.say = {
+        process: function(bot, msg) {
+            let s = {};
+            fn.getOpt(msg, s);
+            bot.sendMessage(msg, s.suffix);
+        },
+        'admin' : true
+    }
+
     this.emptycache = {
         'description'   : 'Empties local cache.',
         'alias'         : ["cache"],
