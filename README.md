@@ -11,7 +11,7 @@ Bot for discord chatroom made with discord.js
 Requires Node.js
 To install clone the repo and `npm install`. 
 
-Then run `node bot` from the command line.
+Then run `node bot` from the command line..
 
 I can't offer support about installing and running the bot youself currently as it is in a very alpha stage.
 
