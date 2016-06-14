@@ -92,6 +92,7 @@ var cmdHandlr = (bot, msg, cmdTxt, suffix) => {
         case "tsa" : commands.tsa.process(bot, msg); break;
         case "orly" : commands.orly.process(bot, msg, suffix); break;
         case "ping" : bot.sendMessage(msg, "pong"); break;
+        case "oodle": commands.oodle.process(bot, msg, suffix); break;
 
         //trivia
         case "trivia" : if (suffix === 'stop' && triviaSesh.gameon === true) {triviaSesh.end(bot, msg);}
@@ -299,6 +300,17 @@ var commands = {
             bot.reply(msg, ball[Math.floor(Math.random() * ball.length)]);
         },
         'admin'         : false
+    },
+
+    'oodle' : {
+        'description': 'Oodle-fy your sentences.',
+        'alias': ["none"],
+        'usage': `\`${prefixes[0]}oodle [sentence]\``,
+        'process': (bot, msg, suffix) => {
+            let reply = suffix.replace(new RegExp(/[aeiou]/gi), 'oodle').toString();
+            bot.reply(msg, reply);
+        },
+        'admin': false
     },
 
     'tsa' : {
