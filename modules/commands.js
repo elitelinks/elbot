@@ -215,6 +215,20 @@ function Commands() {
         'admin'         : false
     };
 
+    this.oodle = {
+        'description': 'Oodle-fy your sentences.',
+        'alias': ['none'],
+        'usage': `\`${prefixes[0]}oodle [sentence]\``,
+        'process': (bot, msg) => {
+            let o = {};
+            fn.getOpt(msg, o);
+            let suffix = o.suffix;
+
+            bot.reply(suffix.replace(/[aeiou]/gi, 'oodle'));
+        },
+        'admin': false
+    };
+
     this.tsa =  {
         'description'   : 'The $100,000 command.',
         'alias'         : ["none"],
