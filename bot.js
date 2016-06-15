@@ -305,9 +305,13 @@ var commands = {
     'oodle' : {
         'description': 'Oodle-fy your sentences.',
         'alias': ["none"],
-        'usage': `\`${prefixes[0]}oodle [sentence]\``,
+        'usage': `\`${prefixes[0]}oodle [sentence, replacement (default is oodle)]\``,
         'process': (bot, msg, suffix) => {
-            let reply = suffix.replace(new RegExp(/[aeiou]/gi), 'oodle').toString();
+            var opts = suffix.split(',');
+            var str = opts[0];
+            var replacement = opts[1] ? opts[1].toString().trim() : 'oodle';
+
+            let reply = str.replace(new RegExp(/[aeiou]/gi), replacement).toString();
             bot.reply(msg, reply);
         },
         'admin': false
